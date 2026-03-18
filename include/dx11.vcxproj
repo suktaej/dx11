@@ -144,6 +144,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Share\TimeManager.h" />
+    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dx11.rc" />
