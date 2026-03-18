@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Windows.h>
-#include <math.h>
 
 #define SAFE_DELETE(p) { if(p) { delete p; p = nullptr; }}
 #define DEFINITION_SINGLE(Type) Type* Type::mInst = nullptr;

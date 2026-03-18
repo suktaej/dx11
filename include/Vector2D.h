@@ -1,6 +1,4 @@
 #pragma once
-#pragma once
-
 #include <math.h>
 
 struct FVector2D
@@ -362,7 +360,6 @@ struct FVector2D
 
 	float length()	const
 	{
-		// sqrtf : 루트값 구해주는 기능.
 		return sqrtf(x * x + y * y);
 	}
 
@@ -423,10 +420,10 @@ struct FVector2D
 	//	return Angle;
 	//}
 
-	static float GetAngle(const FVector2D& v1, const FVector2D& v2)
-	{
-		return 0.f;
-	}
+	//static float GetAngle(const FVector2D& v1, const FVector2D& v2)
+	//{
+	//	return 0.f;
+	//}
 
 #pragma endregion Function
 };

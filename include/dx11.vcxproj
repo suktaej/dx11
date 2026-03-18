@@ -138,6 +138,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Share\TimeManager.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInfo.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Share\TimeManager.h" />
     <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dx11.rc" />
