@@ -49,26 +49,23 @@ LRESULT CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
     return 0;
 }
 
-bool CGameManager::create()
+BOOL CGameManager::InitInstance()
 {
-	RECT WindowRC = { 0, 0, 1280, 720 };
-    AdjustWindowRect(&WindowRC, WS_OVERLAPPEDWINDOW, FALSE);
+    RECT rc = { 0, 0, 1280, 720 };
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, TRUE);
 
-    int windowWidth = WindowRC.right - WindowRC.left;
-    int windowHeight = WindowRC.bottom - WindowRC.top;
+    int windowWidth = rc.right - rc.left;
+    int windowHeight = rc.bottom - rc.top;
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
     int posX = (screenWidth - windowWidth) / 2;
     int posY = (screenHeight - windowHeight) / 2;
-    
+
     mhWnd = CreateWindowW(mClassName, mTitleName, WS_OVERLAPPEDWINDOW,
         posX, posY, windowWidth, windowHeight, nullptr, nullptr, mhInst, nullptr);
 
     if (!mhWnd)
         return false;
-
-    //SetWindowPos(mhWnd, HWND_TOPMOST, 100, 100, WindowRC.right - WindowRC.left,
-    //    WindowRC.bottom - WindowRC.top, SWP_NOMOVE | SWP_NOZORDER);
 
     ShowWindow(mhWnd, SW_SHOW);
     UpdateWindow(mhWnd);
@@ -111,7 +108,7 @@ bool CGameManager::init(HINSTANCE hInst)
 
 	RegisterWindowClass();
 
-    if (!create())
+    if (!InitInstance())
         return false;
 
 	return true;

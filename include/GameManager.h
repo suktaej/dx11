@@ -15,8 +15,8 @@ private:
 private:
 	void RegisterWindowClass();
 	static LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	bool create();
+	BOOL InitInstance();
+	
 	void logic();
 	void input(float dt);
 	bool update(float dt);
