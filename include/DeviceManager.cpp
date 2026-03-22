@@ -1,6 +1,6 @@
 #include "DeviceManager.h"
 
-DEFINITION_SINGLE(CDeviceManager);
+//DEFINITION_SINGLE(CDeviceManager);
 
 CDeviceManager::CDeviceManager()
 {

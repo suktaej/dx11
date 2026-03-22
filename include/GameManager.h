@@ -1,6 +1,7 @@
 #pragma once
 #include "GameInfo.h"
 #include "DeviceManager.h"
+#include "Share/TimeManager.h"
 
 class CGameManager
 {
@@ -16,6 +17,10 @@ private:
 	TCHAR mTitleName[256] = {};
     RECT rc = { 0, 0, 1280, 720 };
 	static bool mLoop;
+
+private:
+	CDeviceManager mDevice;
+	CTimeManager mTime;
 
 private:
 	void RegisterWindowClass();

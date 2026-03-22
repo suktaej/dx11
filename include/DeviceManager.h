@@ -3,7 +3,10 @@
 
 class CDeviceManager
 {
-	DECLARE_SINGLE(CDeviceManager);
+	//DECLARE_SINGLE(CDeviceManager);
+public:
+	CDeviceManager();
+	~CDeviceManager();
 
 private:
 	// IUnkonwn 인터페이스를 상속받는 ID3D11Device와 ID3D11DeviceContext 포인터를 멤버 변수로 선언.

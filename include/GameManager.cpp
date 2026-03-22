@@ -13,8 +13,6 @@ CGameManager::CGameManager()
 CGameManager::~CGameManager()
 {
 	ReleaseDC(mhWnd, GetDC(mhWnd));
-    
-    CDeviceManager::destroyInst();
 }
 
 void CGameManager::RegisterWindowClass()
@@ -76,7 +74,8 @@ BOOL CGameManager::InitInstance()
 
 void CGameManager::logic()
 {
-    float deltaTime = CTimeManager::update();
+    //float deltaTime = CTimeManager::update();
+    float deltaTime = mTime.update();
 
     input(deltaTime);
     if (update(deltaTime)) return;
@@ -112,10 +111,13 @@ bool CGameManager::init(HINSTANCE hInst)
     if (!InitInstance())
         return false;
 
-    if (!CDeviceManager::getInst()->init(mhWnd, rc.right, rc.bottom, true))
-        return false;
+    //if (!CDeviceManager::getInst()->init(mhWnd, rc.right, rc.bottom, true))
+    //    return false;
+    if(false == mDevice.init(mhWnd, rc.right, rc.bottom, true))
+		return false;
     
-    CTimeManager::init();
+    //CTimeManager::init();
+    mTime.init();
 
 	return true;
 }
