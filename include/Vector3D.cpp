@@ -29,10 +29,8 @@ FVector3D::FVector3D(const FVector3D& v) :
 {
 }
 
-FVector3D::FVector3D(FVector3D&& v) :
-	x(v.x),
-	y(v.y),
-	z(v.z)
+FVector3D::FVector3D(FVector3D&& v) noexcept
+	: x(v.x), y(v.y), z(v.z)
 {
 }
 

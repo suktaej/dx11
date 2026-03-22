@@ -1,5 +1,7 @@
 #pragma once
 #include <math.h>
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
 
 namespace EAxis
 {
@@ -24,7 +26,7 @@ struct FVector3D
 	FVector3D();
 	FVector3D(float _x, float _y, float _z);
 	FVector3D(const FVector3D& v);
-	FVector3D(FVector3D&& v);
+	FVector3D(FVector3D&& v) noexcept;
 
 	//FVector3D(const DirectX::XMVECTOR& v);
 
@@ -165,4 +167,3 @@ struct FVector3D
 
 #pragma endregion StaticVariable
 };
-

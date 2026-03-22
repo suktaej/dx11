@@ -4,6 +4,9 @@
 class CGameManager
 {
 	DECLARE_SINGLE(CGameManager);
+//public:
+//	CGameManager();
+//	~CGameManager();
 
 private:
 	HINSTANCE mhInst = 0;

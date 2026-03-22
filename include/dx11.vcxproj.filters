@@ -16,6 +16,9 @@
     <Filter Include="01_GameManager">
       <UniqueIdentifier>{bba11291-ae93-49d4-8687-7d194fa6da35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01_GameManager\Device">
+      <UniqueIdentifier>{b21fe9a1-2a7e-4637-bce2-3e7582d8a5a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="Vector3D.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>01_GameManager\Device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="Vector3D.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>01_GameManager\Device</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

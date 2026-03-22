@@ -1,3 +1,6 @@
+C:\MyCode\dx11\include\Device.cpp;C:\MyCode\dx11\BinObj\Device.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\BinObj\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\BinObj\main.obj
 C:\MyCode\dx11\include\Share\TimeManager.cpp;C:\MyCode\dx11\BinObj\TimeManager.obj
+C:\MyCode\dx11\include\Vector3D.cpp;C:\MyCode\dx11\BinObj\Vector3D.obj
+C:\MyCode\dx11\include\Vector4D.cpp;C:\MyCode\dx11\BinObj\Vector4D.obj

@@ -1,8 +1,25 @@
 #pragma once
 
 #include <Windows.h>
+#include <list>
+#include <vector>
+#include <unordered_map>
+
+#include <d3d11.h>
+#include <d3dcompiler.h>
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "d2d1.lib")
+
+#include "Vector2D.h"
+#include "Vector3D.h"
+#include "Vector4D.h"
 
 #define SAFE_DELETE(p) { if(p) { delete p; p = nullptr; }}
+#define	SAFE_DELETE_ARRAY(p) {if(p)	{ delete[] p; p = nullptr; }}
+#define	SAFE_RELEASE(p)	{if(p)	{ p->Release(); p = nullptr; }}
 #define DEFINITION_SINGLE(Type) Type* Type::mInst = nullptr;
 
 #define DECLARE_SINGLE(Type) \
@@ -22,3 +39,9 @@ public:\
 	{\
 		SAFE_DELETE(mInst);\
 	}
+
+struct FResolution
+{
+	unsigned int width = 0;
+	unsigned int height = 0;
+};
