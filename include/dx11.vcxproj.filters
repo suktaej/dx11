@@ -36,7 +36,7 @@
     <ClCompile Include="Vector4D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Device.cpp">
+    <ClCompile Include="DeviceManager.cpp">
       <Filter>01_GameManager\Device</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="Vector4D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Device.h">
+    <ClInclude Include="DeviceManager.h">
       <Filter>01_GameManager\Device</Filter>
     </ClInclude>
   </ItemGroup>

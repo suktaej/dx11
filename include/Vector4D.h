@@ -4,18 +4,6 @@
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 
-namespace EAxis
-{
-	enum Type
-	{
-		None = -1,
-		X,
-		Y,
-		Z,
-		End
-	};
-}
-
 struct FVector4D
 {
 	float	x = 0.f;

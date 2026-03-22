@@ -12,7 +12,9 @@ CGameManager::CGameManager()
 
 CGameManager::~CGameManager()
 {
-
+	ReleaseDC(mhWnd, GetDC(mhWnd));
+    
+    CDeviceManager::destroyInst();
 }
 
 void CGameManager::RegisterWindowClass()
@@ -51,7 +53,6 @@ LRESULT CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 BOOL CGameManager::InitInstance()
 {
-    RECT rc = { 0, 0, 1280, 720 };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, TRUE);
 
     int windowWidth = rc.right - rc.left;
@@ -110,6 +111,11 @@ bool CGameManager::init(HINSTANCE hInst)
 
     if (!InitInstance())
         return false;
+
+    if (!CDeviceManager::getInst()->init(mhWnd, rc.right, rc.bottom, true))
+        return false;
+    
+    CTimeManager::init();
 
 	return true;
 }

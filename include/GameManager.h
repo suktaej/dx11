@@ -1,5 +1,6 @@
 #pragma once
 #include "GameInfo.h"
+#include "DeviceManager.h"
 
 class CGameManager
 {
@@ -13,6 +14,7 @@ private:
 	HWND mhWnd = 0;
 	TCHAR mClassName[256] = {};
 	TCHAR mTitleName[256] = {};
+    RECT rc = { 0, 0, 1280, 720 };
 	static bool mLoop;
 
 private:
