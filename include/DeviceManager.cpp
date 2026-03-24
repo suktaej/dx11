@@ -8,14 +8,21 @@ CDeviceManager::CDeviceManager()
 
 CDeviceManager::~CDeviceManager()
 {
-	SAFE_RELEASE(mRenderTargetView);
-	SAFE_RELEASE(mDepthStencilView);
-	SAFE_RELEASE(mDevice);
-	SAFE_RELEASE(mContext);
-	if(mContext)
+	//SAFE_RELEASE(mRenderTargetView);
+	//SAFE_RELEASE(mDepthStencilView);
+	//SAFE_RELEASE(mDevice);
+	//SAFE_RELEASE(mContext);
+	//if(mContext)
+	//	mContext->ClearState();
+	//SAFE_RELEASE(mSwapChain);
+
+	if (mContext)
+	{
+		// ID3D11DeviceContext::ClearState: 파이프라인의 모든 상태(셰이더, 정점 버퍼 등)를 기본값으로 재설정
+		// ID3D11DeviceContext::Flush: 큐에 쌓인 GPU 명령을 즉시 제출하여 미해결된 리소스 참조를 강제로 해제
 		mContext->ClearState();
-	
-	SAFE_RELEASE(mSwapChain);
+		mContext->Flush();
+	}
 }
 
 bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode)
@@ -93,46 +100,52 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 
 	// type에 맞는 iid를 얻어오는 __uuidof 연산자를 사용하여 
 	// mDevice 객체에서 IDXGIDevice 인터페이스 포인터를 얻어와 dxgiDevice 변수에 저장
-	IDXGIDevice* dxgiDevice = nullptr;
-	mDevice->QueryInterface(__uuidof(IDXGIDevice),(void**)&dxgiDevice);
+	//IDXGIDevice* dxgiDevice = nullptr;
+	ComPtr<IDXGIDevice> dxgiDevice;
+	//mDevice->QueryInterface(__uuidof(IDXGIDevice),(void**)&dxgiDevice);
+	// ComPtr.As() : ComPtr 객체가 관리하는 QueryInterface 호출을 래핑하여 지정된 인터페이스로 포인터를 반환하는 메서드
+	mDevice.As(&dxgiDevice);
 
 	// IDXGIDevice 인터페이스 포인터를 사용하여 IDXGIAdapter 인터페이스 포인터를 얻어와 dxgiAdapter 변수에 저장
-	IDXGIAdapter* dxgiAdapter = nullptr;
+	//IDXGIAdapter* dxgiAdapter = nullptr;
+	ComPtr<IDXGIAdapter> dxgiAdapter;
 	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 
 	// IDXGIAdapter 인터페이스 포인터를 사용하여 IDXGIFactory 인터페이스 포인터를 얻어와 dxgiFactory 변수에 저장
-	IDXGIFactory* dxgiFactory = nullptr;
+	//IDXGIFactory* dxgiFactory = nullptr;
+	ComPtr<IDXGIFactory> dxgiFactory;
 	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
 
 	// IDXGIFactory 인터페이스 포인터의 CreateSwapChain 메서드를 호출하여 스왑 체인 생성
-	if (FAILED(dxgiFactory->CreateSwapChain(mDevice, &swapChainDesc, &mSwapChain)))
+	if (FAILED(dxgiFactory->CreateSwapChain(mDevice.Get(), &swapChainDesc, mSwapChain.GetAddressOf())))
 	{
-		SAFE_RELEASE(dxgiFactory);
-		SAFE_RELEASE(dxgiAdapter);
-		SAFE_RELEASE(dxgiDevice);
+		//SAFE_RELEASE(dxgiFactory);
+		//SAFE_RELEASE(dxgiAdapter);
+		//SAFE_RELEASE(dxgiDevice);
 		return false;
 	}
 
 	// 사용 종료 시 각 인터페이스 포인터의 Release 메서드를 호출하여 참조 카운트 제어
-	SAFE_RELEASE(dxgiFactory);
-	SAFE_RELEASE(dxgiAdapter);
-	SAFE_RELEASE(dxgiDevice);
+	//SAFE_RELEASE(dxgiFactory);
+	//SAFE_RELEASE(dxgiAdapter);
+	//SAFE_RELEASE(dxgiDevice);
 
 	/* 렌더 타겟 뷰 생성 */ 
 	// swapChain으로 생성한 BackBuffer를 렌더 타겟 뷰로 사용하기 위해 ID3D11Texture2D 인터페이스 포인터에 저장
-	ID3D11Texture2D* backBuffer = nullptr;
+	//ID3D11Texture2D* backBuffer = nullptr;
+	ComPtr<ID3D11Texture2D> backBuffer;
 
 	// Getbuffer 사용 시 AddRef가 호출되어 참조 카운트가 증가
 	if(FAILED(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer)))
 	{
-		SAFE_RELEASE(backBuffer);
+		//SAFE_RELEASE(backBuffer);
 		return false;
 	}
 
 	// backBuffer에 출력하기 위한 렌더 타겟 뷰 생성
-	if (FAILED(mDevice->CreateRenderTargetView(backBuffer, nullptr, &mRenderTargetView)))
+	if (FAILED(mDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &mRenderTargetView)))
 	{
-		SAFE_RELEASE(backBuffer);
+		//SAFE_RELEASE(backBuffer);
 		return false;
 	}
 
@@ -155,22 +168,23 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	depthDesc.MipLevels = 1;
 
 	/* DepthStencil Buffer로 사용할 텍스처 생성 */
-	ID3D11Texture2D* depthStencilBuffer = nullptr;
+	//ID3D11Texture2D* depthStencilBuffer = nullptr;
+	ComPtr<ID3D11Texture2D> depthStencilBuffer;
 
 	if (FAILED(mDevice->CreateTexture2D(&depthDesc, nullptr, &depthStencilBuffer)))
 	{
-		SAFE_RELEASE(depthStencilBuffer);
+		//SAFE_RELEASE(depthStencilBuffer);
 		return false;
 	}
 
 	/* DepthStencilView 생성 */
-	if (FAILED(mDevice->CreateDepthStencilView(depthStencilBuffer, nullptr, &mDepthStencilView)))
+	if (FAILED(mDevice->CreateDepthStencilView(depthStencilBuffer.Get(), nullptr, &mDepthStencilView)))
 	{
-		SAFE_RELEASE(depthStencilBuffer);
+		//SAFE_RELEASE(depthStencilBuffer);
 		return false;
 	}
 
-	/* Viewport 생성 */
+	/* Viewport 생성용 구조체 초기화 */
 	D3D11_VIEWPORT viewport = {};
 
 	viewport.TopLeftX = 0.0f;
@@ -183,8 +197,8 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	// 렌더링할 영역을 설정하기 위해 생성한 Viewport를 장치 컨텍스트에 설정
 	mContext->RSSetViewports(1, &viewport);
 
-	SAFE_RELEASE(depthStencilBuffer);
-	SAFE_RELEASE(backBuffer);
+	//SAFE_RELEASE(depthStencilBuffer);
+	//SAFE_RELEASE(backBuffer);
 	
 	return true;
 }
