@@ -32,7 +32,7 @@ float CTimeManager::update()
 		mFPSTime = 0.f;
 	}
 
-	char FPSText[64] = {};
+	//char FPSText[64] = {};
 
 	//sprintf_s(FPSText, "FPS : %.5f", mFPS);
 	//CLog::PrintLog(FPSText);

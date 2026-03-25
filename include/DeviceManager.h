@@ -14,13 +14,17 @@ private:
 	ComPtr<ID3D11Device> mDevice;
 	//ID3D11DeviceContext* mContext = nullptr;
 	ComPtr<ID3D11DeviceContext> mContext;
-	//// page flip을 위한 IDXGISwapChain 포인터를 멤버 변수로 선언.
+	// page flip을 위한 IDXGISwapChain 포인터를 멤버 변수로 선언.
 	//IDXGISwapChain* mSwapChain = nullptr;
-	ComPtr<IDXGISwapChain> mSwapChain;
-	//// 렌더 타겟 뷰 포인터를 멤버 변수로 선언.
+	ComPtr<IDXGISwapChain1> mSwapChain;
+	// 렌더 타겟 뷰 포인터를 멤버 변수로 선언.
 	//ID3D11RenderTargetView* mRenderTargetView = nullptr;
 	ComPtr<ID3D11RenderTargetView> mRenderTargetView;
-	//// 깊이-스텐실 뷰 포인터를 멤버 변수로 선언.
+	// MSAA용 내부 텍스처
+	ComPtr<ID3D11Texture2D> mMSAATexture;
+	// MSAA 텍스처를 위한 RTV
+	ComPtr<ID3D11RenderTargetView> mMSAARenderTargetView; 
+	// 깊이-스텐실 뷰 포인터를 멤버 변수로 선언.
 	//ID3D11DepthStencilView* mDepthStencilView= nullptr;
 	ComPtr<ID3D11DepthStencilView> mDepthStencilView;
 	

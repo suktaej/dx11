@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 #include <Windows.h>
 #include <d3d11.h>
@@ -11,10 +12,13 @@
 using namespace Microsoft::WRL;
 #include <DirectXMath.h>
 using namespace DirectX;
+#include <dxgi1_6.h>
+
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "d2d1.lib")
 

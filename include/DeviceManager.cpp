@@ -1,5 +1,5 @@
 #include "DeviceManager.h"
-
+#define NOMINMAX
 //DEFINITION_SINGLE(CDeviceManager);
 
 CDeviceManager::CDeviceManager()
@@ -34,7 +34,8 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	// D3D11_CREATE_DEVICE_FLAG 열거형에서 D3D11_CREATE_DEVICE_BGRA_SUPPORT 플래그를 사용
 	unsigned int createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 	// D3D_FEATURE_LEVEL 열거형에서 D3D_FEATURE_LEVEL_11_0 플래그를 사용하여 Direct3D 11.0 기능 레벨을 지정
-	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+	// D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0, };
 	// D3D_FEATURE_LEVEL 열거형에서 D3D_FEATURE_LEVEL_11_0 플래그를 사용하여 Direct3D 11.0 기능 레벨을 지정할 때 결과를 저장할 변수 선언
 	D3D_FEATURE_LEVEL levelResult;
 
@@ -52,7 +53,7 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	// arg8 : ID3D11Device 인터페이스 포인터의 주소 전달 (생성된 장치 객체 반환)
 	// arg9 : 기능 레벨 결과 저장할 변수의 주소 전달
 	// arg10 : ID3D11DeviceContext 인터페이스 포인터의 주소 전달 (생성된 장치 컨텍스트 객체 반환)
-	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, createDeviceFlags, &featureLevel, 1, D3D11_SDK_VERSION, &mDevice, &levelResult, &mContext)))
+	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, 0, createDeviceFlags, featureLevels, 2, D3D11_SDK_VERSION, &mDevice, &levelResult, &mContext)))
 		return false;
 
 	// 생성된 Device 객체의 MSAA 품질 수준을 확인하고 결과를 저장
@@ -66,56 +67,102 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	if (checkColor < 1)
 		sampleCount = 1;
 
-	/* DXGI_SWAP_CHAIN_DESC 구조체를 초기화 */
+	/* DXGI_SWAP_CHAIN_DESC 구조체를 초기화
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	
 	// Backbuffer 설정
 	swapChainDesc.BufferDesc.Width = width;
 	swapChainDesc.BufferDesc.Height = height;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	// 화면주사율 설정 (1초마다 60회 화면 갱신)
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	// 화면주사율 설정 : 주사율은 시스템 기본값 사용 (0/1)
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	// 화면	스케일링 설정 (Default 설정)
 	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	// 스캔라인 순서 설정 (Default 설정)
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	// 백버퍼 수 설정 (1로 설정하여 단일 백버퍼 사용)
-	swapChainDesc.BufferCount = 1;
+	// 백버퍼 수 설정 (1로 설정하여 단일 백버퍼 사용) - 수정
+	// Flip 방식은 최소 2개 이상의 버퍼가 필요
+	swapChainDesc.BufferCount = 2;
 	// 백버퍼 사용 용도 설정 (렌더 타겟 출력으로 설정)
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	// 출력 창 핸들 설정
 	swapChainDesc.OutputWindow = mhWnd;
+	 
+	// DXGI_SWAP_EFFECT_DISCARD 방식
 	// Multi-sampling 설정 (sampleCount 값에 따라 4배 멀티샘플링 또는 사용하지 않음)
 	// DX지원 Multisampling 속도가 낮으므로 NVIDIA FSAA 기능을 활용하는 것을 권장
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.SampleDesc.Count = sampleCount;
+
+	// DXGI_SWAP_EFFECT_FLIP_DISCARD 방식
+	// DirectX의 Flip Model(FLIP_DISCARD, FLIP_SEQUENTIAL)은 운영체제가 버퍼를 직접 관리
+	// Flip 방식 스왑체인은 MSAA를 지원하지 않으므로 별도의 RenderTargetView 필요 (반드시 1, 0)
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
 	// 창 모드 설정
 	swapChainDesc.Windowed = windowMode;
+
 	// 스왑 효과 설정 (DXGI_SWAP_EFFECT_DISCARD로 설정하여 이전 프레임 버퍼 내용이 유지되지 않도록 함)
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
+	// 스왑 효과 설정 (Flip Model 방식으로 설정하여 더 낮은 지연 시간과 향상된 성능 제공)
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	// 창 모드/전체 화면 전환 시 더 부드러운 처리를 위한 플래그
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	*/
+
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+	swapChainDesc.Width = width;
+	swapChainDesc.Height = height;
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.Stereo = FALSE;
+	swapChainDesc.SampleDesc.Count = 1;      // Flip 모델은 무조건 1
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount = 2;           // Flip 모델은 최소 2
+	swapChainDesc.Scaling = DXGI_SCALING_NONE; 
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+	//전체화면 정보는 별도 구조체로 분리
+	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc = {};
+	fsDesc.RefreshRate.Numerator = 0;
+	fsDesc.RefreshRate.Denominator = 1;
+	fsDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	fsDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	fsDesc.Windowed = windowMode;
+
 	/* 스왑 체인 생성 */
 	// IUnknown 인터페이스를 상속받는 객체들은 AddRef와 Release 메서드를 통해 참조 카운트를 관리
-
 	// type에 맞는 iid를 얻어오는 __uuidof 연산자를 사용하여 
 	// mDevice 객체에서 IDXGIDevice 인터페이스 포인터를 얻어와 dxgiDevice 변수에 저장
-	//IDXGIDevice* dxgiDevice = nullptr;
+	// IDXGIDevice* dxgiDevice = nullptr;
 	ComPtr<IDXGIDevice> dxgiDevice;
-	//mDevice->QueryInterface(__uuidof(IDXGIDevice),(void**)&dxgiDevice);
+	// mDevice->QueryInterface(__uuidof(IDXGIDevice),(void**)&dxgiDevice);
 	// ComPtr.As() : ComPtr 객체가 관리하는 QueryInterface 호출을 래핑하여 지정된 인터페이스로 포인터를 반환하는 메서드
 	mDevice.As(&dxgiDevice);
 
 	// IDXGIDevice 인터페이스 포인터를 사용하여 IDXGIAdapter 인터페이스 포인터를 얻어와 dxgiAdapter 변수에 저장
-	//IDXGIAdapter* dxgiAdapter = nullptr;
+	// IDXGIAdapter* dxgiAdapter = nullptr;
 	ComPtr<IDXGIAdapter> dxgiAdapter;
 	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 
-	// IDXGIAdapter 인터페이스 포인터를 사용하여 IDXGIFactory 인터페이스 포인터를 얻어와 dxgiFactory 변수에 저장
-	//IDXGIFactory* dxgiFactory = nullptr;
-	ComPtr<IDXGIFactory> dxgiFactory;
-	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
+	/*
+	* // IDXGIAdapter 인터페이스 포인터를 사용하여 IDXGIFactory 인터페이스 포인터를 얻어와 dxgiFactory 변수에 저장
+	* // IDXGIFactory* dxgiFactory = nullptr;
+	* ComPtr<IDXGIFactory> dxgiFactory;
+	* dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
+	*/
 
+	ComPtr<IDXGIFactory2> dxgiFactory;
+	dxgiAdapter->GetParent(__uuidof(IDXGIFactory2), (void**)&dxgiFactory);
+
+	if (FAILED(dxgiFactory->CreateSwapChainForHwnd(mDevice.Get(), mhWnd, &swapChainDesc, &fsDesc, nullptr, mSwapChain.GetAddressOf())))
+		return false;
+	
+	/*
 	// IDXGIFactory 인터페이스 포인터의 CreateSwapChain 메서드를 호출하여 스왑 체인 생성
 	if (FAILED(dxgiFactory->CreateSwapChain(mDevice.Get(), &swapChainDesc, mSwapChain.GetAddressOf())))
 	{
@@ -135,12 +182,16 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	//ID3D11Texture2D* backBuffer = nullptr;
 	ComPtr<ID3D11Texture2D> backBuffer;
 
+	/*
 	// Getbuffer 사용 시 AddRef가 호출되어 참조 카운트가 증가
 	if(FAILED(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer)))
 	{
 		//SAFE_RELEASE(backBuffer);
 		return false;
 	}
+	*/
+	if (FAILED(mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer))))
+		return false;
 
 	// backBuffer에 출력하기 위한 렌더 타겟 뷰 생성
 	if (FAILED(mDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &mRenderTargetView)))
@@ -148,6 +199,25 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 		//SAFE_RELEASE(backBuffer);
 		return false;
 	}
+	
+	/* MSAA를 적용하기 위한 Render Target View 용 텍스처 설정 구조체 초기화 */
+	D3D11_TEXTURE2D_DESC msaaDesc = {};
+	msaaDesc.Width = width;
+	msaaDesc.Height = height;
+	msaaDesc.MipLevels = 1;
+	msaaDesc.ArraySize = 1;
+	msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	msaaDesc.SampleDesc.Count = sampleCount;
+	msaaDesc.SampleDesc.Quality = (std::max)(0, static_cast<int>(checkColor) - 1);
+	msaaDesc.Usage = D3D11_USAGE_DEFAULT;
+	msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;
+
+	if (FAILED(mDevice->CreateTexture2D(&msaaDesc, nullptr, mMSAATexture.GetAddressOf())))
+		return false;
+
+	// MSAA용 RTV 생성
+	if (FAILED(mDevice->CreateRenderTargetView(mMSAATexture.Get(), nullptr, mMSAARenderTargetView.GetAddressOf())))
+		return false;
 
 	/* DepthStencilView Buffer로 사용할 텍스처 설정 D3D11_TEXTURE2D_DESC 구조체 초기화 */
 	D3D11_TEXTURE2D_DESC depthDesc = {};
@@ -155,17 +225,17 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	depthDesc.Width = width;
 	depthDesc.Height = height;
 	depthDesc.ArraySize = 1;
-	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	// 그래픽카드에 해당 리소스가 DepthStencilView로 사용될 것임을 알리기 위해 D3D11_BIND_DEPTH_STENCIL 플래그 설정
-	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	// MipLevels는 텍스처의 MIP 맵 레벨 수를 지정하는 멤버
+	// Depth Buffer는 화면과 1:1로 대응되어 축소된 이미지가 필요하지 않으므로 MipLevels를 1로 설정하여 단일 레벨의 텍스처를 사용하도록 함
+	depthDesc.MipLevels = 1;
 	// GPU에서 해당 리소스를 읽고쓰기를 모두 수행한다는	것을 알리기 위해 D3D11_USAGE_DEFAULT로 설정
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthDesc.SampleDesc.Count = sampleCount;
 	// Default 설정
-	depthDesc.SampleDesc.Quality = 0;
-	// MipLevels는 텍스처의 MIP 맵 레벨 수를 지정하는 멤버
-	// Depth Buffer는 화면과 1:1로 대응되어 축소된 이미지가 필요하지 않으므로 MipLevels를 1로 설정하여 단일 레벨의 텍스처를 사용하도록 함
-	depthDesc.MipLevels = 1;
+	depthDesc.SampleDesc.Quality = (std::max)(0, static_cast<int>(checkColor) - 1);
+	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	// 그래픽카드에 해당 리소스가 DepthStencilView로 사용될 것임을 알리기 위해 D3D11_BIND_DEPTH_STENCIL 플래그 설정
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	/* DepthStencil Buffer로 사용할 텍스처 생성 */
 	//ID3D11Texture2D* depthStencilBuffer = nullptr;
@@ -196,9 +266,30 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 
 	// 렌더링할 영역을 설정하기 위해 생성한 Viewport를 장치 컨텍스트에 설정
 	mContext->RSSetViewports(1, &viewport);
+	
+	// 렌더 타겟과 깊이 스텐실 뷰를 장치 컨텍스트에 설정하여 렌더링 준비
+	mContext->OMSetRenderTargets(1, mMSAARenderTargetView.GetAddressOf(), mDepthStencilView.Get());
 
 	//SAFE_RELEASE(depthStencilBuffer);
 	//SAFE_RELEASE(backBuffer);
 	
 	return true;
 }
+
+/*
+* Render 시 필요한 단계
+* 
+// 1. MSAA 텍스처에 렌더링 완료 후
+// 2. MSAA 텍스처(Multi-sampled)를 SwapChain 백버퍼(Non-multi-sampled)로 Resolve
+ComPtr<ID3D11Texture2D> backBuffer;
+mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
+
+mContext->ResolveSubresource(
+    backBuffer.Get(), 0,             // 목적지 (SwapChain 백버퍼)
+    mMSAATexture.Get(), 0,           // 소스 (MSAA 렌더 타겟)
+    DXGI_FORMAT_R8G8B8A8_UNORM       // 포맷
+);
+
+// 3. 그 후 Present
+mSwapChain->Present(1, 0);
+*/
