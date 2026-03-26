@@ -23,6 +23,19 @@ CDeviceManager::~CDeviceManager()
 		mContext->ClearState();
 		mContext->Flush();
 	}
+
+	mRenderTargetView.Reset();
+	for (int i = 0; i < 3; ++i)
+		mMSAARenderTargetView[i].Reset();
+	for (int i = 0; i < 3; ++i)
+		mMSAAShaderResourceView[i].Reset();
+	mDepthStencilView.Reset();
+	
+	for (int i = 0; i < 3; ++i)
+		mMSAATexture[i].Reset();
+	mSwapChain.Reset();
+	mContext.Reset();
+	mDevice.Reset();
 }
 
 bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode)
@@ -182,16 +195,12 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	//ID3D11Texture2D* backBuffer = nullptr;
 	ComPtr<ID3D11Texture2D> backBuffer;
 
-	/*
 	// Getbuffer 사용 시 AddRef가 호출되어 참조 카운트가 증가
 	if(FAILED(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer)))
 	{
 		//SAFE_RELEASE(backBuffer);
 		return false;
 	}
-	*/
-	if (FAILED(mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer))))
-		return false;
 
 	// backBuffer에 출력하기 위한 렌더 타겟 뷰 생성
 	if (FAILED(mDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, &mRenderTargetView)))
@@ -201,23 +210,49 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	}
 	
 	/* MSAA를 적용하기 위한 Render Target View 용 텍스처 설정 구조체 초기화 */
+	// RTV배열 기본값
 	D3D11_TEXTURE2D_DESC msaaDesc = {};
 	msaaDesc.Width = width;
 	msaaDesc.Height = height;
 	msaaDesc.MipLevels = 1;
 	msaaDesc.ArraySize = 1;
-	msaaDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	msaaDesc.SampleDesc.Count = sampleCount;
 	msaaDesc.SampleDesc.Quality = (std::max)(0, static_cast<int>(checkColor) - 1);
 	msaaDesc.Usage = D3D11_USAGE_DEFAULT;
-	msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET;
+	// 라이팅 단계에서 입력으로 써야 하므로 SHADER_RESOURCE를 반드시 추가
+	msaaDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
-	if (FAILED(mDevice->CreateTexture2D(&msaaDesc, nullptr, mMSAATexture.GetAddressOf())))
+	// --- 1. 색상용 텍스처 설정 ---
+	D3D11_TEXTURE2D_DESC colorDesc = msaaDesc; // 동일한 크기, 동일한 MSAA 설정 복사
+	colorDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 표준 색상 포맷
+
+	// --- 2. 법선용 텍스처 설정 ---
+	D3D11_TEXTURE2D_DESC normalDesc = msaaDesc; // 동일한 크기, 동일한 MSAA 설정 복사
+	normalDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT; // 고정밀도 부동소수점 포맷
+
+	// --- 3. 스펙큘러용 텍스처 설정 ---
+	D3D11_TEXTURE2D_DESC specularDesc = msaaDesc;
+	specularDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 재질 수치는 0-1
+
+	if (FAILED(mDevice->CreateTexture2D(&colorDesc, nullptr, mMSAATexture[0].GetAddressOf())))
+		return false;
+	if (FAILED(mDevice->CreateRenderTargetView(mMSAATexture[0].Get(), nullptr, mMSAARenderTargetView[0].GetAddressOf())))
 		return false;
 
-	// MSAA용 RTV 생성
-	if (FAILED(mDevice->CreateRenderTargetView(mMSAATexture.Get(), nullptr, mMSAARenderTargetView.GetAddressOf())))
+	if (FAILED(mDevice->CreateTexture2D(&normalDesc, nullptr, mMSAATexture[1].GetAddressOf())))
 		return false;
+	if (FAILED(mDevice->CreateRenderTargetView(mMSAATexture[1].Get(), nullptr, mMSAARenderTargetView[1].GetAddressOf())))
+		return false;
+
+	if (FAILED(mDevice->CreateTexture2D(&specularDesc, nullptr, mMSAATexture[2].GetAddressOf())))
+		return false;
+	if (FAILED(mDevice->CreateRenderTargetView(mMSAATexture[2].Get(), nullptr, mMSAARenderTargetView[2].GetAddressOf())))
+		return false;
+
+	/* ShaderResoureView 생성 (nullptr 전달 시 텍스처 설정을 기반으로 기본 뷰 생성) */
+	for (int i = 0; i < 3; ++i)
+		if (FAILED(mDevice->CreateShaderResourceView(mMSAATexture[i].Get(), nullptr, mMSAAShaderResourceView[i].GetAddressOf())))
+			return false;
 
 	/* DepthStencilView Buffer로 사용할 텍스처 설정 D3D11_TEXTURE2D_DESC 구조체 초기화 */
 	D3D11_TEXTURE2D_DESC depthDesc = {};
@@ -267,8 +302,6 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	// 렌더링할 영역을 설정하기 위해 생성한 Viewport를 장치 컨텍스트에 설정
 	mContext->RSSetViewports(1, &viewport);
 	
-	// 렌더 타겟과 깊이 스텐실 뷰를 장치 컨텍스트에 설정하여 렌더링 준비
-	mContext->OMSetRenderTargets(1, mMSAARenderTargetView.GetAddressOf(), mDepthStencilView.Get());
 
 	//SAFE_RELEASE(depthStencilBuffer);
 	//SAFE_RELEASE(backBuffer);
@@ -276,9 +309,49 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	return true;
 }
 
+void CDeviceManager::clearRenderTarget(const FLOAT clearColor[4])
+{
+	for (int i = 0; i < 3; ++i)
+		if (mMSAARenderTargetView[i])
+			mContext->ClearRenderTargetView(mMSAARenderTargetView[i].Get(), clearColor);
+}
+
+void CDeviceManager::clearDepthStencilView(float depthClearValue, UINT8 stencilClearValue)
+{
+	mContext->ClearDepthStencilView(mDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, depthClearValue, stencilClearValue);
+}
+
+void CDeviceManager::setTarget()
+{
+	// 렌더 타겟과 깊이 스텐실 뷰를 장치 컨텍스트에 설정하여 렌더링 준비
+	// OMSetRenderTargets는 ID3D11RenderTargetView*의 배열을 인자로 전달받음.
+	// ComPtr 배열을 직접 넣을 수 없으므로, 원시 포인터 배열화 후 전달
+	ID3D11RenderTargetView* targets[3] = {
+		mMSAARenderTargetView[0].Get(),
+		mMSAARenderTargetView[1].Get(),
+		mMSAARenderTargetView[2].Get()
+	};
+
+	mContext->OMSetRenderTargets(1, targets, mDepthStencilView.Get());
+}
+
 /*
 * Render 시 필요한 단계
 * 
+* 
+void CDeviceManager::setShaderResources()
+{
+	// SRV 원시 포인터 배열 준비
+	ID3D11ShaderResourceView* srvs[3] = {
+		mMSAAShaderResourceView[0].Get(),
+		mMSAAShaderResourceView[1].Get(),
+		mMSAAShaderResourceView[2].Get()
+	};
+
+	// 픽셀 셰이더의 t0, t1, t2 슬롯에 한꺼번에 바인딩
+	mContext->PSSetShaderResources(0, 3, srvs);
+}
+
 // 1. MSAA 텍스처에 렌더링 완료 후
 // 2. MSAA 텍스처(Multi-sampled)를 SwapChain 백버퍼(Non-multi-sampled)로 Resolve
 ComPtr<ID3D11Texture2D> backBuffer;

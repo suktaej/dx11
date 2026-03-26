@@ -21,11 +21,12 @@ private:
 	//ID3D11RenderTargetView* mRenderTargetView = nullptr;
 	ComPtr<ID3D11RenderTargetView> mRenderTargetView;
 	// MSAA용 내부 텍스처
-	ComPtr<ID3D11Texture2D> mMSAATexture;
-	// MSAA 텍스처를 위한 RTV
-	ComPtr<ID3D11RenderTargetView> mMSAARenderTargetView; 
+	ComPtr<ID3D11Texture2D> mMSAATexture[3];
+	// MSAA 텍스처를 위한 RTV 배열 (Color, Normal, Specular)
+	ComPtr<ID3D11RenderTargetView> mMSAARenderTargetView[3]; 
+	// MSAA 텍스처를 위한 SRV 배열 (Color, Normal, Specular)
+	ComPtr<ID3D11ShaderResourceView> mMSAAShaderResourceView[3];
 	// 깊이-스텐실 뷰 포인터를 멤버 변수로 선언.
-	//ID3D11DepthStencilView* mDepthStencilView= nullptr;
 	ComPtr<ID3D11DepthStencilView> mDepthStencilView;
 	
 	FResolution mResolution;
@@ -33,5 +34,8 @@ private:
 
 public:
 	bool init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode);
+	void clearRenderTarget(const FLOAT clearColor[4]);
+	void clearDepthStencilView(float depthClearValue = 1.0f, UINT8 stencilClearValue = 0);
+	void setTarget();
 };
 
