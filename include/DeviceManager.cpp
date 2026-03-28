@@ -62,6 +62,9 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	if (!createGBuffers()) return false;
 	if (!createLightingBuffers()) return false;
 	if (!createPostProcessBuffers()) return false;
+	if (!createFullQuadBuffer()) return false;
+
+	setViewport();
 	
 	return true;
 }
@@ -110,7 +113,6 @@ bool CDeviceManager::createDevice()
 
 bool CDeviceManager::createSwapChain(bool windowMode)
 {
-
 	/* DXGI_SWAP_CHAIN_DESC 구조체를 초기화
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 
@@ -439,20 +441,36 @@ void CDeviceManager::setViewport()
 	mContext->RSSetViewports(1, &viewport);
 }
 
-/*
-void CDeviceManager::clearRenderTargetView(const FLOAT clearColor[4])
+bool CDeviceManager::createFullQuadBuffer()
 {
-	for (int i = 0; i < 3; ++i)
-		if (mMSAARenderTargetView[i])
-			mContext->ClearRenderTargetView(mMSAARenderTargetView[i].Get(), clearColor);
-}
+	// 화면 전체를 덮는 거대 삼각형 (정점 3개)
+	// NDC: (-1, 3), (3, -1), (-1, -1)
+	// UV:  (0, -1), (2, 1), (0, 1)
+	FPostProcessVertex vertices[3];
 
-void CDeviceManager::clearDepthStencilView(float depthClearValue, UINT8 stencilClearValue)
-{
-	mContext->ClearDepthStencilView(mDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, depthClearValue, stencilClearValue);
-}
-*/
+	vertices[0].pos = DirectX::XMFLOAT3(-1.0f, 3.0f, 0.0f);
+	vertices[0].uv = DirectX::XMFLOAT2(0.0f, -1.0f);
 
+	vertices[1].pos = DirectX::XMFLOAT3(3.0f, -1.0f, 0.0f);
+	vertices[1].uv = DirectX::XMFLOAT2(2.0f, 1.0f);
+
+	vertices[2].pos = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);
+	vertices[2].uv = DirectX::XMFLOAT2(0.0f, 1.0f);
+
+	D3D11_BUFFER_DESC vbd = {};
+	vbd.Usage = D3D11_USAGE_IMMUTABLE; // 수정할 필요 없으므로 최적화용 Immutable
+	vbd.ByteWidth = sizeof(FPostProcessVertex) * 3;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vinit = {};
+	vinit.pSysMem = vertices;
+
+	if (FAILED(mDevice->CreateBuffer(&vbd, &vinit, mFullQuadVB.GetAddressOf())))
+		return false;
+
+	return true;
+}
 
 void CDeviceManager::clearBuffers(const FLOAT clearColor[4])
 {
@@ -532,6 +550,20 @@ void CDeviceManager::setPostProcessSource(ID3D11ShaderResourceView* srv)
 {
 	// 픽셀 셰이더의 0번 슬롯(t0)에 소스 이미지(SRV)를 꽂음
 	mContext->PSSetShaderResources(0, 1, &srv);
+}
+
+void CDeviceManager::drawFullScreenQuad()
+{
+	// 버퍼 설정
+	UINT stride = sizeof(FPostProcessVertex);
+	UINT offset = 0;
+	mContext->IASetVertexBuffers(0, 1, mFullQuadVB.GetAddressOf(), &stride, &offset);
+
+	// 토폴로지 설정 (삼각형 리스트)
+	mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// 그리기 (정점 3개면 화면이 꽉 참)
+	mContext->Draw(3, 0);
 }
 
 void CDeviceManager::present()

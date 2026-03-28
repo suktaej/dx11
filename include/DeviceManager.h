@@ -1,6 +1,12 @@
 #pragma once
 #include "GameInfo.h"
 
+struct FPostProcessVertex
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT2 uv;
+};
+
 class CDeviceManager
 {
 	//DECLARE_SINGLE(CDeviceManager);
@@ -64,6 +70,7 @@ public:
 	bool createLightingBuffers();			// HDR 라이팅 버퍼 생성
 	bool createPostProcessBuffers();		// Resolve/Ping-pong 버퍼 생성
 	void setViewport();						// RSSetViewports
+	bool createFullQuadBuffer();
 
 	//void clearRenderTargetView(const FLOAT clearColor[4]);
 	//void clearDepthStencilView(float depthClearValue = 1.0f, UINT8 stencilClearValue = 0);
@@ -74,6 +81,7 @@ public:
 	void setPostProcessTarget(int index); // 포스트 프로세스 타겟 설정 (0 또는 1번 핑퐁 버퍼)
 	void setFinalTarget(); // 최종 백버퍼를 타겟으로 설정 (포스트 프로세스의 마지막 단계)
 	void setPostProcessSource(ID3D11ShaderResourceView* srv); // 셰이더에게 읽을 소스 전달 (mResolvedHDRSRV 또는 핑퐁 SRV)
+	void drawFullScreenQuad();
 	void present(); // 스왑체인 Present 호출
 	void render();
 	
