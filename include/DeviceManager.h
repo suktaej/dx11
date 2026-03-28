@@ -26,6 +26,7 @@ private:
 	// 렌더 타겟 뷰 포인터를 멤버 변수로 선언.
 	//ID3D11RenderTargetView* mRenderTargetView = nullptr;
 	ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+
 	// MSAA용 내부 텍스처
 	ComPtr<ID3D11Texture2D> mMSAATexture[3];
 	// MSAA 텍스처를 위한 RTV 배열 (Color, Normal, Specular)
@@ -33,19 +34,25 @@ private:
 	ComPtr<ID3D11RenderTargetView> mMSAARenderTargetView[3]; 
 	// MSAA 텍스처를 위한 SRV 배열 (Color, Normal, Specular)
 	ComPtr<ID3D11ShaderResourceView> mMSAAShaderResourceView[3];
+
 	// 깊이-스텐실 뷰 포인터를 멤버 변수로 선언.
 	ComPtr<ID3D11DepthStencilView> mDepthStencilView;
+	ComPtr<ID3D11ShaderResourceView> mDepthSRV; 
+	
 	// 라이팅 결과가 담길 HDR 버퍼 (MSAA 대응)
 	ComPtr<ID3D11Texture2D> mLightAccumTextureMSAA;
 	ComPtr<ID3D11RenderTargetView> mLightAccumRTVMSAA;
+
 	// Resolve된 HDR 버퍼 (단일 샘플, 포스트 프로세스 시작점)
 	ComPtr<ID3D11Texture2D> mResolvedHDRTexture;
 	ComPtr<ID3D11ShaderResourceView> mResolvedHDRSRV;
+	
 	// 포스트 프로세스용 핑퐁 버퍼 (최소 2개)
 	// 효과가 여러 개일 때 (A -> B, B -> A 식으로 번갈아가며 렌더링)
 	ComPtr<ID3D11Texture2D> mPostProcessTextures[2];
 	ComPtr<ID3D11RenderTargetView> mPostProcessRTVs[2];
 	ComPtr<ID3D11ShaderResourceView> mPostProcessSRVs[2];
+
 	// 화면 전체를 덮는 삼각형/사각형 Vertex Buffer (포스트 프로세스 실행용)
 	// 픽셀 셰이더만 돌리기 위해 필요
 	ComPtr<ID3D11Buffer> mFullQuadVB;
