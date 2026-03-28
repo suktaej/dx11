@@ -19,6 +19,9 @@
     <Filter Include="01_GameManager\Device">
       <UniqueIdentifier>{b21fe9a1-2a7e-4637-bce2-3e7582d8a5a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02_Asset">
+      <UniqueIdentifier>{98d13fea-ff00-4dbc-955d-86d6c1447d88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="DeviceManager.cpp">
       <Filter>01_GameManager\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\AssetManager.cpp">
+      <Filter>02_Asset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="DeviceManager.h">
       <Filter>01_GameManager\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\AssetManager.h">
+      <Filter>02_Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

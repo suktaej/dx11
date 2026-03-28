@@ -89,7 +89,7 @@ void CGameManager::input(float dt)
 
 bool CGameManager::update(float dt)
 {
-    return true;
+    return false;
 }
 
 void CGameManager::collision(float dt)
@@ -98,6 +98,48 @@ void CGameManager::collision(float dt)
 
 void CGameManager::render(float dt)
 {
+    // 1. 초기화
+    mDevice.unbindShaderResources(); // 이전 프레임의 입력 해제 (안전장치)
+    mDevice.clearBuffers(mClearColor);
+
+    // 2. 기하 단계 (G-Buffer)
+    mDevice.setGBufferTarget();
+    mDevice.render();
+    // TODO: 모든 오브젝트 Draw (깊이 쓰기 ON 상태)
+
+    /*
+    // 3. 라이팅 단계 (Lighting Buffer)
+    mDevice.unbindShaderResources(); // G-Buffer RTV를 해제하기 위해
+    mDevice.setLightingTarget(); // 여기서 깊이 쓰기 OFF 권장
+    mDevice.setPostProcessSource(mDevice.getGBufferSRV(0)); // t0, t1, t2... 바인딩 필요
+    // TODO: FSQ Draw (Lighting Shader)
+
+    // 4. Resolve (MSAA -> Non-MSAA)
+    mDevice.unbindShaderResources(); // 입력으로 썼던 G-Buffer 해제
+    mDevice.preparePostProcess();
+
+    // 5. 포스트 프로세스 핑퐁
+    // Step A: HDR -> Post0
+    mDevice.setPostProcessTarget(0);
+    mDevice.setPostProcessSource(mDevice.getResolvedHDRSRV());
+    // TODO: FSQ Draw (Effect 1)
+    mDevice.unbindShaderResources();
+
+    // Step B: Post0 -> Post1
+    mDevice.setPostProcessTarget(1);
+    mDevice.setPostProcessSource(mDevice.getPostProcessSRV(0));
+    // TODO: FSQ Draw (Effect 2)
+    mDevice.unbindShaderResources();
+
+    // 6. 최종 출력 (톤 매핑 및 백버퍼)
+    mDevice.setFinalTarget();
+    mDevice.setPostProcessSource(mDevice.getPostProcessSRV(1));
+    // TODO: FSQ Draw (Tone-mapping Shader)
+
+    // 7. UI 및 Present
+    // mDevice.drawUI(); // UI는 보통 백버퍼 위에 직접 그림
+    mDevice.present(); // mSwapChain->Present(1, 0)
+    */
 }
 
 bool CGameManager::init(HINSTANCE hInst)
@@ -135,6 +177,7 @@ int CGameManager::run()
         }
         else
         {
+            logic();
         }
     }
 

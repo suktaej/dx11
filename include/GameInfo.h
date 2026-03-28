@@ -14,6 +14,8 @@ using namespace Microsoft::WRL;
 using namespace DirectX;
 #include <dxgi1_6.h>
 
+#include <crtdbg.h>
+
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -26,7 +28,6 @@ using namespace DirectX;
 #define	SAFE_DELETE_ARRAY(p) {if(p)	{ delete[] p; p = nullptr; }}
 #define	SAFE_RELEASE(p)	{if(p)	{ p->Release(); p = nullptr; }}
 #define DEFINITION_SINGLE(Type) Type* Type::mInst = nullptr;
-
 #define DECLARE_SINGLE(Type) \
 private:\
 	Type();\
@@ -44,6 +45,8 @@ public:\
 	{\
 		SAFE_DELETE(mInst);\
 	}
+
+#define LEAK_POS(val) _CrtSetBreakAlloc(val);
 
 struct FResolution
 {

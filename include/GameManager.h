@@ -2,6 +2,7 @@
 #include "GameInfo.h"
 #include "DeviceManager.h"
 #include "Share/TimeManager.h"
+#include "Asset/AssetManager.h"
 
 class CGameManager
 {
@@ -16,12 +17,14 @@ private:
 	TCHAR mClassName[256] = {};
 	TCHAR mTitleName[256] = {};
     RECT rc = { 0, 0, 1280, 720 };
+	float mClearColor[4] = {1.f,};
 	static bool mLoop;
 
 private:
 	CDeviceManager mDevice;
 	CTimeManager mTime;
-
+	CAssetManager mAsset;
+	
 private:
 	void RegisterWindowClass();
 	static LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
