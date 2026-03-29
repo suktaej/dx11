@@ -160,7 +160,6 @@ bool CGameManager::init(HINSTANCE hInst)
 
     mTime.init();
 
-
 	return true;
 }
 

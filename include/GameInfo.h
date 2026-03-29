@@ -92,6 +92,12 @@ struct FMeshDesc
 	bool bKeepIndexData = true;
 };
 
+struct FVertexPosColor
+{
+	XMFLOAT3 pos;
+	XMFLOAT4 color;
+};
+
 enum class EAssetType
 {
 	Mesh,

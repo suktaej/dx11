@@ -16,6 +16,7 @@ private:
 public:
 	bool init(CDeviceManager& device);
 	class CMesh* findMesh(const std::string& name);
+    void testCode();
 
 public:
     template <typename T>
