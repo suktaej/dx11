@@ -605,6 +605,16 @@ void CDeviceManager::present()
 	mSwapChain->Present(1, 0);
 }
 
+void CDeviceManager::unbindShaderResources()
+{
+	ID3D11ShaderResourceView* nullSRVs[16] = { nullptr };
+
+	mContext->PSSetShaderResources(0, 16, nullSRVs);
+	mContext->VSSetShaderResources(0, 16, nullSRVs);
+	mContext->GSSetShaderResources(0, 16, nullSRVs);
+	mContext->CSSetShaderResources(0, 16, nullSRVs);
+}
+
 void CDeviceManager::render()
 {
 	ComPtr<ID3D11Texture2D> backBuffer;
@@ -620,14 +630,4 @@ void CDeviceManager::render()
 	}
 
 	mSwapChain->Present(1, 0);
-}
-
-void CDeviceManager::unbindShaderResources()
-{
-	ID3D11ShaderResourceView* nullSRVs[16] = { nullptr };
-
-	mContext->PSSetShaderResources(0, 16, nullSRVs);
-	mContext->VSSetShaderResources(0, 16, nullSRVs);
-	mContext->GSSetShaderResources(0, 16, nullSRVs);
-	mContext->CSSetShaderResources(0, 16, nullSRVs);
 }

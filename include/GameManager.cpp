@@ -1,6 +1,6 @@
 #include "GameManager.h"
 #include "resource.h"
-#include "Share/TimeManager.h"
+
 
 DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
@@ -99,7 +99,6 @@ void CGameManager::collision(float dt)
 void CGameManager::render(float dt)
 {
     // 1. 초기화
-    mDevice.unbindShaderResources(); // 이전 프레임의 입력 해제 (안전장치)
     mDevice.clearBuffers(mClearColor);
 
     // 2. 기하 단계 (G-Buffer)
@@ -153,13 +152,14 @@ bool CGameManager::init(HINSTANCE hInst)
     if (!InitInstance())
         return false;
 
-    //if (!CDeviceManager::getInst()->init(mhWnd, rc.right, rc.bottom, true))
-    //    return false;
     if(false == mDevice.init(mhWnd, rc.right, rc.bottom, true))
 		return false;
-    
-    //CTimeManager::init();
+ 
+    if (false == mAsset.init(mDevice))
+        return false;
+
     mTime.init();
+
 
 	return true;
 }

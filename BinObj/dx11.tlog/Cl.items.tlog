@@ -1,4 +1,8 @@
+C:\MyCode\dx11\include\Asset\Asset.cpp;C:\MyCode\dx11\BinObj\Asset.obj
 C:\MyCode\dx11\include\Asset\AssetManager.cpp;C:\MyCode\dx11\BinObj\AssetManager.obj
+C:\MyCode\dx11\include\Asset\Mesh\Mesh.cpp;C:\MyCode\dx11\BinObj\Mesh.obj
+C:\MyCode\dx11\include\Asset\Mesh\MeshManager.cpp;C:\MyCode\dx11\BinObj\MeshManager.obj
+C:\MyCode\dx11\include\Asset\Mesh\StaticMesh.cpp;C:\MyCode\dx11\BinObj\StaticMesh.obj
 C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\BinObj\DeviceManager.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\BinObj\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\BinObj\main.obj

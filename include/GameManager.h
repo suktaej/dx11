@@ -17,7 +17,7 @@ private:
 	TCHAR mClassName[256] = {};
 	TCHAR mTitleName[256] = {};
     RECT rc = { 0, 0, 1280, 720 };
-	float mClearColor[4] = {1.f,};
+	float mClearColor[4] = {0.f, 1.f,};
 	static bool mLoop;
 
 private:

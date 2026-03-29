@@ -22,6 +22,9 @@
     <Filter Include="02_Asset">
       <UniqueIdentifier>{98d13fea-ff00-4dbc-955d-86d6c1447d88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02_Asset\Mesh">
+      <UniqueIdentifier>{70a5b022-ba63-4d7a-a40f-eaa14326bec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,6 +41,18 @@
     </ClCompile>
     <ClCompile Include="Asset\AssetManager.cpp">
       <Filter>02_Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\Asset.cpp">
+      <Filter>02_Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\Mesh\Mesh.cpp">
+      <Filter>02_Asset\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\Mesh\StaticMesh.cpp">
+      <Filter>02_Asset\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\Mesh\MeshManager.cpp">
+      <Filter>02_Asset\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +73,18 @@
     </ClInclude>
     <ClInclude Include="Asset\AssetManager.h">
       <Filter>02_Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\Asset.h">
+      <Filter>02_Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\Mesh\Mesh.h">
+      <Filter>02_Asset\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\Mesh\StaticMesh.h">
+      <Filter>02_Asset\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\Mesh\MeshManager.h">
+      <Filter>02_Asset\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

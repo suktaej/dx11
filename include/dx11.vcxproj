@@ -135,14 +135,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asset\Asset.cpp" />
     <ClCompile Include="Asset\AssetManager.cpp" />
+    <ClCompile Include="Asset\Mesh\Mesh.cpp" />
+    <ClCompile Include="Asset\Mesh\MeshManager.cpp" />
+    <ClCompile Include="Asset\Mesh\StaticMesh.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Share\TimeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asset\Asset.h" />
     <ClInclude Include="Asset\AssetManager.h" />
+    <ClInclude Include="Asset\Mesh\Mesh.h" />
+    <ClInclude Include="Asset\Mesh\MeshManager.h" />
+    <ClInclude Include="Asset\Mesh\StaticMesh.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />

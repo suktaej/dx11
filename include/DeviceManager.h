@@ -10,6 +10,8 @@ struct FPostProcessVertex
 class CDeviceManager
 {
 	//DECLARE_SINGLE(CDeviceManager);
+	friend class CGameManager;
+
 public:
 	CDeviceManager();
 	~CDeviceManager();
@@ -65,11 +67,10 @@ private:
 	unsigned int mCheckColor;
 	// 화면 해상도를 저장하는 구조체 멤버 변수
 	FResolution mResolution;
+	// Windows 핸들 저장 (초기화 시 전달받음)
 	HWND mhWnd = nullptr;
 
-public:
-	bool init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode);
-
+private:
 	bool createDevice();                    // ID3D11Device 생성 및 MSAA 체크
 	bool createSwapChain(bool windowMode);	// IDXGISwapChain 생성 및 BackBuffer RTV
 	bool createDepthStencilView();			// DepthStencilView 생성
@@ -77,10 +78,13 @@ public:
 	bool createLightingBuffers();			// HDR 라이팅 버퍼 생성
 	bool createPostProcessBuffers();		// Resolve/Ping-pong 버퍼 생성
 	void setViewport();						// RSSetViewports
-	bool createFullQuadBuffer();
+	bool createFullQuadBuffer();			// 화면 전체를 덮는 정점 버퍼 생성 (포스트 프로세스용)
+	
+	void unbindShaderResources(); // 픽셀 셰이더에 바인딩된 SRV 해제
 
-	//void clearRenderTargetView(const FLOAT clearColor[4]);
-	//void clearDepthStencilView(float depthClearValue = 1.0f, UINT8 stencilClearValue = 0);
+//public:
+	bool init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode);
+
 	void clearBuffers(const FLOAT clearColor[4]);
 	void setGBufferTarget();
 	void setLightingTarget();
@@ -90,9 +94,8 @@ public:
 	void setPostProcessSource(ID3D11ShaderResourceView* srv); // 셰이더에게 읽을 소스 전달 (mResolvedHDRSRV 또는 핑퐁 SRV)
 	void drawFullScreenQuad();
 	void present(); // 스왑체인 Present 호출
-	void render();
 	
-	void unbindShaderResources(); // 픽셀 셰이더에 바인딩된 SRV 해제
+	void render();
 
 public:
 	ID3D11Device* getDevice() const { return mDevice.Get(); }
