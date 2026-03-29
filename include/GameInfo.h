@@ -55,6 +55,52 @@ struct FResolution
 	unsigned int height = 0;
 };
 
+struct FBuffer
+{
+	ComPtr<ID3D11Buffer> buffer = nullptr;
+	std::vector<uint8_t> data;
+	UINT size = 0;
+	UINT count = 0;
+
+	virtual ~FBuffer() {};
+};
+
+struct FVertexBuffer : FBuffer { }; 
+struct FIndexBuffer : FBuffer { DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN; };
+
+struct FMeshDesc
+{
+	// 정점 데이터
+	std::string Name;
+	UINT VertexSize = 0;
+	UINT VertexCount = 0;
+	D3D11_USAGE VertexUsage = D3D11_USAGE_DEFAULT;
+	D3D11_PRIMITIVE_TOPOLOGY Primitive = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	// 실제 데이터 (주소값만 전달)
+	const void* pVertexData = nullptr;
+
+	// 인덱스 데이터
+	const void* pIndexData = nullptr;
+	UINT IndexSize = 0;
+	UINT IndexCount = 0;
+	DXGI_FORMAT IndexFormat = DXGI_FORMAT_UNKNOWN;
+	D3D11_USAGE IndexUsage = D3D11_USAGE_DEFAULT;
+
+	// 옵션
+	bool bKeepVertexData = true;
+	bool bKeepIndexData = true;
+};
+
+enum class EAssetType
+{
+	Mesh,
+	Texture,
+	Material,
+	Sound
+};
+
+/*
 struct FIndexBuffer
 {
 	// 데이터를 저장하기 위한 CPU 메모리 공간
@@ -66,10 +112,11 @@ struct FIndexBuffer
 	// 포멧
 	DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
 	// 임의의 데이터 포인터 (인덱스 버퍼에 저장된 인덱스 데이터를 CPU에서 접근하기 위한 용도)
-	void* data = nullptr;
+	//void* data = nullptr;
+	std::vector<uint8_t> data;
 
-	FIndexBuffer() {}
-	~FIndexBuffer() { SAFE_DELETE_ARRAY(data); }
+	//FIndexBuffer() {}
+	//~FIndexBuffer() { SAFE_DELETE_ARRAY(data); }
 };
 
 struct FVertexBuffer
@@ -81,8 +128,10 @@ struct FVertexBuffer
 	// 데이터 개수
 	UINT count = 0;
 	// 임의의 데이터 포인터 (버텍스 버퍼에 저장된 버텍스 데이터를 CPU에서 접근하기 위한 용도)
-	void* data = nullptr;
+	//void* data = nullptr;
+	std::vector<uint8_t> data;
 
-	FVertexBuffer() {}
-	~FVertexBuffer() { SAFE_DELETE_ARRAY(data); }
+	//FVertexBuffer() {}
+	//~FVertexBuffer() { SAFE_DELETE_ARRAY(data); }
 };
+*/

@@ -1,6 +1,5 @@
 #pragma once
-#include "../GameInfo.h"
-#include "../../DeviceManager.h"
+#include "../../GameInfo.h"
 
 class CMeshManager
 {
@@ -11,10 +10,32 @@ public:
 	~CMeshManager();
 
 private:
-	CDeviceManager* mDeviceMgr = nullptr;
-	std::unordered_map<std::string, class CMesh*> mMeshMap;
+	class CDeviceManager* mDeviceMgr = nullptr;
+	std::unordered_map<std::string, std::unique_ptr<class CMesh>> mMeshMap;
 
 public:
 	bool init(CDeviceManager& device);
-};
+	class CMesh* findMesh(const std::string& name);
 
+public:
+    template <typename T>
+    bool createMesh(const FMeshDesc& desc)
+    {
+        static_assert(std::is_base_of<CMesh, T>::value, "T must inherit from CMesh");
+
+        if (findMesh(desc.Name))
+            return true;
+
+        auto mesh = std::make_unique<T>(*mDeviceMgr);
+        mesh->setName(desc.Name);
+
+        if (!mesh->createMesh(
+            desc.bKeepVertexData, (void*)desc.pVertexData, desc.VertexSize, desc.VertexCount, desc.VertexUsage,
+            desc.Primitive,
+            desc.bKeepIndexData, (void*)desc.pIndexData, desc.IndexSize, desc.IndexCount, desc.IndexFormat, desc.IndexUsage))
+            return false;
+
+        mMeshMap.insert(std::make_pair(desc.Name, std::move(mesh)));
+        return true;
+    }
+};

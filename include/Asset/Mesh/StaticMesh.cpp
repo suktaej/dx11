@@ -1,6 +1,6 @@
 #include "StaticMesh.h"
 
-CStaticMesh::CStaticMesh()
+CStaticMesh::CStaticMesh(CDeviceManager& deviceMgr) : CMesh(deviceMgr)
 {
 }
 
