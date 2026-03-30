@@ -61,7 +61,7 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	if (!createDevice()) return false;
 	if (!createSwapChain(windowMode)) return false;
 	if (!createDepthStencilView()) return false;
-	if (!createGBuffers()) return false;
+	if (!createGeometryBuffers()) return false;
 	if (!createLightingBuffers()) return false;
 	if (!createPostProcessBuffers()) return false;
 	if (!createFullQuadBuffer()) return false;
@@ -309,7 +309,7 @@ bool CDeviceManager::createDepthStencilView()
 	return true;
 }
 
-bool CDeviceManager::createGBuffers()
+bool CDeviceManager::createGeometryBuffers()
 {
 	/* MSAA를 적용하기 위한 Render Target View 용 텍스처 설정 구조체 초기화 */
 	// RTV배열 기본값
@@ -508,7 +508,7 @@ void CDeviceManager::clearBuffers(const FLOAT clearColor[4])
 	mContext->ClearDepthStencilView(mDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void CDeviceManager::setGBufferTarget()
+void CDeviceManager::BeginGeometryPass()
 {
 	unbindShaderResources();
 
@@ -525,16 +525,16 @@ void CDeviceManager::setGBufferTarget()
 	mContext->OMSetRenderTargets(3, targets, mDepthStencilView.Get());
 }
 
-void CDeviceManager::setLightingTarget()
+void CDeviceManager::BeginLightingPass()
 {
 	// 이전 단계의 SRV들 해제
 	unbindShaderResources(); 
 	// 라이팅 결과는 mLightAccumRTVMSAA 하나에만 저장
 	// 이때 G-Buffer의 SRV를 읽어야 하므로, 기존에 걸려있던 G-Buffer RTV는 자동으로 해제되어야 함
-	mContext->OMSetRenderTargets(1, mLightAccumRTVMSAA.GetAddressOf(), mDepthStencilView.Get());
+	mContext->OMSetRenderTargets(1, mLightAccumRTVMSAA.GetAddressOf(), nullptr);
 }
 
-void CDeviceManager::preparePostProcess()
+void CDeviceManager::ResolveAndBeginPostProcess()
 { 
 	// Resolve 대상들이 SRV로 꽂혀있을 가능성 제거
 	unbindShaderResources();
@@ -561,8 +561,15 @@ void CDeviceManager::setPostProcessTarget(int index)
 	mContext->OMSetRenderTargets(1, mPostProcessRTVs[index].GetAddressOf(), nullptr);
 }
 
-void CDeviceManager::setFinalTarget()
+void CDeviceManager::setPostProcessSource(ID3D11ShaderResourceView* srv)
 {
+	// 픽셀 셰이더의 0번 슬롯(t0)에 소스 이미지(SRV)를 꽂음
+	mContext->PSSetShaderResources(0, 1, &srv);
+}
+
+void CDeviceManager::BeginFinalPass()
+{
+	unbindShaderResources();
 	// 최종 목적지인 스왑체인 백버퍼를 출력 타겟으로 설정
 	// 포스트 프로세스 이후이므로 Depth는 필요 없음 (nullptr)
 	mContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr);
@@ -577,12 +584,6 @@ void CDeviceManager::setFinalTarget()
 
 	mContext->RSSetViewports(1, &vp);
 	*/
-}
-
-void CDeviceManager::setPostProcessSource(ID3D11ShaderResourceView* srv)
-{
-	// 픽셀 셰이더의 0번 슬롯(t0)에 소스 이미지(SRV)를 꽂음
-	mContext->PSSetShaderResources(0, 1, &srv);
 }
 
 void CDeviceManager::drawFullScreenQuad()
@@ -615,7 +616,7 @@ void CDeviceManager::unbindShaderResources()
 	mContext->CSSetShaderResources(0, 16, nullSRVs);
 }
 
-void CDeviceManager::render()
+void CDeviceManager::testRender()
 {
 	ComPtr<ID3D11Texture2D> backBuffer;
 	HRESULT hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);

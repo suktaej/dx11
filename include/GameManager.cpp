@@ -102,8 +102,8 @@ void CGameManager::render(float dt)
     mDevice.clearBuffers(mClearColor);
 
     // 2. 기하 단계 (G-Buffer)
-    mDevice.setGBufferTarget();
-    mDevice.render();
+    mDevice.BeginGeometryPass();
+    mDevice.testRender();
     // TODO: 모든 오브젝트 Draw (깊이 쓰기 ON 상태)
 
     /*

@@ -74,7 +74,7 @@ private:
 	bool createDevice();                    // ID3D11Device 생성 및 MSAA 체크
 	bool createSwapChain(bool windowMode);	// IDXGISwapChain 생성 및 BackBuffer RTV
 	bool createDepthStencilView();			// DepthStencilView 생성
-	bool createGBuffers();				    // G-Buffer 텍스처/뷰 생성
+	bool createGeometryBuffers();			// G-Buffer 텍스처/뷰 생성
 	bool createLightingBuffers();			// HDR 라이팅 버퍼 생성
 	bool createPostProcessBuffers();		// Resolve/Ping-pong 버퍼 생성
 	void setViewport();						// RSSetViewports
@@ -86,16 +86,16 @@ private:
 	bool init(HWND hWnd, unsigned int width, unsigned int height, bool windowMode);
 
 	void clearBuffers(const FLOAT clearColor[4]);
-	void setGBufferTarget();
-	void setLightingTarget();
-	void preparePostProcess();
+	void BeginGeometryPass();
+	void BeginLightingPass();
+	void ResolveAndBeginPostProcess();
 	void setPostProcessTarget(int index); // 포스트 프로세스 타겟 설정 (0 또는 1번 핑퐁 버퍼)
-	void setFinalTarget(); // 최종 백버퍼를 타겟으로 설정 (포스트 프로세스의 마지막 단계)
 	void setPostProcessSource(ID3D11ShaderResourceView* srv); // 셰이더에게 읽을 소스 전달 (mResolvedHDRSRV 또는 핑퐁 SRV)
+	void BeginFinalPass(); // 최종 백버퍼를 타겟으로 설정 (포스트 프로세스의 마지막 단계)
 	void drawFullScreenQuad();
 	void present(); // 스왑체인 Present 호출
 	
-	void render();
+	void testRender();
 
 public:
 	ID3D11Device* getDevice() const { return mDevice.Get(); }
