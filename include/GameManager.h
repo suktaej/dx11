@@ -3,6 +3,7 @@
 #include "DeviceManager.h"
 #include "Share/TimeManager.h"
 #include "Asset/AssetManager.h"
+#include "Shader/ShaderManager.h"
 
 class CGameManager
 {
@@ -24,6 +25,7 @@ private:
 	CDeviceManager mDevice;
 	CTimeManager mTime;
 	CAssetManager mAsset;
+	CShaderManager mShader;
 	
 private:
 	void RegisterWindowClass();

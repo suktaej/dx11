@@ -25,6 +25,18 @@
     <Filter Include="02_Asset\Mesh">
       <UniqueIdentifier>{70a5b022-ba63-4d7a-a40f-eaa14326bec0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03_Shader">
+      <UniqueIdentifier>{b46e873d-ea3f-4f98-aeb9-149a794b2c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Shader\HLSL">
+      <UniqueIdentifier>{8f97e467-81aa-4035-844c-7977e1a4caec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Shader\Shader">
+      <UniqueIdentifier>{1c5d77a9-06aa-43ba-8eab-eef15365d353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Shader\Shader\ColorMesh">
+      <UniqueIdentifier>{9ac1737e-3f6e-4ee4-8fb4-d4db6d025bda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +65,21 @@
     </ClCompile>
     <ClCompile Include="Asset\Mesh\MeshManager.cpp">
       <Filter>02_Asset\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ShaderManager.cpp">
+      <Filter>03_Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\Shader.cpp">
+      <Filter>03_Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\GraphicShader.cpp">
+      <Filter>03_Shader\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ComputeShader.cpp">
+      <Filter>03_Shader\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ColorMeshShader.cpp">
+      <Filter>03_Shader\Shader\ColorMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +113,21 @@
     <ClInclude Include="Asset\Mesh\MeshManager.h">
       <Filter>02_Asset\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\ShaderManager.h">
+      <Filter>03_Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\Shader.h">
+      <Filter>03_Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\GraphicShader.h">
+      <Filter>03_Shader\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ComputeShader.h">
+      <Filter>03_Shader\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ColorMeshShader.h">
+      <Filter>03_Shader\Shader\ColorMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dx11.rc">
@@ -96,5 +138,13 @@
     <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Bin\Shader\Shared.hlsli">
+      <Filter>03_Shader\HLSL</Filter>
+    </None>
+    <None Include="..\Bin\Shader\Mesh.hlsl">
+      <Filter>03_Shader\HLSL</Filter>
+    </None>
   </ItemGroup>
 </Project>

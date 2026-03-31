@@ -1,7 +1,6 @@
 #include "GameManager.h"
 #include "resource.h"
 
-
 DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
 
@@ -156,6 +155,9 @@ bool CGameManager::init(HINSTANCE hInst)
 		return false;
  
     if (false == mAsset.init(mDevice))
+        return false;
+
+    if (false == mShader.init(mDevice))
         return false;
 
     mTime.init();

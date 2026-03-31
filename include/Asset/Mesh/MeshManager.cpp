@@ -79,5 +79,4 @@ void CMeshManager::testCode()
     desc.bKeepIndexData = true;
 
     createMesh<CStaticMesh>(desc);
-
 }

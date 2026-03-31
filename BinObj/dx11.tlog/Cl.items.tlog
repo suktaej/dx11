@@ -6,4 +6,9 @@ C:\MyCode\dx11\include\Asset\Mesh\StaticMesh.cpp;C:\MyCode\dx11\BinObj\StaticMes
 C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\BinObj\DeviceManager.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\BinObj\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\BinObj\main.obj
+C:\MyCode\dx11\include\Shader\ColorMeshShader.cpp;C:\MyCode\dx11\BinObj\ColorMeshShader.obj
+C:\MyCode\dx11\include\Shader\ComputeShader.cpp;C:\MyCode\dx11\BinObj\ComputeShader.obj
+C:\MyCode\dx11\include\Shader\GraphicShader.cpp;C:\MyCode\dx11\BinObj\GraphicShader.obj
+C:\MyCode\dx11\include\Shader\Shader.cpp;C:\MyCode\dx11\BinObj\Shader.obj
+C:\MyCode\dx11\include\Shader\ShaderManager.cpp;C:\MyCode\dx11\BinObj\ShaderManager.obj
 C:\MyCode\dx11\include\Share\TimeManager.cpp;C:\MyCode\dx11\BinObj\TimeManager.obj
