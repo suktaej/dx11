@@ -110,26 +110,6 @@ void CGameManager::render(float dt)
     CShader* testShader = mShader.findShader("TestShader");
     testShader->setShader();
 
-    D3D11_RASTERIZER_DESC rsDesc = {};
-    rsDesc.FillMode = D3D11_FILL_SOLID;
-    rsDesc.CullMode = D3D11_CULL_NONE; // 앞뒤 모두 그리기
-    rsDesc.FrontCounterClockwise = FALSE;
-    rsDesc.DepthClipEnable = TRUE;
-
-    ComPtr<ID3D11RasterizerState> pRS;
-    mDevice.getDevice()->CreateRasterizerState(&rsDesc, &pRS);
-    mDevice.getContext()->RSSetState(pRS.Get());
-
-    // 2. Depth Stencil State: 깊이 판정 끄기
-    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-    dsDesc.DepthEnable = FALSE; // 깊이 판정 안 함 (무조건 덮어쓰기)
-    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
-
-    ComPtr<ID3D11DepthStencilState> pDS;
-    mDevice.getDevice()->CreateDepthStencilState(&dsDesc, &pDS);
-    mDevice.getContext()->OMSetDepthStencilState(pDS.Get(), 0);
-
     CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
     testMesh->render();
     
