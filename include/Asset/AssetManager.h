@@ -13,5 +13,5 @@ private:
 
 public:
 	bool init(CDeviceManager& device);
+	CMeshManager* getMeshManager() { return mMeshMgr.get(); }
 };
-

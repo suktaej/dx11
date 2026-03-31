@@ -5,6 +5,7 @@ CMesh::CMesh(class CDeviceManager& deviceMgr)
 {
 	mAssetType = EAssetType::Mesh;
 	mDevice = deviceMgr.getDevice();
+	mContext = deviceMgr.getContext();
 	mPrimitive = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
 
@@ -114,4 +115,34 @@ bool CMesh::createMesh(bool keepVertexData, void* vertexData, UINT vertexSize, U
 			return false;
 
 	return true;
+}
+
+void CMesh::render()
+{
+	// 그려줄 도형 타입을 지정
+	mContext->IASetPrimitiveTopology(mPrimitive);
+	
+	UINT stride = mVertexBuffer.size;
+	UINT offset = 0;
+	// Vertex buffer 지정
+	mContext->IASetVertexBuffers(0, 1, mVertexBuffer.buffer.GetAddressOf(), &stride, &offset);
+	
+	size_t slotCount = mMeshSlots.size();
+
+	if (slotCount > 0)
+	{
+		for (size_t i = 0; i < slotCount; ++i)
+		{
+			// Index buffer 지정
+			mContext->IASetIndexBuffer(mMeshSlots[i]->indexBuffer.buffer.Get(), mMeshSlots[i]->indexBuffer.format, 0);
+			// Index를 참고하여 draw
+			mContext->DrawIndexed(mMeshSlots[i]->indexBuffer.count, 0, 0);
+		}
+	}
+	else
+	{
+		mContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+		mContext->Draw(mVertexBuffer.count, 0);
+
+	}
 }

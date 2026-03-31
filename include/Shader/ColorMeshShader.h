@@ -3,9 +3,9 @@
 class CColorMeshShader :
     public CGraphicShader
 {
-protected:
+public:
 	CColorMeshShader();
-	~CColorMeshShader();
+	~CColorMeshShader() override;
 
 public:
 	bool init(class CDeviceManager& device) override;

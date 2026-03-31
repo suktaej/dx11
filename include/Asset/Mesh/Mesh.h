@@ -14,11 +14,12 @@ public:
 
 protected:
 	ID3D11Device* mDevice;
+	ID3D11DeviceContext* mContext;
 	FVertexBuffer mVertexBuffer;
 	std::vector<std::unique_ptr<FMeshSlot>> mMeshSlots;
 	D3D11_PRIMITIVE_TOPOLOGY mPrimitive;
 
-private:	
+private:
 	bool createBuffer(ID3D11Buffer** buffer, D3D11_BIND_FLAG flag, void* data, UINT size, UINT count, D3D11_USAGE usage);
 	bool createIndexBuffer(
 		bool keepCPUdata,
@@ -47,5 +48,7 @@ public:
 		UINT indexCount = 0,
 		DXGI_FORMAT indexFormat = DXGI_FORMAT_UNKNOWN,
 		D3D11_USAGE indexUsage = D3D11_USAGE_DEFAULT);
+
+	void render();
 };
 

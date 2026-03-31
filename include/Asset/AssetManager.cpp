@@ -15,6 +15,7 @@ bool CAssetManager::init(CDeviceManager& device)
 	mDeviceMgr = &device;
 
 	mMeshMgr = std::make_unique<CMeshManager>();
+
 	if(false == mMeshMgr->init(device))
 		return false;
 

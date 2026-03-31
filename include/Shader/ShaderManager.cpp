@@ -1,5 +1,6 @@
 #include "ShaderManager.h"
 #include "Shader.h"
+#include "ColorMeshShader.h"
 #include "../DeviceManager.h"
 
 CShaderManager::CShaderManager()
@@ -9,9 +10,12 @@ CShaderManager::CShaderManager()
 CShaderManager::~CShaderManager()
 {
 }
+
 bool CShaderManager::init(CDeviceManager& device)
 {
 	mDeviceMgr = &device;
+
+	createShader<CColorMeshShader>("TestShader");
 
 	return true;
 }

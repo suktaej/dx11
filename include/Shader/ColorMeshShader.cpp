@@ -1,4 +1,5 @@
 #include "ColorMeshShader.h"
+#include "../DeviceManager.h"
 
 CColorMeshShader::CColorMeshShader()
 {
@@ -10,6 +11,9 @@ CColorMeshShader::~CColorMeshShader()
 
 bool CColorMeshShader::init(CDeviceManager& device)
 {
+	mDevice = device.getDevice();
+	mContext = device.getContext();
+
     if(!createVertexShader(TEXT("Mesh.hlsl"), "ColorMeshVS", "vs_5_0"))
 		return false;
 

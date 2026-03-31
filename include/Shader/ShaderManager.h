@@ -26,8 +26,6 @@ public:
 
 		auto shader = std::make_unique<T>();
 		
-		shader->setName(name);
-		
 		if (!shader->init(*mDeviceMgr))
 			return false;
 		
@@ -35,5 +33,4 @@ public:
 		
 		return true;
 	}
-	
 };

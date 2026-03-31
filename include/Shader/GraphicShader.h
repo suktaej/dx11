@@ -4,9 +4,9 @@
 class CGraphicShader :
     public CShader
 {
-protected:
+public:
 	CGraphicShader();
-	virtual ~CGraphicShader();
+	~CGraphicShader() override;
 
 protected:
 	ID3D11Device* mDevice = nullptr;
