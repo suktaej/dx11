@@ -100,7 +100,7 @@ bool CDeviceManager::createDevice()
 
 	// 생성된 Device 객체의 MSAA 품질 수준을 확인하고 결과를 저장
 	// DX에서는 0-1사이의 normal화 된 색상값을 사용
-	// mSampleCount : 1(사용하지	않음) 또는 4(4배 멀티샘플링)로 설정하여 MSAA 품질 수준을 확인
+	// mSampleCount : 1(사용하지 않음) 또는 4(4배 멀티샘플링)로 설정하여 MSAA 품질 수준을 확인
 	// mCheckColor : 해당 샘플 개수에서 MSAA 품질 수준이 지원되는지 여부를 저장하는 변수
 	mSampleCount = 4;
 	mCheckColor = 0;

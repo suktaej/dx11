@@ -19,7 +19,7 @@ protected:
 	//UINT mByteOffset = 0;
 	 
 	// 셰이더 파일 경로를 셰이더 로딩 함수에서 기본 경로로 사용
-	std::wstring mDefaultShaderFilePath = TEXT("../Bin/Shader/");
+	std::wstring mDefaultShaderFilePath = TEXT("../Shader/");
 	// 각 셰이더 유형별로 ID3D11*Shader 포인터와 해당 셰이더의 컴파일된 코드(ID3DBlob)를 멤버 변수로 선언
 	ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
 	ComPtr<ID3DBlob> mVertexShaderBlob = nullptr;

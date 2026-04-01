@@ -140,10 +140,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Bin\Shader\Shared.hlsli">
+    <None Include="..\Shader\Shared.hlsli">
       <Filter>03_Shader\HLSL</Filter>
     </None>
-    <None Include="..\Bin\Shader\Mesh.hlsl">
+    <None Include="..\Shader\Mesh.hlsl">
       <Filter>03_Shader\HLSL</Filter>
     </None>
   </ItemGroup>

@@ -34,11 +34,11 @@ void CMeshManager::testCode()
     // TestCode
     FVertexPosColor boxVertex[8] =
     {
-        // ¾Õ¸é (Z = -1.0f)
-        { XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) }, // 0: °ËÁ¤ (ÁÂÇÏ´Ü)
-		{ XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) }, // 1: ÃÊ·Ï (ÁÂ»ó´Ü)
-        { XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) }, // 2: ³ë¶û (¿ì»ó´Ü)
-        { XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) }, // 3: »¡°­ (¿ìÇÏ´Ü)
+        // ¾Õ¸é (Z = 0.0f)
+        { XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) }, // 0: °ËÁ¤ (ÁÂÇÏ´Ü)
+		{ XMFLOAT3(-0.5f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) }, // 1: ÃÊ·Ï (ÁÂ»ó´Ü)
+        { XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) }, // 2: ³ë¶û (¿ì»ó´Ü)
+        { XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) }, // 3: »¡°­ (¿ìÇÏ´Ü)
 
 		// µÞ¸é (Z = 1.0f)
 		{ XMFLOAT3(-1.f,-1.f, 1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }, // 4: ÆÄ¶û (ÁÂÇÏ´Ü)
