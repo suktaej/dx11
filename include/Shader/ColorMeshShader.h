@@ -8,6 +8,6 @@ public:
 	~CColorMeshShader() override;
 
 public:
-	bool init(class CDeviceManager& device) override;
+	//bool init() override;
+	bool create(ID3D11Device* device) override;
 };
-

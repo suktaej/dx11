@@ -108,10 +108,10 @@ void CGameManager::render(float dt)
     mDevice.BeginGeometryPass();
 
     CShader* testShader = mShader.findShader("TestShader");
-    testShader->setShader();
+    testShader->setShader(mDevice.getContext());
 
     CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
-    testMesh->render();
+    testMesh->render(mDevice.getContext());
     
     mDevice.testRender();
 

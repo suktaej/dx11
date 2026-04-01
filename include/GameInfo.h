@@ -70,6 +70,7 @@ struct FIndexBuffer : FBuffer { DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN; };
 
 struct FMeshDesc
 {
+	ID3D11Device* device = nullptr;
 	// 정점 데이터
 	std::string Name;
 	UINT VertexSize = 0;

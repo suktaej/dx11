@@ -1,7 +1,6 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 #include "ColorMeshShader.h"
-#include "../DeviceManager.h"
 
 CShaderManager::CShaderManager()
 {

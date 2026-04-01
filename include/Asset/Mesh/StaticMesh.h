@@ -4,7 +4,7 @@
 class CStaticMesh : public CMesh
 {
 public:
-	CStaticMesh(class CDeviceManager& deviceMgr);
+	CStaticMesh();
 	virtual ~CStaticMesh();
 };
 

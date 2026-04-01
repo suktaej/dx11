@@ -1,11 +1,11 @@
 #include "Mesh.h"
 #include "../../DeviceManager.h"
 
-CMesh::CMesh(class CDeviceManager& deviceMgr)
+CMesh::CMesh()
 {
 	mAssetType = EAssetType::Mesh;
-	mDevice = deviceMgr.getDevice();
-	mContext = deviceMgr.getContext();
+	//mDevice = deviceMgr.getDevice();
+	//mContext = deviceMgr.getContext();
 	mPrimitive = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
 
@@ -13,7 +13,7 @@ CMesh::~CMesh()
 {
 }
 
-bool CMesh::createBuffer(ID3D11Buffer** buffer, D3D11_BIND_FLAG flag, void* data, UINT size, UINT count, D3D11_USAGE usage)
+bool CMesh::createBuffer(ID3D11Device* device, ID3D11Buffer** buffer, D3D11_BIND_FLAG flag, void* data, UINT size, UINT count, D3D11_USAGE usage)
 {
 	D3D11_BUFFER_DESC bufferDesc = {};
 
@@ -41,13 +41,13 @@ bool CMesh::createBuffer(ID3D11Buffer** buffer, D3D11_BIND_FLAG flag, void* data
 		initData = &bufferData;
 	}
 
-	if (FAILED(mDevice->CreateBuffer(&bufferDesc, initData, buffer)))
+	if (FAILED(device->CreateBuffer(&bufferDesc, initData, buffer)))
 		return false;
 
 	return true;
 }
 
-bool CMesh::createIndexBuffer(bool keepCPUdata, void* indexData, UINT indexSize, UINT indexCount, DXGI_FORMAT indexFormat, D3D11_USAGE indexUsage)
+bool CMesh::createIndexBuffer(ID3D11Device* device, bool keepCPUdata, void* indexData, UINT indexSize, UINT indexCount, DXGI_FORMAT indexFormat, D3D11_USAGE indexUsage)
 {
 	std::unique_ptr<FMeshSlot> slot = std::make_unique<FMeshSlot>();
 
@@ -73,7 +73,7 @@ bool CMesh::createIndexBuffer(bool keepCPUdata, void* indexData, UINT indexSize,
 		//slot->indexBuffer.data = nullptr;
 		slot->indexBuffer.data.clear();
 
-	if (!createBuffer(&slot->indexBuffer.buffer, D3D11_BIND_INDEX_BUFFER, indexData, indexSize, indexCount, indexUsage))
+	if (!createBuffer(device, &slot->indexBuffer.buffer, D3D11_BIND_INDEX_BUFFER, indexData, indexSize, indexCount, indexUsage))
 		return false;
 
 	mMeshSlots.push_back(std::move(slot));
@@ -81,7 +81,7 @@ bool CMesh::createIndexBuffer(bool keepCPUdata, void* indexData, UINT indexSize,
 	return true;
 }
 
-bool CMesh::createVertexBuffer(bool keepCPUdata, void* vertexData, UINT vertexSize, UINT vertexCount, D3D11_USAGE vertexUsage)
+bool CMesh::createVertexBuffer(ID3D11Device* device, bool keepCPUdata, void* vertexData, UINT vertexSize, UINT vertexCount, D3D11_USAGE vertexUsage)
 {
 	mVertexBuffer.size = vertexSize;
 	mVertexBuffer.count = vertexCount;
@@ -97,35 +97,35 @@ bool CMesh::createVertexBuffer(bool keepCPUdata, void* vertexData, UINT vertexSi
 		//mVertexBuffer.data = nullptr;
 		mVertexBuffer.data.clear();
 
-	if (!createBuffer(&mVertexBuffer.buffer, D3D11_BIND_VERTEX_BUFFER, vertexData, vertexSize, vertexCount, vertexUsage))
+	if (!createBuffer(device, &mVertexBuffer.buffer, D3D11_BIND_VERTEX_BUFFER, vertexData, vertexSize, vertexCount, vertexUsage))
 		return false;
 
 	return true;
 }
 
-bool CMesh::createMesh(bool keepVertexData, void* vertexData, UINT vertexSize, UINT vertexCount, D3D11_USAGE vertexUsage, D3D11_PRIMITIVE_TOPOLOGY primitive, bool keepIndexdata, void* indexData, UINT indexSize, UINT indexCount, DXGI_FORMAT indexFormat, D3D11_USAGE indexUsage)
+bool CMesh::createMesh(ID3D11Device* device, bool keepVertexData, void* vertexData, UINT vertexSize, UINT vertexCount, D3D11_USAGE vertexUsage, D3D11_PRIMITIVE_TOPOLOGY primitive, bool keepIndexdata, void* indexData, UINT indexSize, UINT indexCount, DXGI_FORMAT indexFormat, D3D11_USAGE indexUsage)
 {
 	mPrimitive = primitive;
 	
-	if (!createVertexBuffer(keepVertexData, vertexData, vertexSize, vertexCount, vertexUsage))
+	if (!createVertexBuffer(device, keepVertexData, vertexData, vertexSize, vertexCount, vertexUsage))
 		return false;
 
 	if (indexData)
-		if (!createIndexBuffer(keepIndexdata, indexData, indexSize, indexCount, indexFormat, indexUsage))
+		if (!createIndexBuffer(device, keepIndexdata, indexData, indexSize, indexCount, indexFormat, indexUsage))
 			return false;
 
 	return true;
 }
 
-void CMesh::render()
+void CMesh::render(ID3D11DeviceContext* context)
 {
 	// 그려줄 도형 타입을 지정
-	mContext->IASetPrimitiveTopology(mPrimitive);
+	context->IASetPrimitiveTopology(mPrimitive);
 	
 	UINT stride = mVertexBuffer.size;
 	UINT offset = 0;
 	// Vertex buffer 지정
-	mContext->IASetVertexBuffers(0, 1, mVertexBuffer.buffer.GetAddressOf(), &stride, &offset);
+	context->IASetVertexBuffers(0, 1, mVertexBuffer.buffer.GetAddressOf(), &stride, &offset);
 	
 	size_t slotCount = mMeshSlots.size();
 
@@ -134,15 +134,14 @@ void CMesh::render()
 		for (size_t i = 0; i < slotCount; ++i)
 		{
 			// Index buffer 지정
-			mContext->IASetIndexBuffer(mMeshSlots[i]->indexBuffer.buffer.Get(), mMeshSlots[i]->indexBuffer.format, 0);
+			context->IASetIndexBuffer(mMeshSlots[i]->indexBuffer.buffer.Get(), mMeshSlots[i]->indexBuffer.format, 0);
 			// Index를 참고하여 draw
-			mContext->DrawIndexed(mMeshSlots[i]->indexBuffer.count, 0, 0);
+			context->DrawIndexed(mMeshSlots[i]->indexBuffer.count, 0, 0);
 		}
 	}
 	else
 	{
-		mContext->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
-		mContext->Draw(mVertexBuffer.count, 0);
-
+		context->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+		context->Draw(mVertexBuffer.count, 0);
 	}
 }

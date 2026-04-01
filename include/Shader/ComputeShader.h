@@ -7,7 +7,8 @@ protected:
 	virtual ~CComputeShader();
 
 public:
-	bool init(class CDeviceManager& device) override;
-	void setShader() final;
+	//bool init() override;
+	bool create(ID3D11Device* device) override;
+	void setShader(ID3D11DeviceContext* context) final;
 };
 

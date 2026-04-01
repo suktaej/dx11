@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameInfo.h"
+#include "../DeviceManager.h"
 
 class CShaderManager
 {
@@ -8,7 +9,7 @@ public:
 	~CShaderManager();
 
 private:
-	class CDeviceManager* mDeviceMgr;
+	CDeviceManager* mDeviceMgr;
 	std::unordered_map<std::string, std::unique_ptr<class CShader>> mShaderMap;
 
 public:
@@ -26,7 +27,7 @@ public:
 
 		auto shader = std::make_unique<T>();
 		
-		if (!shader->init(*mDeviceMgr))
+		if (!shader->create(mDeviceMgr->getDevice()))
 			return false;
 		
 		mShaderMap.insert(std::make_pair(name, std::move(shader)));

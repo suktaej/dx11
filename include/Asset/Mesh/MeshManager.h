@@ -14,7 +14,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<class CMesh>> mMeshMap;
 
 public:
-	bool init(CDeviceManager& device);
+	bool init(class CDeviceManager& device);
 	class CMesh* findMesh(const std::string& name);
     void testCode();
 
@@ -27,10 +27,11 @@ public:
         if (findMesh(desc.Name))
             return true;
 
-        auto mesh = std::make_unique<T>(*mDeviceMgr);
+        auto mesh = std::make_unique<T>();
         mesh->setName(desc.Name);
 
         if (!mesh->createMesh(
+            desc.device,
             desc.bKeepVertexData, (void*)desc.pVertexData, desc.VertexSize, desc.VertexCount, desc.VertexUsage,
             desc.Primitive,
             desc.bKeepIndexData, (void*)desc.pIndexData, desc.IndexSize, desc.IndexCount, desc.IndexFormat, desc.IndexUsage))
