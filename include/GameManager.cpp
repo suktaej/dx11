@@ -54,7 +54,7 @@ LRESULT CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 BOOL CGameManager::InitInstance()
 {
-	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, TRUE);
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
     int windowWidth = rc.right - rc.left;
     int windowHeight = rc.bottom - rc.top;

@@ -13,6 +13,7 @@
 using namespace Microsoft::WRL;
 #include <DirectXMath.h>
 using namespace DirectX;
+#include <DirectXPackedVector.h>
 #include <dxgi1_6.h>
 
 #include <crtdbg.h>
@@ -98,6 +99,35 @@ struct FVertexPosColor
 	XMFLOAT3 pos;
 	XMFLOAT4 color;
 };
+
+enum class EShaderBufferType
+{
+	None = 0x0,
+	Vertex = 0x1,
+	Pixel = 0x2,
+	Hull = 0x4,
+	Domain = 0x8,
+	Geometry = 0x10,
+	Compute = 0x20,
+	Graphic = Vertex | Pixel | Hull | Domain | Geometry,
+	All = Graphic | Compute
+};
+
+inline EShaderBufferType operator|(EShaderBufferType a, EShaderBufferType b)
+{
+	return static_cast<EShaderBufferType>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline EShaderBufferType operator&(EShaderBufferType a, EShaderBufferType b)
+{
+	return static_cast<EShaderBufferType>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+inline EShaderBufferType& operator|=(EShaderBufferType& a, EShaderBufferType b)
+{
+	a = a | b;
+	return a;
+}
 
 enum class EAssetType
 {

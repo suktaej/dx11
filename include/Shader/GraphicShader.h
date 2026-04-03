@@ -9,9 +9,6 @@ public:
 	~CGraphicShader() override;
 
 protected:
-	//ID3D11Device* mDevice = nullptr;
-	//ID3D11DeviceContext* mContext = nullptr;
-
 	ComPtr<ID3D11InputLayout> mInputLayout = nullptr;
 	// Register 지정을 위한 구조체 정의
 	std::vector<D3D11_INPUT_ELEMENT_DESC> mVecElementDescs;

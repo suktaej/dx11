@@ -37,6 +37,9 @@
     <Filter Include="03_Shader\Shader\ColorMesh">
       <UniqueIdentifier>{9ac1737e-3f6e-4ee4-8fb4-d4db6d025bda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03_Shader\ConstantBuffer">
+      <UniqueIdentifier>{997cbfef-dd6b-4115-83bb-436483c35d89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,6 +83,15 @@
     </ClCompile>
     <ClCompile Include="Shader\ColorMeshShader.cpp">
       <Filter>03_Shader\Shader\ColorMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ConstantBuffer.cpp">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ConstantBufferData.cpp">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\TransformConstantBuffer.cpp">
+      <Filter>03_Shader\ConstantBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +139,21 @@
     </ClInclude>
     <ClInclude Include="Shader\ColorMeshShader.h">
       <Filter>03_Shader\Shader\ColorMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ConstantBuffer.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ConstantBufferData.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TransformConstantBuffer.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ConstantBufferInfo.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,3 +5,11 @@ struct PS_OUT_SINGLE
     // 출력 레지스터에 SV_TARGET 값을 삽입
     float4 Color : SV_TARGET;
 };
+
+cbuffer TransformBuffer : register(b0)
+{
+    float4x4 gWorld;
+    float4x4 gView;
+    float4x4 gProjection;
+    float4x4 gWVP;
+};

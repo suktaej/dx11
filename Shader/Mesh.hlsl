@@ -17,7 +17,9 @@ VS_OUTPUT_COLOR ColorMeshVS(VS_INPUT_COLOR input)
     // 구조체 멤버 초기화
     VS_OUTPUT_COLOR output = (VS_OUTPUT_COLOR)0;
 
-    output.Position = float4(input.Position, 1.f);
+    // 지역공간에서 월드공간으로 변환
+    // 아핀공간에서 변환할 때는 w값이 1(점)
+    output.Position = mul(float4(input.Position, 1.f), gWVP);
     output.Color = input.Color;
 
     return output;
