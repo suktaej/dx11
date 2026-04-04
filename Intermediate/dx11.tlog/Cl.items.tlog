@@ -8,7 +8,10 @@ C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\Intermediate\GameManager.o
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj
 C:\MyCode\dx11\include\Shader\ColorMeshShader.cpp;C:\MyCode\dx11\Intermediate\ColorMeshShader.obj
 C:\MyCode\dx11\include\Shader\ComputeShader.cpp;C:\MyCode\dx11\Intermediate\ComputeShader.obj
+C:\MyCode\dx11\include\Shader\ConstantBuffer.cpp;C:\MyCode\dx11\Intermediate\ConstantBuffer.obj
+C:\MyCode\dx11\include\Shader\ConstantBufferData.cpp;C:\MyCode\dx11\Intermediate\ConstantBufferData.obj
 C:\MyCode\dx11\include\Shader\GraphicShader.cpp;C:\MyCode\dx11\Intermediate\GraphicShader.obj
 C:\MyCode\dx11\include\Shader\Shader.cpp;C:\MyCode\dx11\Intermediate\Shader.obj
 C:\MyCode\dx11\include\Shader\ShaderManager.cpp;C:\MyCode\dx11\Intermediate\ShaderManager.obj
+C:\MyCode\dx11\include\Shader\TransformConstantBuffer.cpp;C:\MyCode\dx11\Intermediate\TransformConstantBuffer.obj
 C:\MyCode\dx11\include\Share\TimeManager.cpp;C:\MyCode\dx11\Intermediate\TimeManager.obj

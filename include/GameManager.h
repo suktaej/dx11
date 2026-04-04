@@ -41,5 +41,6 @@ private:
 public:
 	bool init(HINSTANCE hInst);
 	int run();
+	void testRender();
 };
 

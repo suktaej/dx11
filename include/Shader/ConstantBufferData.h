@@ -14,11 +14,11 @@ protected:
 	CConstantBuffer* mBuffer = nullptr;
 
 protected:
-	void setConstantBuffer(CShaderManager& shaderMgr, const std::string& name);
+	void setConstantBuffer(const std::string& name);
 
 public:
-	virtual bool init() = 0;
+	virtual bool init(CShaderManager& shaderMgr) = 0;
 	virtual void updateBuffer(ID3D11DeviceContext* context) = 0;
-	virtual CConstantBufferData* clone() const = 0;
+	virtual std::unique_ptr<CConstantBufferData> clone() const = 0;
 };
 

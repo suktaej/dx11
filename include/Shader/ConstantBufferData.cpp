@@ -8,19 +8,17 @@ CConstantBufferData::CConstantBufferData()
 
 CConstantBufferData::CConstantBufferData(const CConstantBufferData& data)
 {
-
 }
 
-CConstantBufferData::CConstantBufferData(CConstantBufferData&& data)
+CConstantBufferData::CConstantBufferData(CConstantBufferData&& data) noexcept
 {
-	
 }
 
 CConstantBufferData::~CConstantBufferData()
 {
 }
 
-void CConstantBufferData::setConstantBuffer(CShaderManager& shaderMgr, const std::string& name)
+void CConstantBufferData::setConstantBuffer(const std::string& name)
 {
-	mBuffer = shaderMgr.findConstantBuffer(name);
+	mBuffer = mShaderMgr->findConstantBuffer(name);
 }

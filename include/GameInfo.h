@@ -12,7 +12,6 @@
 #include <wrl.h>
 using namespace Microsoft::WRL;
 #include <DirectXMath.h>
-using namespace DirectX;
 #include <DirectXPackedVector.h>
 #include <dxgi1_6.h>
 
@@ -96,8 +95,8 @@ struct FMeshDesc
 
 struct FVertexPosColor
 {
-	XMFLOAT3 pos;
-	XMFLOAT4 color;
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT4 color;
 };
 
 enum class EShaderBufferType

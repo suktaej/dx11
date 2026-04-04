@@ -5,6 +5,8 @@
 #include "Asset/Mesh/MeshManager.h"
 #include "Shader/ColorMeshShader.h"
 
+#include "Shader/TransformConstantBuffer.h" //TEST
+
 DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
 
@@ -107,13 +109,7 @@ void CGameManager::render(float dt)
     // 2. 기하 단계 (G-Buffer)
     mDevice.BeginGeometryPass();
 
-    CShader* testShader = mShader.findShader("TestShader");
-    testShader->setShader(mDevice.getContext());
-
-    CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
-    testMesh->render(mDevice.getContext());
-    
-    mDevice.testRender();
+    testRender();
 
     // TODO: 모든 오브젝트 Draw (깊이 쓰기 ON 상태)
 
@@ -195,4 +191,67 @@ int CGameManager::run()
     }
 
     return (int)msg.wParam;
+}
+
+void CGameManager::testRender()
+{
+	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 5.0f, 1.0f);
+	static DirectX::XMVECTOR rot = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	float testSpeed = 5.0f;
+
+	// case1: scalar 연산
+	float dtSpeed = testSpeed * mTime.getDeltaTime();
+	// case2: vector 연산
+    using DirectX::operator*;
+    using DirectX::operator-=;
+    DirectX::XMVECTOR vSpeed = DirectX::XMVectorReplicate(testSpeed * mTime.getDeltaTime());
+    DirectX::XMVECTOR vDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	if (GetAsyncKeyState('W') & 0x8000)
+        pos = DirectX::XMVectorAdd(pos, DirectX::XMVectorScale(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), dtSpeed));
+
+	if (GetAsyncKeyState('S') & 0x8000)
+        pos -= vDir * vSpeed;
+    
+	static CTransformConstantBuffer testCBuffer;
+    DirectX::XMFLOAT4X4 world, view, projection;
+
+    // world
+    DirectX::XMFLOAT4X4 translate, rotate, scale;
+    // translate
+    DirectX::XMStoreFloat4x4(&translate, DirectX::XMMatrixTranslationFromVector(pos));
+    //DirectX::XMStoreFloat4x4(&translate, DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f));
+    // rotation
+    float pitch = DirectX::XMConvertToRadians(45.0f);
+    float yaw = DirectX::XMConvertToRadians(45.0f);
+    float roll = 0.0f;
+    //XMStoreFloat4x4(&rotate, XMMatrixRotationY(XMConvertToRadians(45.0f)));
+    DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
+    // scale
+    DirectX::XMStoreFloat4x4(&scale, DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
+    // SRT
+    DirectX::XMStoreFloat4x4(&world, XMLoadFloat4x4(&scale) * XMLoadFloat4x4(&rotate) * XMLoadFloat4x4(&translate));
+
+    // view
+    DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
+    DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+    DirectX::XMStoreFloat4x4(&view, DirectX::XMMatrixLookAtLH(eye, at, up));
+
+	// projection
+    DirectX::XMStoreFloat4x4(&projection, DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), (float)rc.right / rc.bottom, 0.1f, 100.0f));
+
+    testCBuffer.setWorld(world);
+    testCBuffer.setView(view);
+    testCBuffer.setProjection(projection);
+    testCBuffer.init(mShader);
+	testCBuffer.updateBuffer(mDevice.getContext());
+
+    CShader* testShader = mShader.findShader("TestShader");
+    testShader->setShader(mDevice.getContext());
+
+    CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
+    testMesh->render(mDevice.getContext());
+
+    mDevice.testRender();
 }

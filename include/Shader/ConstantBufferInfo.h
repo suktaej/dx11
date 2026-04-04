@@ -3,8 +3,8 @@
 
 struct FTransformConstantBufferInfo
 {
-	XMFLOAT4 World;
-	XMFLOAT4 View;
-	XMFLOAT4 Projection;
-	XMFLOAT4 WVP;
+	DirectX::XMFLOAT4X4 World;
+	DirectX::XMFLOAT4X4 View;
+	DirectX::XMFLOAT4X4 Projection;
+	DirectX::XMFLOAT4X4 WVP;
 };

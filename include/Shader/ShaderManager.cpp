@@ -1,6 +1,6 @@
 #include "ShaderManager.h"
-#include "../DeviceManager.h"
 #include "Shader.h"
+#include "../DeviceManager.h"
 #include "ColorMeshShader.h"
 #include "ConstantBuffer.h"
 
@@ -16,7 +16,11 @@ bool CShaderManager::init(CDeviceManager& device)
 {
 	mDeviceMgr = &device;
 
+	// Shader
 	createShader<CColorMeshShader>("TestShader");
+	
+	// Constant Buffer
+	createConstantBuffer("Transform", sizeof(FTransformConstantBufferInfo), 0, EShaderBufferType::Vertex);
 
 	return true;
 }
@@ -41,17 +45,15 @@ void CShaderManager::releaseShader(const std::string& name)
 
 bool CShaderManager::createConstantBuffer(const std::string& name, int size, int registerSlot, EShaderBufferType bufferType)
 {
-	CConstantBuffer* CBuffer = findConstantBuffer(name);
-
-	if (CBuffer)
+	if (findConstantBuffer(name))
 		return true;
 
-	CBuffer = new CConstantBuffer;
+	std::unique_ptr<CConstantBuffer> CBuffer = std::make_unique<CConstantBuffer>();
 
 	if (!CBuffer->init(mDeviceMgr, bufferType, size, registerSlot))
 		return false;
 
-	mConstantBufferMap.insert(std::make_pair(name, CBuffer));
+	mConstantBufferMap.emplace(std::make_pair(name, std::move(CBuffer)));
 
 	return true;
 }
