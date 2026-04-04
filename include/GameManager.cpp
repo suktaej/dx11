@@ -196,39 +196,62 @@ int CGameManager::run()
 void CGameManager::testRender()
 {
 	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 5.0f, 1.0f);
-	static DirectX::XMVECTOR rot = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	float testSpeed = 5.0f;
+	static DirectX::XMVECTOR rot = DirectX::XMQuaternionIdentity();
+    DirectX::XMVECTOR dirY = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    DirectX::XMVECTOR dirZ = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 
-	// case1: scalar 연산
-	float dtSpeed = testSpeed * mTime.getDeltaTime();
-	// case2: vector 연산
-    using DirectX::operator*;
-    using DirectX::operator-=;
-    DirectX::XMVECTOR vSpeed = DirectX::XMVectorReplicate(testSpeed * mTime.getDeltaTime());
-    DirectX::XMVECTOR vDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	float testSpeed = 5.0f;
+	float dtSpeed = testSpeed * mTime.getDeltaTime();                // case1: scalar 연산
+    DirectX::XMVECTOR vSpeed = DirectX::XMVectorReplicate(dtSpeed);  // case2: vector 연산
+
+    float rotAngle = DirectX::XMConvertToRadians(180.0f);
+    float dtRot = rotAngle * mTime.getDeltaTime();
 
 	if (GetAsyncKeyState('W') & 0x8000)
-        pos = DirectX::XMVectorAdd(pos, DirectX::XMVectorScale(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), dtSpeed));
-
+        pos = DirectX::XMVectorAdd(pos, DirectX::XMVectorScale(dirY, dtSpeed));
 	if (GetAsyncKeyState('S') & 0x8000)
-        pos -= vDir * vSpeed;
+	{
+        using DirectX::operator*;
+		using DirectX::operator-=;
+
+        pos -= dirY * vSpeed;
+    }
+    if(GetAsyncKeyState('A') & 0x8000)
+    { 
+        using DirectX::operator*;
+        rot = DirectX::XMQuaternionMultiply(rot, DirectX::XMQuaternionRotationAxis(dirZ, dtRot));
+	}
+    if (GetAsyncKeyState('D') & 0x8000)
+    {
+        using DirectX::operator*;
+        rot = DirectX::XMQuaternionMultiply(rot, DirectX::XMQuaternionRotationAxis(dirZ, -dtRot));
+    }
     
-	static CTransformConstantBuffer testCBuffer;
     DirectX::XMFLOAT4X4 world, view, projection;
 
     // world
     DirectX::XMFLOAT4X4 translate, rotate, scale;
+
     // translate
-    DirectX::XMStoreFloat4x4(&translate, DirectX::XMMatrixTranslationFromVector(pos));
     //DirectX::XMStoreFloat4x4(&translate, DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f));
+    DirectX::XMStoreFloat4x4(&translate, DirectX::XMMatrixTranslationFromVector(pos));
+
     // rotation
-    float pitch = DirectX::XMConvertToRadians(45.0f);
-    float yaw = DirectX::XMConvertToRadians(45.0f);
-    float roll = 0.0f;
+	// Y축 단일 회전
     //XMStoreFloat4x4(&rotate, XMMatrixRotationY(XMConvertToRadians(45.0f)));
-    DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
+    
+	// Quaternion 회전
+    //float pitch = DirectX::XMConvertToRadians(45.0f);
+    //float yaw = DirectX::XMConvertToRadians(45.0f);
+    //float roll = 0.f;
+    //DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
+
+	// Axis-Angle 회전
+	DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationQuaternion(rot));
+    
     // scale
     DirectX::XMStoreFloat4x4(&scale, DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
     // SRT
     DirectX::XMStoreFloat4x4(&world, XMLoadFloat4x4(&scale) * XMLoadFloat4x4(&rotate) * XMLoadFloat4x4(&translate));
 
@@ -240,11 +263,20 @@ void CGameManager::testRender()
 
 	// projection
     DirectX::XMStoreFloat4x4(&projection, DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), (float)rc.right / rc.bottom, 0.1f, 100.0f));
+	
+    static CTransformConstantBuffer testCBuffer;
+    static bool bInit = false;
+   
+    if (!bInit) 
+    {
+        testCBuffer.init(mShader);
+        bInit = true;
+    }
 
     testCBuffer.setWorld(world);
     testCBuffer.setView(view);
     testCBuffer.setProjection(projection);
-    testCBuffer.init(mShader);
+
 	testCBuffer.updateBuffer(mDevice.getContext());
 
     CShader* testShader = mShader.findShader("TestShader");
