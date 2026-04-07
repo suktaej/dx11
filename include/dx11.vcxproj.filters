@@ -40,6 +40,15 @@
     <Filter Include="03_Shader\ConstantBuffer">
       <UniqueIdentifier>{997cbfef-dd6b-4115-83bb-436483c35d89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04_Scene">
+      <UniqueIdentifier>{539c079c-6b16-4363-9401-8ba4a9b03350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05_Object">
+      <UniqueIdentifier>{bcf6cd18-8469-413c-8561-5a2383bc8a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06_Component">
+      <UniqueIdentifier>{d21b3719-8420-4dd2-9c49-8781fda3dc0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +101,15 @@
     </ClCompile>
     <ClCompile Include="Shader\TransformConstantBuffer.cpp">
       <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>04_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneMain.cpp">
+      <Filter>04_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Object.cpp">
+      <Filter>05_Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="Shader\ConstantBufferInfo.h">
       <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>04_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneMain.h">
+      <Filter>04_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Object.h">
+      <Filter>05_Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

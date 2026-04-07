@@ -18,7 +18,6 @@ bool CShaderManager::init(CDeviceManager& device)
 
 	// Shader
 	createShader<CColorMeshShader>("TestShader");
-	
 	// Constant Buffer
 	createConstantBuffer("Transform", sizeof(FTransformConstantBufferInfo), 0, EShaderBufferType::Vertex);
 

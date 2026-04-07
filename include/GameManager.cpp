@@ -97,6 +97,7 @@ bool CGameManager::update(float dt)
     return false;
 }
 
+
 void CGameManager::collision(float dt)
 {
 }
@@ -195,7 +196,7 @@ int CGameManager::run()
 
 void CGameManager::testRender()
 {
-	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 5.0f, 1.0f);
+	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 10.0f, 1.0f);
 	static DirectX::XMVECTOR rot = DirectX::XMQuaternionIdentity();
     DirectX::XMVECTOR dirY = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     DirectX::XMVECTOR dirZ = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
@@ -217,19 +218,11 @@ void CGameManager::testRender()
         pos -= dirY * vSpeed;
     }
     if(GetAsyncKeyState('A') & 0x8000)
-    { 
-        using DirectX::operator*;
         rot = DirectX::XMQuaternionMultiply(rot, DirectX::XMQuaternionRotationAxis(dirZ, dtRot));
-	}
     if (GetAsyncKeyState('D') & 0x8000)
-    {
-        using DirectX::operator*;
         rot = DirectX::XMQuaternionMultiply(rot, DirectX::XMQuaternionRotationAxis(dirZ, -dtRot));
-    }
     
     DirectX::XMFLOAT4X4 world, view, projection;
-
-    // world
     DirectX::XMFLOAT4X4 translate, rotate, scale;
 
     // translate
@@ -240,13 +233,13 @@ void CGameManager::testRender()
 	// Y축 단일 회전
     //XMStoreFloat4x4(&rotate, XMMatrixRotationY(XMConvertToRadians(45.0f)));
     
-	// Quaternion 회전
+	// Euler 회전
     //float pitch = DirectX::XMConvertToRadians(45.0f);
     //float yaw = DirectX::XMConvertToRadians(45.0f);
     //float roll = 0.f;
     //DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll));
 
-	// Axis-Angle 회전
+	// Quaternion 회전
 	DirectX::XMStoreFloat4x4(&rotate, DirectX::XMMatrixRotationQuaternion(rot));
     
     // scale

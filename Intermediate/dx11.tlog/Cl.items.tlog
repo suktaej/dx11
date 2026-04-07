@@ -6,6 +6,9 @@ C:\MyCode\dx11\include\Asset\Mesh\StaticMesh.cpp;C:\MyCode\dx11\Intermediate\Sta
 C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\Intermediate\DeviceManager.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\Intermediate\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj
+C:\MyCode\dx11\include\Object\Object.cpp;C:\MyCode\dx11\Intermediate\Object.obj
+C:\MyCode\dx11\include\Scene\Scene.cpp;C:\MyCode\dx11\Intermediate\Scene.obj
+C:\MyCode\dx11\include\Scene\SceneMain.cpp;C:\MyCode\dx11\Intermediate\SceneMain.obj
 C:\MyCode\dx11\include\Shader\ColorMeshShader.cpp;C:\MyCode\dx11\Intermediate\ColorMeshShader.obj
 C:\MyCode\dx11\include\Shader\ComputeShader.cpp;C:\MyCode\dx11\Intermediate\ComputeShader.obj
 C:\MyCode\dx11\include\Shader\ConstantBuffer.cpp;C:\MyCode\dx11\Intermediate\ConstantBuffer.obj
