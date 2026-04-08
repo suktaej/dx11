@@ -43,7 +43,6 @@ public:
 	void render() override;
 	void postRender() override;
 	std::unique_ptr<CComponent> clone() const override;
-	//std::unique_ptr<CComponent> cloneHierarchy() const override;
 	void eraseOwner() override;
 	void addChild(CSceneComponent& child);
 
@@ -58,7 +57,7 @@ public:
 	const DirectX::XMFLOAT3& getRelativeScale() { return mRelativeScale; }
 	const DirectX::XMFLOAT4& getRelativeRotation() { return mRelativeRotation; }
 	const DirectX::XMFLOAT3& getRelativePosition() { return mRelativePosition; }
-	DirectX::XMFLOAT3 getWorldScale();
-	DirectX::XMFLOAT3 getWorldPosition();
-	DirectX::XMFLOAT4 getWorldRotation();
+	const DirectX::XMFLOAT3 getWorldScale();
+	const DirectX::XMFLOAT3 getWorldPosition();
+	const DirectX::XMFLOAT4 getWorldRotation();
 };

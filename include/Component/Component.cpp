@@ -2,7 +2,7 @@
 
 CComponent::CComponent(ComponentKey key) { }
 CComponent::CComponent(ComponentKey key, const CComponent& other) { }
-CComponent::CComponent(ComponentKey key, CComponent&& other) noexcept { }
+//CComponent::CComponent(ComponentKey key, CComponent&& other) noexcept { }
 CComponent::~CComponent() { }
 
 bool CComponent::init() { return true; }

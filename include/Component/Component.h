@@ -16,7 +16,7 @@ public:
 
     CComponent(ComponentKey key);
     CComponent(ComponentKey key, const CComponent& other);
-    CComponent(ComponentKey key, CComponent&& other) noexcept;
+    //CComponent(ComponentKey key, CComponent&& other) noexcept;
 	virtual ~CComponent();
 
 protected:
@@ -38,6 +38,7 @@ public:
 	virtual void render();
 	virtual void postRender();
 	virtual std::unique_ptr<CComponent> clone() const = 0;
+	//virtual std::unique_ptr<CComponent> cloneHierarchy() const = 0;
 	virtual void eraseOwner();
 
 public:
