@@ -29,8 +29,8 @@ public:
 		
 		if (findShader(name))
 			return true;
-
-		auto shader = std::make_unique<T>();
+		
+		auto shader = std::make_unique<T>(typename T::ShaderKey{});
 		
 		if (!shader->create(mDeviceMgr->getDevice()))
 			return false;

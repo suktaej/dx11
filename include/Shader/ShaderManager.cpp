@@ -47,7 +47,7 @@ bool CShaderManager::createConstantBuffer(const std::string& name, int size, int
 	if (findConstantBuffer(name))
 		return true;
 
-	std::unique_ptr<CConstantBuffer> CBuffer = std::make_unique<CConstantBuffer>();
+	std::unique_ptr<CConstantBuffer> CBuffer = std::make_unique<CConstantBuffer>(CConstantBuffer::ConstantBufferKey{});
 
 	if (!CBuffer->init(mDeviceMgr, bufferType, size, registerSlot))
 		return false;

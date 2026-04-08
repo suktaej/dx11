@@ -47,7 +47,6 @@ public:\
 		SAFE_DELETE(mInst);\
 	}
 
-#define LEAK_POS(val) _CrtSetBreakAlloc(val);
 
 struct FResolution
 {

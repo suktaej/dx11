@@ -1,7 +1,7 @@
 #include "ColorMeshShader.h"
 #include "../DeviceManager.h"
 
-CColorMeshShader::CColorMeshShader()
+CColorMeshShader::CColorMeshShader(ShaderKey key) : CGraphicShader(key)
 {
 }
 

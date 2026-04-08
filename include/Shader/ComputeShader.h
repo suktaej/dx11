@@ -2,8 +2,8 @@
 #include "Shader.h"
 class CComputeShader : public CShader
 {
-protected:
-	CComputeShader();
+public:
+	CComputeShader(ShaderKey key);
 	virtual ~CComputeShader();
 
 public:

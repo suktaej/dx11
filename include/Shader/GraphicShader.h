@@ -5,7 +5,7 @@ class CGraphicShader :
     public CShader
 {
 public:
-	CGraphicShader();
+	CGraphicShader(ShaderKey key);
 	~CGraphicShader() override;
 
 protected:

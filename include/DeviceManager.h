@@ -11,8 +11,10 @@ class CDeviceManager
 {
 	//DECLARE_SINGLE(CDeviceManager);
 	friend class CGameManager;
+	friend std::default_delete<CDeviceManager>;
 
-public:
+//public:
+private:
 	CDeviceManager();
 	~CDeviceManager();
 

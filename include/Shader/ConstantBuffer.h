@@ -4,10 +4,14 @@
 
 class CConstantBuffer
 {
-	friend class CShaderManager;
-
 public:
-	CConstantBuffer();
+	class ConstantBufferKey
+	{
+		friend class CShaderManager;
+		ConstantBufferKey() {}
+	};
+
+	CConstantBuffer(ConstantBufferKey key);
 	~CConstantBuffer();
 
 private:

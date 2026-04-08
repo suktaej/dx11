@@ -3,10 +3,18 @@
 
 class CShader abstract
 {
-	friend class CShaderManager;
-
 public:
-	CShader();
+	class ShaderKey
+	{
+		friend class CShaderManager;
+
+	private:
+		ShaderKey() {}
+	public:
+		ShaderKey(const ShaderKey&) {}
+	};
+
+	CShader(ShaderKey key);
 	virtual ~CShader();
 
 public:

@@ -3,19 +3,26 @@
 
 class CObject
 {
+	//friend struct std::default_delete<CObject>;
 public:
 	class SceneKey
 	{
 		friend class CScene;
-		// private 생성자를 통해 CScene에서만 CObject를 생성가능
+	private:
 		SceneKey() {}
+	public:
+		SceneKey(const SceneKey& key) {}
 	};
 
-protected:
+public:
+	// passkey 패턴을 사용하여 호출 클래스에서만 해당 객체를 생성할 수 있도록 함
+	// passkey가 없으면 컴파일 에러가 발생하므로, 외부에서 CObject를 직접 생성할 수 없음
+	// 외부에서 생성할 수 없으므로 소멸자 역시 public으로 선언
+	// 단, unique_ptr로 관리 시, 엄격한 소멸자 제어를 하려면 
+	// 소멸자도 private으로 선언하고 std::default_delete를 friend로 지정
 	CObject(SceneKey key);
 	CObject(SceneKey key,const CObject& other);
 	CObject(SceneKey key,CObject&& other) noexcept;
-public:
 	virtual ~CObject();
 
 protected:

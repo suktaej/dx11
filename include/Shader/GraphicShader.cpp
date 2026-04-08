@@ -1,7 +1,7 @@
 #include "GraphicShader.h"
 #include "../DeviceManager.h"
 
-CGraphicShader::CGraphicShader()
+CGraphicShader::CGraphicShader(ShaderKey key) : CShader(key)
 {
 }
 

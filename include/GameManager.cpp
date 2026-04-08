@@ -12,7 +12,6 @@ bool CGameManager::mLoop = true;
 
 CGameManager::CGameManager()
 {
-
 }
 
 CGameManager::~CGameManager()

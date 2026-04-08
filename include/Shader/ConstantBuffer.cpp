@@ -1,7 +1,7 @@
 #include "ConstantBuffer.h"
 #include "../DeviceManager.h"
 
-CConstantBuffer::CConstantBuffer()
+CConstantBuffer::CConstantBuffer(ConstantBufferKey key)
 {
 }
 

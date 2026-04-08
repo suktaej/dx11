@@ -4,8 +4,9 @@
 class CMeshManager
 {
 	friend class CAssetManager;
+	friend std::default_delete<CMeshManager>;
 
-public:
+private:
 	CMeshManager();
 	~CMeshManager();
 
@@ -13,12 +14,14 @@ private:
 	class CDeviceManager* mDeviceMgr = nullptr;
 	std::unordered_map<std::string, std::unique_ptr<class CMesh>> mMeshMap;
 
+private:
+    bool init(class CDeviceManager& device);
+
 public:
-	bool init(class CDeviceManager& device);
 	class CMesh* findMesh(const std::string& name);
     void testCode();
 
-public:
+private:
     template <typename T>
     bool createMesh(const FMeshDesc& desc)
     {
@@ -28,6 +31,7 @@ public:
             return true;
 
         auto mesh = std::make_unique<T>();
+		//std::unique_ptr<T> mesh(new T(typename T::MeshKey{}));
         mesh->setName(desc.Name);
 
         if (!mesh->createMesh(

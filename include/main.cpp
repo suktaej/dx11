@@ -12,6 +12,7 @@ int wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int
 	*/
 	// CRT 디버그 플래그 설정
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc();
 
 	if (!CGameManager::getInst()->init(hInstance))
 	{

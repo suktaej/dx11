@@ -4,7 +4,7 @@ class CColorMeshShader :
     public CGraphicShader
 {
 public:
-	CColorMeshShader();
+	CColorMeshShader(ShaderKey key);
 	~CColorMeshShader() override;
 
 public:
