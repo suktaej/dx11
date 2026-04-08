@@ -212,7 +212,8 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
         //parentQuat = XMQuaternionNormalize(parentQuat);
 
         // 로컬 회전 계산: LocalQuat = WorldQuat * Inverse(ParentWorldQuat)
-        XMVECTOR parentQuat = XMLoadFloat4(&mParent->getWorldRotation());
+        XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
+        XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
         // 행렬곱 순서 주의
         XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
