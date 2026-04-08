@@ -14,7 +14,7 @@ protected:
 	std::vector<CSceneComponent*> mChildList;
 
 	DirectX::XMFLOAT3 mRelativeScale;
-	DirectX::XMFLOAT3 mRelativeRotation;
+	DirectX::XMFLOAT4 mRelativeRotation;
 	DirectX::XMFLOAT3 mRelativePosition;
 	DirectX::XMFLOAT4X4 mWorldMatrix;
 	DirectX::XMFLOAT4X4 mLocalMatrix;
@@ -26,11 +26,11 @@ private:
 	void setRelativeScale(const DirectX::XMFLOAT3& scale);
 	void setRelativeRotation(const DirectX::XMFLOAT3& rotation);
 	void setRelativePosition(const DirectX::XMFLOAT3& position);
-	void invalidateTransform();
 	void updateWorldTransform();
 	void setWorldScale(const DirectX::XMFLOAT3& scale);
-	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
 	void setWorldPosition(const DirectX::XMFLOAT3& position);
+	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
+	//DirectX::XMFLOAT3 quaternionToEuler(DirectX::XMVECTOR quat);
 
 public:
 	bool init() override;
@@ -51,8 +51,10 @@ public:
 	const DirectX::XMFLOAT3& getRelativePosition() const { return mRelativePosition; }
 	const DirectX::XMFLOAT3& getRelativeRotation() const { return mRelativeRotation; }
 	const DirectX::XMFLOAT4X4& getWorldMatrix();
-	//DirectX::XMFLOAT3 getWorldScale() { return mWorldMatrix; }
-	//DirectX::XMFLOAT3 getWorldPosition() { return mWorldPosition; }
-	//DirectX::XMFLOAT3 getWorldRotation() { return mWorldRotation; }
+	const DirectX::XMFLOAT3 getWorldScale();
+	const DirectX::XMFLOAT3 getWorldPosition();
+	const DirectX::XMFLOAT4 getWorldRotation();
+	
+	//void invalidateTransform();
 };
 
