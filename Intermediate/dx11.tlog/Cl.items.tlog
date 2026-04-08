@@ -3,6 +3,8 @@ C:\MyCode\dx11\include\Asset\AssetManager.cpp;C:\MyCode\dx11\Intermediate\AssetM
 C:\MyCode\dx11\include\Asset\Mesh\Mesh.cpp;C:\MyCode\dx11\Intermediate\Mesh.obj
 C:\MyCode\dx11\include\Asset\Mesh\MeshManager.cpp;C:\MyCode\dx11\Intermediate\MeshManager.obj
 C:\MyCode\dx11\include\Asset\Mesh\StaticMesh.cpp;C:\MyCode\dx11\Intermediate\StaticMesh.obj
+C:\MyCode\dx11\include\Component\Component.cpp;C:\MyCode\dx11\Intermediate\Component.obj
+C:\MyCode\dx11\include\Component\SceneComponent.cpp;C:\MyCode\dx11\Intermediate\SceneComponent.obj
 C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\Intermediate\DeviceManager.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\Intermediate\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj

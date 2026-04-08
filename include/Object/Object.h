@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameInfo.h"
 
-class CObject
+class CObject abstract
 {
 	//friend struct std::default_delete<CObject>;
 public:
@@ -27,7 +27,11 @@ public:
 
 protected:
 	class CScene* mScene = nullptr;
+	class CComponent* mRootComponent = nullptr;
 	std::string mName;
+	bool mIsActive = true;
+	bool mIsEnabled = true;
+	bool mIsVisible = true;
 
 public:
 	virtual bool init();
@@ -46,5 +50,10 @@ public:
 	class CScene* getScene() const { return mScene; }
 	void setName(const std::string& name) { mName = name; }
 	const char* getName() const { return mName.c_str(); }
+	void setEnabled(bool enabled) { mIsEnabled = enabled; }
+	bool isEnabled() const { return mIsEnabled; }
+	void setActive(bool active) { mIsActive = active; }
+	bool isActive() const { return mIsActive; }
+	void setRootComponent(class CComponent* root) { mRootComponent = root; }
 };
 

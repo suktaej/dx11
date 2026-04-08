@@ -140,6 +140,8 @@
     <ClCompile Include="Asset\Mesh\Mesh.cpp" />
     <ClCompile Include="Asset\Mesh\MeshManager.cpp" />
     <ClCompile Include="Asset\Mesh\StaticMesh.cpp" />
+    <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="Component\SceneComponent.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +164,8 @@
     <ClInclude Include="Asset\Mesh\Mesh.h" />
     <ClInclude Include="Asset\Mesh\MeshManager.h" />
     <ClInclude Include="Asset\Mesh\StaticMesh.h" />
+    <ClInclude Include="Component\Component.h" />
+    <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />

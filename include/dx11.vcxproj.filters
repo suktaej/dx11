@@ -111,6 +111,12 @@
     <ClCompile Include="Object\Object.cpp">
       <Filter>05_Object</Filter>
     </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>06_Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SceneComponent.cpp">
+      <Filter>06_Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInfo.h">
@@ -181,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="Object\Object.h">
       <Filter>05_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Component.h">
+      <Filter>06_Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SceneComponent.h">
+      <Filter>06_Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

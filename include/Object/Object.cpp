@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "../Component/Component.h"
 
 CObject::CObject(SceneKey key)
 {
