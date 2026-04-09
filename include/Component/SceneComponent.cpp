@@ -2,9 +2,9 @@
 
 CSceneComponent::CSceneComponent(ComponentKey key) 
     : CComponent(key),
-	mRelativeScale(1.f, 1.f, 1.f),
-	mRelativePosition(0.f, 0.f, 0.f),
-	mRelativeRotation(0.f, 0.f, 0.f, 1.f)
+	mLocalScale(1.f, 1.f, 1.f),
+	mLocalPosition(0.f, 0.f, 0.f),
+	mLocalRotation(0.f, 0.f, 0.f, 1.f)
 {
     XMStoreFloat4x4(&mLocalMatrix, DirectX::XMMatrixIdentity());
     XMStoreFloat4x4(&mWorldMatrix, DirectX::XMMatrixIdentity());
@@ -12,9 +12,9 @@ CSceneComponent::CSceneComponent(ComponentKey key)
 
 CSceneComponent::CSceneComponent(ComponentKey key, const CSceneComponent& other) 
     : CComponent(key, other),
-    mRelativeScale(other.mRelativeScale),
-    mRelativePosition(other.mRelativePosition),
-    mRelativeRotation(other.mRelativeRotation),
+    mLocalScale(other.mLocalScale),
+    mLocalPosition(other.mLocalPosition),
+    mLocalRotation(other.mLocalRotation),
     mParent(nullptr),
     mIsLocalDirty(true),
     mIsWorldDirty(true)
@@ -46,9 +46,9 @@ CSceneComponent::~CSceneComponent()
     mChildList.clear();
 }
 
-void CSceneComponent::setRelativeScale(const DirectX::XMFLOAT3& scale)
+void CSceneComponent::setLocalScale(const DirectX::XMFLOAT3& scale)
 {
-    mRelativeScale = scale;
+    mLocalScale = scale;
     mIsLocalDirty = true;
 
     // Eager
@@ -57,7 +57,26 @@ void CSceneComponent::setRelativeScale(const DirectX::XMFLOAT3& scale)
     invalidateTransform();
 }
 
-void CSceneComponent::setRelativeRotation(const DirectX::XMFLOAT3& rotation)
+void CSceneComponent::setLocalScale(const EAxis& axis, const float& scale)
+{
+    using namespace DirectX;
+
+    XMVECTOR curScale = XMLoadFloat3(&mLocalScale);
+
+    switch (axis) 
+    {
+    case EAxis::x: curScale = XMVectorSetX(curScale, scale); break;
+    case EAxis::y: curScale = XMVectorSetY(curScale, scale); break;
+    case EAxis::z: curScale = XMVectorSetZ(curScale, scale); break;
+    }
+
+    XMStoreFloat3(&mLocalScale, curScale);
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
+void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT3& rotation)
 {
     using namespace DirectX;
 
@@ -66,25 +85,84 @@ void CSceneComponent::setRelativeRotation(const DirectX::XMFLOAT3& rotation)
             XMConvertToRadians(rotation.y),
             XMConvertToRadians(rotation.z));
 
-    //mRelativeRotation = rotation;
-    XMStoreFloat4(&mRelativeRotation, quat);
+    //mLocalRotation = rotation;
+    XMStoreFloat4(&mLocalRotation, quat);
     mIsLocalDirty = true;
 
-    mEuler = rotation;
-    mEulerDirty = false;
+    //mEuler = rotation;
+    //mEulerDirty = false;
 
     //updateWorldTransform();
     // Lazy Evaluation
     invalidateTransform();
 }
 
-void CSceneComponent::setRelativePosition(const DirectX::XMFLOAT3& position)
+void CSceneComponent::addLocalRotation(const EAxis& axis, const float& angle)
 {
-    mRelativePosition = position;
+    using namespace DirectX;
+
+    XMVECTOR curQuat = XMLoadFloat4(&mLocalRotation);
+    XMVECTOR delta = XMQuaternionRotationAxis(FAxis::Get(axis), XMConvertToRadians(angle));
+    curQuat = XMQuaternionMultiply(curQuat, delta);
+
+    XMStoreFloat4(&mLocalRotation, curQuat);
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
+void CSceneComponent::addWorldScale(const EAxis& axis, const float& scale)
+{
+    using namespace DirectX;
+
+    XMFLOAT3 worldScale = getWorldScale();
+    XMVECTOR worldScaleVec = XMLoadFloat3(&worldScale);
+    XMVECTOR offset = XMVectorScale(FAxis::Get(axis), scale);
+    XMVECTOR newScale = XMVectorAdd(worldScaleVec, offset);
+
+    XMStoreFloat3(&worldScale, newScale);
+    setWorldScale(worldScale);
+}
+
+void CSceneComponent::addWorldPosition(const EAxis& axis, const float& pos)
+{
+    using namespace DirectX;
+
+    XMFLOAT3 worldPos = getWorldPosition();
+    XMVECTOR worldPosVec = XMLoadFloat3(&worldPos);
+    XMVECTOR offset = XMVectorScale(FAxis::Get(axis), pos);
+    XMVECTOR newPos = XMVectorAdd(worldPosVec, offset);
+
+    XMStoreFloat3(&worldPos, newPos);
+    setWorldPosition(worldPos);
+}
+
+void CSceneComponent::setLocalPosition(const DirectX::XMFLOAT3& position)
+{
+    mLocalPosition = position;
     mIsLocalDirty = true;
 
     //updateWorldTransform();
     // Lazy Evaluation
+    invalidateTransform();
+}
+
+void CSceneComponent::setLocalPosition(const EAxis& axis, const float& pos)
+{
+    using namespace DirectX;
+
+    XMVECTOR curPos = XMLoadFloat3(&mLocalPosition);
+
+    switch (axis)
+    {
+    case EAxis::x: curPos = XMVectorSetX(curPos, pos); break;
+    case EAxis::y: curPos = XMVectorSetY(curPos, pos); break;
+    case EAxis::z: curPos = XMVectorSetZ(curPos, pos); break;
+    }
+
+    XMStoreFloat3(&mLocalPosition, curPos);
+
+    mIsLocalDirty = true;
     invalidateTransform();
 }
 
@@ -142,10 +220,10 @@ void CSceneComponent::updateWorldTransform()
 
     if (mIsLocalDirty)
 	{
-		XMMATRIX matScale = XMMatrixScaling(mRelativeScale.x, mRelativeScale.y, mRelativeScale.z);
-        XMVECTOR vRot = XMQuaternionNormalize(XMLoadFloat4(&mRelativeRotation));
+		XMMATRIX matScale = XMMatrixScaling(mLocalScale.x, mLocalScale.y, mLocalScale.z);
+        XMVECTOR vRot = XMQuaternionNormalize(XMLoadFloat4(&mLocalRotation));
 		XMMATRIX matRot = XMMatrixRotationQuaternion(vRot);
-		XMMATRIX matPos = XMMatrixTranslation(mRelativePosition.x, mRelativePosition.y, mRelativePosition.z);
+		XMMATRIX matPos = XMMatrixTranslation(mLocalPosition.x, mLocalPosition.y, mLocalPosition.z);
 
 		XMStoreFloat4x4(&mLocalMatrix, matScale * matRot * matPos);
 		mIsLocalDirty = false;
@@ -182,16 +260,34 @@ void CSceneComponent::setWorldScale(const DirectX::XMFLOAT3& scale)
         XMFLOAT3 pScale;
         XMStoreFloat3(&pScale, parentScale);
 
-        mRelativeScale.x = (std::abs(pScale.x) > 1e-6f) ? scale.x / pScale.x : 0.f;
-        mRelativeScale.y = (std::abs(pScale.y) > 1e-6f) ? scale.y / pScale.y : 0.f;
-        mRelativeScale.z = (std::abs(pScale.z) > 1e-6f) ? scale.z / pScale.z : 0.f;
+        mLocalScale.x = (std::abs(pScale.x) > 1e-6f) ? scale.x / pScale.x : 0.f;
+        mLocalScale.y = (std::abs(pScale.y) > 1e-6f) ? scale.y / pScale.y : 0.f;
+        mLocalScale.z = (std::abs(pScale.z) > 1e-6f) ? scale.z / pScale.z : 0.f;
     }
     else
-        mRelativeScale = scale;
+        mLocalScale = scale;
 
     mIsLocalDirty = true;
     invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::setWorldScale(const EAxis& axis, const float& scale)
+{
+    using namespace DirectX;
+
+    XMFLOAT3 worldScale = getWorldScale();
+    XMVECTOR worldScaleVec = XMLoadFloat3(&worldScale);
+
+    switch (axis)
+    {
+    case EAxis::x: worldScaleVec = XMVectorSetX(worldScaleVec, scale); break;
+    case EAxis::y: worldScaleVec = XMVectorSetY(worldScaleVec, scale); break;
+    case EAxis::z: worldScaleVec = XMVectorSetZ(worldScaleVec, scale); break;
+    }
+
+    XMStoreFloat3(&worldScale, worldScaleVec);
+    setWorldScale(worldScale);
 }
 
 void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
@@ -219,18 +315,75 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
         XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
         localQuat = XMQuaternionNormalize(localQuat);
 
-        XMStoreFloat4(&mRelativeRotation, localQuat);
+        XMStoreFloat4(&mLocalRotation, localQuat);
     }
     else
     {
         worldQuat = XMQuaternionNormalize(worldQuat);
-        XMStoreFloat4(&mRelativeRotation, worldQuat);
+        XMStoreFloat4(&mLocalRotation, worldQuat);
     }
 
     mIsLocalDirty = true;
-    mEulerDirty = true;
+    //mEulerDirty = true;
 	invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::addLocalScale(const EAxis& axis, const float& scale)
+{
+    using namespace DirectX;
+
+    XMVECTOR curScale = XMLoadFloat3(&mLocalScale);
+    XMVECTOR offset = XMVectorScale(FAxis::Get(axis), scale);
+    XMVECTOR newScale = XMVectorAdd(curScale, offset);
+    XMStoreFloat3(&mLocalScale, newScale);
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
+void CSceneComponent::addLocalPosition(const EAxis& axis, const float& pos)
+{
+    using namespace DirectX;
+
+    XMVECTOR curPos = XMLoadFloat3(&mLocalPosition);
+    XMVECTOR offset = XMVectorScale(FAxis::Get(axis), pos);
+    XMVECTOR newPos = XMVectorAdd(curPos, offset);
+    XMStoreFloat3(&mLocalPosition, newPos);
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
+void CSceneComponent::addWorldRotation(const EAxis& axis, const float& angle)
+{
+    using namespace DirectX;
+
+    XMFLOAT4 worldRot = getWorldRotation();
+    XMVECTOR worldQuat = XMLoadFloat4(&worldRot);
+    XMVECTOR delta = XMQuaternionRotationAxis(FAxis::Get(axis), XMConvertToRadians(angle));
+    worldQuat = XMQuaternionMultiply(worldQuat, delta);
+
+    if (mParent)
+    {
+        // 로컬 회전 계산: LocalQuat = WorldQuat * Inverse(ParentWorldQuat)
+        XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
+        XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
+        XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
+        // 행렬곱 순서 주의
+        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        localQuat = XMQuaternionNormalize(localQuat);
+
+        XMStoreFloat4(&mLocalRotation, localQuat);
+    }
+    else
+    {
+        worldQuat = XMQuaternionNormalize(worldQuat);
+        XMStoreFloat4(&mLocalRotation, worldQuat);
+    }
+
+    mIsLocalDirty = true;
+    invalidateTransform();
 }
 
 void CSceneComponent::setWorldPosition(const DirectX::XMFLOAT3& position)
@@ -246,14 +399,32 @@ void CSceneComponent::setWorldPosition(const DirectX::XMFLOAT3& position)
         XMVECTOR worldPos = XMLoadFloat3(&position);
         XMVECTOR localPos = XMVector3TransformCoord(worldPos, invParentWorld);
 
-        XMStoreFloat3(&mRelativePosition, localPos);
+        XMStoreFloat3(&mLocalPosition, localPos);
     }
     else
-        mRelativePosition = position;
+        mLocalPosition = position;
 
     mIsLocalDirty = true;
     invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::setWorldPosition(const EAxis& axis, const float& pos)
+{
+    using namespace DirectX;
+
+    XMFLOAT3 worldPos = getWorldPosition();
+    XMVECTOR worldPosVec = XMLoadFloat3(&worldPos);
+
+    switch (axis)
+    {
+    case EAxis::x: worldPosVec = XMVectorSetX(worldPosVec, pos); break;
+    case EAxis::y: worldPosVec = XMVectorSetY(worldPosVec, pos); break;
+    case EAxis::z: worldPosVec = XMVectorSetZ(worldPosVec, pos); break;
+    }
+
+    XMStoreFloat3(&worldPos, worldPosVec);
+    setWorldPosition(worldPos);
 }
 
 bool CSceneComponent::init()
@@ -359,9 +530,9 @@ bool CSceneComponent::isDescendant(CSceneComponent* node)
 
 //CSceneComponent::CSceneComponent(ComponentKey key, CSceneComponent&& other) noexcept
 //	: CComponent(key, std::move(other)),
-//	mRelativeScale(other.mRelativeScale),
-//	mRelativeRotation(other.mRelativeRotation),
-//	mRelativePosition(other.mRelativePosition),
+//	mLocalScale(other.mLocalScale),
+//	mLocalRotation(other.mLocalRotation),
+//	mLocalPosition(other.mLocalPosition),
 //	mLocalMatrix(other.mLocalMatrix),
 //	mWorldMatrix(other.mWorldMatrix),
 //    mIsLocalDirty(other.mIsLocalDirty),
@@ -384,9 +555,9 @@ bool CSceneComponent::isDescendant(CSceneComponent* node)
 //
 //	using namespace DirectX;
 //
-//	other.mRelativeScale = XMFLOAT3(1.f, 1.f, 1.f);
-//	other.mRelativePosition = XMFLOAT3(0.f, 0.f, 0.f);
-//	other.mRelativeRotation = XMFLOAT4(0.f, 0.f, 0.f, 1.f);
+//	other.mLocalScale = XMFLOAT3(1.f, 1.f, 1.f);
+//	other.mLocalPosition = XMFLOAT3(0.f, 0.f, 0.f);
+//	other.mLocalRotation = XMFLOAT4(0.f, 0.f, 0.f, 1.f);
 //    XMStoreFloat4x4(&other.mLocalMatrix, DirectX::XMMatrixIdentity());
 //    XMStoreFloat4x4(&other.mWorldMatrix, DirectX::XMMatrixIdentity());
 //    other.mParent = nullptr;
