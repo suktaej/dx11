@@ -185,33 +185,46 @@ const DirectX::XMFLOAT4X4& CSceneComponent::getWorldMatrix()
 
 DirectX::XMFLOAT3 CSceneComponent::getWorldScale()
 {
-    using namespace DirectX;
+    if (mIsWorldDirty) 
+        updateWorldTransform();
 
-    XMVECTOR scale, quat, trans;
-    XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
+    return mWorldScale;
 
-    return XMFLOAT3(
-        XMVectorGetX(scale), 
-        XMVectorGetY(scale), 
-        XMVectorGetZ(scale));
+    //using namespace DirectX;
+
+    //XMVECTOR scale, quat, trans;
+    //XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
+
+    //return XMFLOAT3(
+    //    XMVectorGetX(scale), 
+    //    XMVectorGetY(scale), 
+    //    XMVectorGetZ(scale));
 }
 
 DirectX::XMFLOAT4 CSceneComponent::getWorldRotation()
 {
-    using namespace DirectX;
+    if (mIsWorldDirty) 
+        updateWorldTransform();
+    
+    return mWorldRotation;
+    //using namespace DirectX;
 
-    XMVECTOR scale, quat, trans;
-    XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
+    //XMVECTOR scale, quat, trans;
+    //XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
 
-    XMFLOAT4 result;
-    XMStoreFloat4(&result, quat);
-    return result;
+    //XMFLOAT4 result;
+    //XMStoreFloat4(&result, quat);
+    //return result;
 }
 
 DirectX::XMFLOAT3 CSceneComponent::getWorldPosition()
 {
-    const DirectX::XMFLOAT4X4& matWorld = getWorldMatrix();
-    return DirectX::XMFLOAT3(matWorld._41, matWorld._42, matWorld._43);
+    if (mIsWorldDirty) 
+        updateWorldTransform();
+
+    return mWorldPosition;
+    //const DirectX::XMFLOAT4X4& matWorld = getWorldMatrix();
+    //return DirectX::XMFLOAT3(matWorld._41, matWorld._42, matWorld._43);
 }
 
 void CSceneComponent::updateWorldTransform()
@@ -236,6 +249,13 @@ void CSceneComponent::updateWorldTransform()
     }
     else
         mWorldMatrix = mLocalMatrix;
+
+    XMVECTOR vScale, vQuat, vPos;
+    XMMatrixDecompose(&vScale, &vQuat, &vPos, XMLoadFloat4x4(&mWorldMatrix));
+
+    XMStoreFloat3(&mWorldScale, vScale);
+    XMStoreFloat4(&mWorldRotation, vQuat);
+    XMStoreFloat3(&mWorldPosition, vPos);
 
     mIsWorldDirty = false;
 

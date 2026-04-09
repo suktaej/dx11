@@ -14,11 +14,16 @@ protected:
 	std::vector<CSceneComponent*> mChildList;
 
 	DirectX::XMFLOAT3 mLocalScale;
-	DirectX::XMFLOAT3 mLocalPosition;
 	DirectX::XMFLOAT4 mLocalRotation;
-	//DirectX::XMFLOAT3 mEulerRoatation;
+	DirectX::XMFLOAT3 mLocalPosition;
 	DirectX::XMFLOAT4X4 mLocalMatrix;
+
+	DirectX::XMFLOAT3 mWorldScale;
+	DirectX::XMFLOAT4 mWorldRotation;
+	DirectX::XMFLOAT3 mWorldPosition;
 	DirectX::XMFLOAT4X4 mWorldMatrix;
+	
+	//DirectX::XMFLOAT3 mEulerRoatation;
 
 	bool mIsLocalDirty = true;
 	bool mIsWorldDirty = true;
