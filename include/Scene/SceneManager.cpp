@@ -9,6 +9,7 @@ CSceneManager::CSceneManager()
 CSceneManager::~CSceneManager()
 {
 	delete mCurrentScene;
+	mCurrentScene = nullptr;
 }
 
 bool CSceneManager::init()

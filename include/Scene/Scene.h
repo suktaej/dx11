@@ -36,10 +36,10 @@ public:
 		static_assert(std::is_base_of_v<CObject, T>, "T must be derived from CObject");
 
 		int* a = new int;
-		//std::unique_ptr<T> newObj(T(typename T::SceneKey{}));
-		std::unique_ptr<T> newObj = make_unique<T>(typename T::SceneKey{});
+		//std::unique_ptr<T> newObj(T(typename T::ObjectKey{}));
+		std::unique_ptr<T> newObj = std::make_unique<T>(typename T::ObjectKey{});
 		newObj->setName(name);
-		newObj->mScene = this;
+		newObj->setScene(*this);
 
 		if(!newObj->init())
 			return nullptr;

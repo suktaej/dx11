@@ -135,6 +135,9 @@
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>00_Shared</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerObject.cpp">
+      <Filter>05_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="ServiceLocator.h">
       <Filter>00_Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerObject.h">
+      <Filter>05_Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

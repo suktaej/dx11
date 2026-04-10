@@ -20,6 +20,11 @@ void CMeshManager::serviceInit()
 {
 }
 
+CMesh* CMeshManager::getMesh(const std::string& name)
+{
+    return findMesh(name);
+}
+
 CMesh* CMeshManager::findMesh(const std::string& name)
 {
     // std::unordered_map<std::string, std::unique_ptr<CMesh>>::iterator

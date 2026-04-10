@@ -429,6 +429,11 @@ void CSceneComponent::setWorldPosition(const DirectX::XMFLOAT3& position)
     //updateWorldTransform();
 }
 
+void CSceneComponent::setWorldPosition(float x, float y, float z)
+{
+    setWorldPosition(DirectX::XMFLOAT3(x, y, z));
+}
+
 void CSceneComponent::setWorldPosition(const EAxis& axis, const float& pos)
 {
     using namespace DirectX;

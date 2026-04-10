@@ -1,15 +1,15 @@
 #include "Object.h"
 #include "../Component/Component.h"
 
-CObject::CObject(SceneKey key)
+CObject::CObject(ObjectKey key)
 {
 }
 
-CObject::CObject(SceneKey key, const CObject& other)
+CObject::CObject(ObjectKey key, const CObject& other)
 {
 }
 
-CObject::CObject(SceneKey key, CObject&& other) noexcept
+CObject::CObject(ObjectKey key, CObject&& other) noexcept
 {
 }
 
@@ -29,36 +29,35 @@ bool CObject::init(const char* filePath)
 
 void CObject::prevUpdate(float dt)
 {
+	mRootComponent->preUpdate(dt);
 }
 
 void CObject::update(float dt)
 {
+	mRootComponent->update(dt);
 }
 
 void CObject::postUpdate(float dt)
 {
-}
-
-void CObject::prevCollision(float dt)
-{
+	mRootComponent->postUpdate(dt);
 }
 
 void CObject::collision(float dt)
 {
-}
-
-void CObject::postCollision(float dt)
-{
+	mRootComponent->collision(dt);
 }
 
 void CObject::prevRender()
 {
+	mRootComponent->preRender();
 }
 
 void CObject::render()
 {
+	mRootComponent->render();
 }
 
 void CObject::postRender()
 {
+	mRootComponent->postRender();
 }

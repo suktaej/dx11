@@ -14,8 +14,8 @@ private:
 	FTransformConstantBufferInfo mData;
 
 public:
-	bool init(CShaderManager& shaderMgr) override;
-	void updateBuffer(ID3D11DeviceContext* context) override;
+	bool init() override;
+	void updateBuffer() override;
     std::unique_ptr<CConstantBufferData> clone() const override;
 	std::unique_ptr<CTransformConstantBuffer> cloneTransform() const;
 

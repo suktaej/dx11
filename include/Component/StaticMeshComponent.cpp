@@ -4,6 +4,7 @@
 #include "../Shader/ShaderManager.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Mesh/MeshManager.h"
+#include "../ServiceLocator.h"
 
 CStaticMeshComponent::CStaticMeshComponent(ComponentKey key) : CMeshComponent(key)
 {
@@ -19,18 +20,30 @@ CStaticMeshComponent::~CStaticMeshComponent()
 
 void CStaticMeshComponent::setShader(const std::string& name)
 {
+    IShader& shader = CServiceLocator::getShader();
+    mShader = shader.getShader(name);
+
+    if (!mShader)
+        return;
 }
 
 void CStaticMeshComponent::setShader(CShader& shader)
 {
+    mShader = &shader;
 }
 
 void CStaticMeshComponent::setMesh(const std::string& name)
 {
+    IMesh& mesh = CServiceLocator::getMesh();
+	mMesh = dynamic_cast<CStaticMesh*>(mesh.getMesh(name));
+
+    if (!mMesh)
+        return;
 }
 
 void CStaticMeshComponent::setMesh(CMesh& mesh)
 {
+    mMesh = dynamic_cast<CStaticMesh*>(&mesh);
 }
 
 bool CStaticMeshComponent::init()

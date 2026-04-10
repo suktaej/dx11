@@ -75,6 +75,7 @@ public:
 	void setWorldScale(const DirectX::XMFLOAT3& scale);
 	void setWorldScale(const EAxis& axis, const float& scale);
 	void setWorldPosition(const DirectX::XMFLOAT3& position);
+	void setWorldPosition(float x, float y, float z);
 	void setWorldPosition(const EAxis& axis, const float& pos);
 	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
 	

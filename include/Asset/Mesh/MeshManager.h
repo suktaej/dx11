@@ -18,6 +18,7 @@ private:
 private:
     bool init();
     void serviceInit();
+    class CMesh* getMesh(const std::string& name) override;
 
 public:
 	class CMesh* findMesh(const std::string& name);

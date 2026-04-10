@@ -20,15 +20,13 @@ CTransformConstantBuffer::~CTransformConstantBuffer()
 {
 }
 
-bool CTransformConstantBuffer::init(CShaderManager& shaderMgr)
+bool CTransformConstantBuffer::init()
 {
-	mShaderMgr = &shaderMgr;
-
 	setConstantBuffer("Transform");
 	return true;
 }
 
-void CTransformConstantBuffer::updateBuffer(ID3D11DeviceContext* context)
+void CTransformConstantBuffer::updateBuffer()
 {
 	// 전송용 임시 구조체 생성
 	FTransformConstantBufferInfo sendData;

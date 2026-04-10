@@ -56,6 +56,10 @@ bool CShaderManager::createConstantBuffer(const std::string& name, int size, int
 
 CConstantBuffer* CShaderManager::findConstantBuffer(const std::string& name)
 {
+	if (this == nullptr) 
+		// 객체가 생성되지 않았거나 이미 파괴됨
+		return nullptr;
+
 	auto it = mConstantBufferMap.find(name);
 
 	if (it != mConstantBufferMap.end())
@@ -74,4 +78,14 @@ void CShaderManager::releaseConstantBuffer(const std::string& name)
 
 void CShaderManager::serviceInit()
 {
+}
+
+CShader* CShaderManager::getShader(const std::string& name)
+{
+	return findShader(name);
+}
+
+CConstantBuffer* CShaderManager::getConstant(const std::string& name)
+{
+	return findConstantBuffer(name);
 }

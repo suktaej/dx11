@@ -14,13 +14,15 @@ private:
 
 public:
 	bool init();
-	CShader* findShader(const std::string& name);
+	class CShader* findShader(const std::string& name);
 	void releaseShader(const std::string& name);
 	bool createConstantBuffer(const std::string& name, int size, int registerSlot, EShaderBufferType bufferType = EShaderBufferType::Graphic);
-	CConstantBuffer* findConstantBuffer(const std::string& name);
+	class CConstantBuffer* findConstantBuffer(const std::string& name);
 	void releaseConstantBuffer(const std::string& name);
 
 	void serviceInit() override;
+	class CShader* getShader(const std::string& name) override;
+	class CConstantBuffer* getConstant(const std::string& name) override;
 
 public:
 	template <typename T>

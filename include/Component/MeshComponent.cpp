@@ -1,10 +1,10 @@
 #include "MeshComponent.h"
 #include "../Shader/TransformConstantBuffer.h"
-#include "../ServiceLocator.h"
 
 CMeshComponent::CMeshComponent(ComponentKey key) : CSceneComponent(key)
 {
     mTransformConstantBuffer = std::make_unique<CTransformConstantBuffer>();
+    mTransformConstantBuffer->init();
 }
 
 CMeshComponent::CMeshComponent(ComponentKey key, const CMeshComponent& other) : CSceneComponent(key, other)
@@ -62,8 +62,6 @@ void CMeshComponent::render()
 {
     CSceneComponent::render();
 
-    IDevice& device = CServiceLocator::getDevice();
-
     mTransformConstantBuffer->setWorld(mWorldMatrix);
 
     // 임시자료
@@ -79,7 +77,7 @@ void CMeshComponent::render()
 
     mTransformConstantBuffer->setView(view);
     mTransformConstantBuffer->setProjection(projection);
-    mTransformConstantBuffer->updateBuffer(device.getContext());
+    mTransformConstantBuffer->updateBuffer();
 }
 
 void CMeshComponent::postRender()
