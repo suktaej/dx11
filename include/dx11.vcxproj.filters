@@ -49,6 +49,12 @@
     <Filter Include="06_Component">
       <UniqueIdentifier>{d21b3719-8420-4dd2-9c49-8781fda3dc0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06_Component\SceneComponent">
+      <UniqueIdentifier>{16a7bbd8-1968-4a47-99db-8af8c5e9fbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Shared">
+      <UniqueIdentifier>{3b919f56-8362-4e53-ac1a-78762edc428b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -115,13 +121,22 @@
       <Filter>06_Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\SceneComponent.cpp">
-      <Filter>06_Component</Filter>
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\MeshComponent.cpp">
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\StaticMeshComponent.cpp">
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>04_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>00_Shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>01_GameManager</Filter>
     </ClInclude>
@@ -192,7 +207,25 @@
       <Filter>06_Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\SceneComponent.h">
-      <Filter>06_Component</Filter>
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\MeshComponent.h">
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\StaticMeshComponent.h">
+      <Filter>06_Component\SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>04_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInfo.h">
+      <Filter>00_Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceInterface.h">
+      <Filter>00_Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>00_Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

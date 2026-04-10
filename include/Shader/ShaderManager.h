@@ -1,25 +1,26 @@
 #pragma once
 #include "../GameInfo.h"
-#include "../DeviceManager.h"
+#include "../ServiceInterface.h"
 
-class CShaderManager
+class CShaderManager : public IShader
 {
 public:
 	CShaderManager();
 	~CShaderManager();
 
 private:
-	CDeviceManager* mDeviceMgr;
 	std::unordered_map<std::string, std::unique_ptr<class CShader>> mShaderMap;
 	std::unordered_map<std::string, std::unique_ptr<class CConstantBuffer>> mConstantBufferMap;
 
 public:
-	bool init(CDeviceManager& device);
+	bool init();
 	CShader* findShader(const std::string& name);
 	void releaseShader(const std::string& name);
 	bool createConstantBuffer(const std::string& name, int size, int registerSlot, EShaderBufferType bufferType = EShaderBufferType::Graphic);
 	CConstantBuffer* findConstantBuffer(const std::string& name);
 	void releaseConstantBuffer(const std::string& name);
+
+	void serviceInit() override;
 
 public:
 	template <typename T>
@@ -31,8 +32,8 @@ public:
 			return true;
 		
 		auto shader = std::make_unique<T>(typename T::ShaderKey{});
-		
-		if (!shader->create(mDeviceMgr->getDevice()))
+
+		if (!shader->create())
 			return false;
 		
 		mShaderMap.insert(std::make_pair(name, std::move(shader)));

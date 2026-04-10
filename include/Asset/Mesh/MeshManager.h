@@ -1,8 +1,10 @@
 #pragma once
 #include "../../GameInfo.h"
+#include "../../ServiceLocator.h"
 
-class CMeshManager
+class CMeshManager : public IMesh
 {
+    //TODO : passkey pattern 적용여부
 	friend class CAssetManager;
 	friend std::default_delete<CMeshManager>;
 
@@ -11,11 +13,11 @@ private:
 	~CMeshManager();
 
 private:
-	class CDeviceManager* mDeviceMgr = nullptr;
 	std::unordered_map<std::string, std::unique_ptr<class CMesh>> mMeshMap;
 
 private:
-    bool init(class CDeviceManager& device);
+    bool init();
+    void serviceInit();
 
 public:
 	class CMesh* findMesh(const std::string& name);
@@ -35,7 +37,6 @@ private:
         mesh->setName(desc.Name);
 
         if (!mesh->createMesh(
-            desc.device,
             desc.bKeepVertexData, (void*)desc.pVertexData, desc.VertexSize, desc.VertexCount, desc.VertexUsage,
             desc.Primitive,
             desc.bKeepIndexData, (void*)desc.pIndexData, desc.IndexSize, desc.IndexCount, desc.IndexFormat, desc.IndexUsage))

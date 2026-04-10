@@ -11,6 +11,7 @@ public:
 
 protected:
 	CSceneComponent* mParent = nullptr;
+	// TODO: unique_ptr °í·Á
 	std::vector<CSceneComponent*> mChildList;
 
 	DirectX::XMFLOAT3 mLocalScale;
@@ -45,6 +46,7 @@ private:
 	void updateWorldTransform();
 	void invalidateTransform();
 	bool isDescendant(CSceneComponent* node);
+	void processChildren(float dt, std::function<void(CSceneComponent*, float)> func);
 	//void detachFromParent();
 	//DirectX::XMFLOAT3 quaternionToEuler(DirectX::XMVECTOR quat);
 
@@ -60,8 +62,8 @@ public:
 	void postRender() override;
 	std::unique_ptr<CComponent> clone() const override;
 	//std::unique_ptr<CComponent> cloneHierarchy() const override;
-	void eraseOwner() override;
 	void addChild(CSceneComponent& child);
+	void eraseOwner() override;
 
 public:
 	void setLocalScale(const DirectX::XMFLOAT3& scale);
@@ -89,9 +91,9 @@ public:
 	const DirectX::XMFLOAT3& getLocalPosition() { return mLocalPosition; }
 	
 	const DirectX::XMFLOAT4X4& getWorldMatrix();
-	DirectX::XMFLOAT3 getWorldScale();
-	DirectX::XMFLOAT3 getWorldPosition();
-	DirectX::XMFLOAT4 getWorldRotation();
+	const DirectX::XMFLOAT3 getWorldScale();
+	const DirectX::XMFLOAT3 getWorldPosition();
+	const DirectX::XMFLOAT4 getWorldRotation();
 	
 	//void setLocalRotation(EAxis axis, const float& angle);
 	//void setWorldRotation(EAxis axis, const float& rotation);

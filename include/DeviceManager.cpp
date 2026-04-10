@@ -606,6 +606,20 @@ void CDeviceManager::present()
 	mSwapChain->Present(1, 0);
 }
 
+void CDeviceManager::serviceInit()
+{
+}
+
+ID3D11Device* CDeviceManager::getDevice()
+{
+	return mDevice.Get();
+}
+
+ID3D11DeviceContext* CDeviceManager::getContext()
+{
+	return mContext.Get();
+}
+
 void CDeviceManager::unbindShaderResources()
 {
 	ID3D11ShaderResourceView* nullSRVs[16] = { nullptr };

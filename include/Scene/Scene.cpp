@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "../Object/Object.h"
 
-CScene::CScene()
+CScene::CScene(SceneKey key)
 {
 }
 

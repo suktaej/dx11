@@ -9,6 +9,7 @@ public:
 	~CGraphicShader() override;
 
 protected:
+	ID3D11Device* mDevice = nullptr;
 	ComPtr<ID3D11InputLayout> mInputLayout = nullptr;
 	// Register 지정을 위한 구조체 정의
 	std::vector<D3D11_INPUT_ELEMENT_DESC> mVecElementDescs;
@@ -31,8 +32,8 @@ protected:
 
 public:
 	//bool init() override;
-	bool create(ID3D11Device* device) override;
-	void setShader(ID3D11DeviceContext* context) final;
+	bool create() override;
+	void setShader() final;
 	void AddInputLayoutDesc(
 	LPCSTR SemanticName,
 	UINT SemanticIndex,
@@ -41,12 +42,12 @@ public:
 	UINT InputSize,
 	D3D11_INPUT_CLASSIFICATION InputSlotClass,
 	UINT InstanceDataStepRate);
-	bool createInputLayout(ID3D11Device& device, ID3DBlob* vertexShaderBlob);
+	bool createInputLayout(ID3DBlob* vertexShaderBlob);
 	bool compileShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** shaderBlob);
-	bool createVertexShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint = "VSMain", const std::string& shaderModel = "vs_5_0");
-	bool createHullShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint = "HSMain", const std::string& shaderModel = "hs_5_0");
-	bool createDomainShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint = "DSMain", const std::string& shaderModel = "ds_5_0");
-	bool createGeometryShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint = "GSMain", const std::string& shaderModel = "gs_5_0");
-	bool createPixelShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint = "PSMain", const std::string& shaderModel = "ps_5_0");
+	bool createVertexShader(const std::wstring& fileName, const std::string& entryPoint = "VSMain", const std::string& shaderModel = "vs_5_0");
+	bool createHullShader(const std::wstring& fileName, const std::string& entryPoint = "HSMain", const std::string& shaderModel = "hs_5_0");
+	bool createDomainShader(const std::wstring& fileName, const std::string& entryPoint = "DSMain", const std::string& shaderModel = "ds_5_0");
+	bool createGeometryShader(const std::wstring& fileName, const std::string& entryPoint = "GSMain", const std::string& shaderModel = "gs_5_0");
+	bool createPixelShader(const std::wstring& fileName, const std::string& entryPoint = "PSMain", const std::string& shaderModel = "ps_5_0");
 };
 

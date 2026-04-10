@@ -1,5 +1,5 @@
 #include "GraphicShader.h"
-#include "../DeviceManager.h"
+#include "../ServiceLocator.h"
 
 CGraphicShader::CGraphicShader(ShaderKey key) : CShader(key)
 {
@@ -9,21 +9,26 @@ CGraphicShader::~CGraphicShader()
 {
 }
 
-bool CGraphicShader::create(ID3D11Device* device)
+bool CGraphicShader::create()
 {
+	IDevice& device = CServiceLocator::getDevice();
+	mDevice = device.getDevice();
+
 	return true;
 }
 
-void CGraphicShader::setShader(ID3D11DeviceContext* context)
+void CGraphicShader::setShader()
 {
-	context->VSSetShader(mVertexShader.Get(), nullptr, 0);
-	context->HSSetShader(mHullShader.Get(), nullptr, 0);
-	context->DSSetShader(mDomainShader.Get(), nullptr, 0);
-	context->GSSetShader(mGeometryShader.Get(), nullptr, 0);
-	context->PSSetShader(mPixelShader.Get(), nullptr, 0);
+	IDevice& device = CServiceLocator::getDevice();
+
+	device.getContext()->VSSetShader(mVertexShader.Get(), nullptr, 0);
+	device.getContext()->HSSetShader(mHullShader.Get(), nullptr, 0);
+	device.getContext()->DSSetShader(mDomainShader.Get(), nullptr, 0);
+	device.getContext()->GSSetShader(mGeometryShader.Get(), nullptr, 0);
+	device.getContext()->PSSetShader(mPixelShader.Get(), nullptr, 0);
 
 	// IA : Input Assembler
-	context->IASetInputLayout(mInputLayout.Get());
+	device.getContext()->IASetInputLayout(mInputLayout.Get());
 }
 
 void CGraphicShader::AddInputLayoutDesc(LPCSTR SemanticName, UINT SemanticIndex, DXGI_FORMAT Format, UINT InputSlot, UINT InputSize, D3D11_INPUT_CLASSIFICATION InputSlotClass, UINT InstanceDataStepRate)
@@ -52,9 +57,9 @@ void CGraphicShader::AddInputLayoutDesc(LPCSTR SemanticName, UINT SemanticIndex,
 	mVecElementDescs.push_back(elementDesc);
 }
 
-bool CGraphicShader::createInputLayout(ID3D11Device& device, ID3DBlob* blob)
+bool CGraphicShader::createInputLayout(ID3DBlob* blob)
 {
-	HRESULT hr = device.CreateInputLayout(
+	HRESULT hr = mDevice->CreateInputLayout(
 		//&mVecElementDescs[0],
 		mVecElementDescs.data(),
 		static_cast<UINT>(mVecElementDescs.size()),
@@ -105,12 +110,12 @@ bool CGraphicShader::compileShader(const std::wstring& fileName, const std::stri
 	return true;
 }
 
-bool CGraphicShader::createVertexShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
+bool CGraphicShader::createVertexShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
 {
 	if(!compileShader(fileName, entryPoint, shaderModel, &mVertexShaderBlob))
 		return false;
 
-	if (FAILED((device.CreateVertexShader(
+	if (FAILED((mDevice->CreateVertexShader(
 		mVertexShaderBlob->GetBufferPointer(),
 		mVertexShaderBlob->GetBufferSize(),
 		nullptr,
@@ -120,12 +125,12 @@ bool CGraphicShader::createVertexShader(ID3D11Device& device, const std::wstring
 	return true;
 }
 
-bool CGraphicShader::createHullShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
+bool CGraphicShader::createHullShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
 {
 	if (!compileShader(fileName, entryPoint, shaderModel, &mHullShaderBlob))
 		return false;
 
-	if (FAILED(device.CreateHullShader(
+	if (FAILED(mDevice->CreateHullShader(
 		mHullShaderBlob->GetBufferPointer(),
 		mHullShaderBlob->GetBufferSize(),
 		nullptr,
@@ -135,12 +140,12 @@ bool CGraphicShader::createHullShader(ID3D11Device& device, const std::wstring& 
 	return true;
 }
 
-bool CGraphicShader::createDomainShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
+bool CGraphicShader::createDomainShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
 {
 	if (!compileShader(fileName, entryPoint, shaderModel, &mDomainShaderBlob))
 		return false;
 
-	if (FAILED(device.CreateDomainShader(
+	if (FAILED(mDevice->CreateDomainShader(
 		mDomainShaderBlob->GetBufferPointer(),
 		mDomainShaderBlob->GetBufferSize(),
 		nullptr,
@@ -150,12 +155,12 @@ bool CGraphicShader::createDomainShader(ID3D11Device& device, const std::wstring
 	return true;
 }
 
-bool CGraphicShader::createGeometryShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
+bool CGraphicShader::createGeometryShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
 {
 	if (!compileShader(fileName, entryPoint, shaderModel, &mGeometryShaderBlob))
 		return false;
 
-	if (FAILED(device.CreateGeometryShader(
+	if (FAILED(mDevice->CreateGeometryShader(
 		mGeometryShaderBlob->GetBufferPointer(),
 		mGeometryShaderBlob->GetBufferSize(),
 		nullptr,
@@ -165,12 +170,12 @@ bool CGraphicShader::createGeometryShader(ID3D11Device& device, const std::wstri
 	return true;
 }
 
-bool CGraphicShader::createPixelShader(ID3D11Device& device, const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
+bool CGraphicShader::createPixelShader(const std::wstring& fileName, const std::string& entryPoint, const std::string& shaderModel)
 {
 	if (!compileShader(fileName, entryPoint, shaderModel, &mPixelShaderBlob))
 		return false;
 
-	if (FAILED(device.CreatePixelShader(
+	if (FAILED(mDevice->CreatePixelShader(
 		mPixelShaderBlob->GetBufferPointer(),
 		mPixelShaderBlob->GetBufferSize(),
 		nullptr,

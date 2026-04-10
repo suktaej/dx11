@@ -1,4 +1,5 @@
 #include "Component.h"
+#include "../DeviceManager.h"
 
 CComponent::CComponent(ComponentKey key) { }
 CComponent::CComponent(ComponentKey key, const CComponent& other) { }

@@ -8,10 +8,12 @@ CConstantBufferData::CConstantBufferData()
 
 CConstantBufferData::CConstantBufferData(const CConstantBufferData& data)
 {
+	mBuffer = data.mBuffer;
 }
 
 CConstantBufferData::CConstantBufferData(CConstantBufferData&& data) noexcept
 {
+	mBuffer = data.mBuffer;
 }
 
 CConstantBufferData::~CConstantBufferData()

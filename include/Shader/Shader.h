@@ -19,7 +19,7 @@ public:
 
 public:
 	//virtual bool init() = 0;
-	virtual bool create(ID3D11Device* device) = 0;
-	virtual void setShader(ID3D11DeviceContext* context) = 0;
+	virtual bool create() = 0;
+	virtual void setShader() = 0;
 };
 

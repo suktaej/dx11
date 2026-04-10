@@ -23,6 +23,9 @@ protected:
 	class CObject* mOwner = nullptr;
 	class CScene* mScene = nullptr;
 	std::string mName;
+	bool mIsActive = true;
+	bool mIsEnabled = true;
+	bool mIsVisible = true;
 
 protected:
 	ComponentKey createKey() const { return ComponentKey(); }
@@ -37,8 +40,9 @@ public:
 	virtual void preRender();
 	virtual void render();
 	virtual void postRender();
-	virtual std::unique_ptr<CComponent> clone() const = 0;
+	// CRTR Pattern 사용 고려
 	//virtual std::unique_ptr<CComponent> cloneHierarchy() const = 0;
+	virtual std::unique_ptr<CComponent> clone() const = 0;
 	virtual void eraseOwner();
 
 public:
@@ -46,5 +50,9 @@ public:
 	class CScene* getScene() const { return mScene; }
 	const char* getName() const { return mName.c_str(); }
 	void setName(const std::string& name) { mName = name; }
+	bool getActive() { return mIsActive; }
+	bool getEnable() { return mIsEnabled; }
+	void setActive(bool active) { mIsActive = active; }
+	void setEnable(bool enable) { mIsEnabled = enable; }
 };
 

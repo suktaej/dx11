@@ -21,7 +21,6 @@ protected:
 
 private:
 	bool createBuffer(
-		ID3D11Device* device,
 		ID3D11Buffer** buffer,
 		D3D11_BIND_FLAG flag,
 		void* data,
@@ -30,7 +29,6 @@ private:
 		D3D11_USAGE usage);
 	
 	bool createIndexBuffer(
-		ID3D11Device* device,
 		bool keepCPUdata,
 		void* indexData,
 		UINT indexSize,
@@ -39,7 +37,6 @@ private:
 		D3D11_USAGE indexUsage = D3D11_USAGE_DEFAULT);
 	
 	bool createVertexBuffer(
-		ID3D11Device* device,
 		bool keepCPUdata,
 		void* vertexData,
 		UINT vertexSize,
@@ -52,7 +49,6 @@ public:
 	// D3D11_USAGE_DYNAMIC: CPU가 Map(D3D11_MAP_WRITE_DISCARD 등)으로 직접 GPU 버퍼에 쓰는 방식
 	// D3D11_USAGE_STAGING : CPU에서 읽고 쓰기가 모두 가능한 버퍼를 생성할 때 사용 (GPU에서 직접 접근 불가하므로 출력할 수 없음, 갱신 전용 버퍼)
 	virtual bool createMesh(
-		ID3D11Device* device,
 		bool keepVertexData,
 		void* vertexData,
 		UINT vertexSize,
@@ -66,6 +62,6 @@ public:
 		DXGI_FORMAT indexFormat = DXGI_FORMAT_UNKNOWN,
 		D3D11_USAGE indexUsage = D3D11_USAGE_DEFAULT);
 
-	void render(ID3D11DeviceContext* context);
+	void render();
 };
 

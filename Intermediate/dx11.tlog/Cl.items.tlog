@@ -4,13 +4,17 @@ C:\MyCode\dx11\include\Asset\Mesh\Mesh.cpp;C:\MyCode\dx11\Intermediate\Mesh.obj
 C:\MyCode\dx11\include\Asset\Mesh\MeshManager.cpp;C:\MyCode\dx11\Intermediate\MeshManager.obj
 C:\MyCode\dx11\include\Asset\Mesh\StaticMesh.cpp;C:\MyCode\dx11\Intermediate\StaticMesh.obj
 C:\MyCode\dx11\include\Component\Component.cpp;C:\MyCode\dx11\Intermediate\Component.obj
+C:\MyCode\dx11\include\Component\MeshComponent.cpp;C:\MyCode\dx11\Intermediate\MeshComponent.obj
 C:\MyCode\dx11\include\Component\SceneComponent.cpp;C:\MyCode\dx11\Intermediate\SceneComponent.obj
+C:\MyCode\dx11\include\Component\StaticMeshComponent.cpp;C:\MyCode\dx11\Intermediate\StaticMeshComponent.obj
 C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\Intermediate\DeviceManager.obj
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\Intermediate\GameManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj
 C:\MyCode\dx11\include\Object\Object.cpp;C:\MyCode\dx11\Intermediate\Object.obj
 C:\MyCode\dx11\include\Scene\Scene.cpp;C:\MyCode\dx11\Intermediate\Scene.obj
 C:\MyCode\dx11\include\Scene\SceneMain.cpp;C:\MyCode\dx11\Intermediate\SceneMain.obj
+C:\MyCode\dx11\include\Scene\SceneManager.cpp;C:\MyCode\dx11\Intermediate\SceneManager.obj
+C:\MyCode\dx11\include\ServiceLocator.cpp;C:\MyCode\dx11\Intermediate\ServiceLocator.obj
 C:\MyCode\dx11\include\Shader\ColorMeshShader.cpp;C:\MyCode\dx11\Intermediate\ColorMeshShader.obj
 C:\MyCode\dx11\include\Shader\ComputeShader.cpp;C:\MyCode\dx11\Intermediate\ComputeShader.obj
 C:\MyCode\dx11\include\Shader\ConstantBuffer.cpp;C:\MyCode\dx11\Intermediate\ConstantBuffer.obj

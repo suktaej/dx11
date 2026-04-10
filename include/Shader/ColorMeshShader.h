@@ -9,5 +9,5 @@ public:
 
 public:
 	//bool init() override;
-	bool create(ID3D11Device* device) override;
+	bool create() override;
 };

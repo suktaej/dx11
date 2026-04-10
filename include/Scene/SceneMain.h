@@ -3,8 +3,8 @@
 
 class CSceneMain : public CScene
 {
-private:
-	CSceneMain();
+public:
+	CSceneMain(SceneKey key);
 	~CSceneMain();
 
 public:

@@ -8,11 +8,11 @@ CComputeShader::~CComputeShader()
 {
 }
 
-bool CComputeShader::create(ID3D11Device* device)
+bool CComputeShader::create()
 {
     return true;
 }
 
-void CComputeShader::setShader(ID3D11DeviceContext* context)
+void CComputeShader::setShader()
 {
 }

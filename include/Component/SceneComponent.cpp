@@ -3,8 +3,11 @@
 CSceneComponent::CSceneComponent(ComponentKey key) 
     : CComponent(key),
 	mLocalScale(1.f, 1.f, 1.f),
+	mLocalRotation(0.f, 0.f, 0.f, 1.f),
 	mLocalPosition(0.f, 0.f, 0.f),
-	mLocalRotation(0.f, 0.f, 0.f, 1.f)
+    mWorldScale(1.f, 1.f, 1.f),
+    mWorldRotation(0.f, 0.f, 0.f, 1.f),
+    mWorldPosition(0.f, 0.f, 0.f)
 {
     XMStoreFloat4x4(&mLocalMatrix, DirectX::XMMatrixIdentity());
     XMStoreFloat4x4(&mWorldMatrix, DirectX::XMMatrixIdentity());
@@ -13,8 +16,11 @@ CSceneComponent::CSceneComponent(ComponentKey key)
 CSceneComponent::CSceneComponent(ComponentKey key, const CSceneComponent& other) 
     : CComponent(key, other),
     mLocalScale(other.mLocalScale),
-    mLocalPosition(other.mLocalPosition),
     mLocalRotation(other.mLocalRotation),
+    mLocalPosition(other.mLocalPosition),
+    mWorldScale(other.mWorldScale),
+    mWorldRotation(other.mWorldRotation),
+    mWorldPosition(other.mWorldPosition),
     mParent(nullptr),
     mIsLocalDirty(true),
     mIsWorldDirty(true)
@@ -183,41 +189,36 @@ const DirectX::XMFLOAT4X4& CSceneComponent::getWorldMatrix()
     return mWorldMatrix;
 }
 
-DirectX::XMFLOAT3 CSceneComponent::getWorldScale()
+const DirectX::XMFLOAT3 CSceneComponent::getWorldScale()
 {
     if (mIsWorldDirty) 
         updateWorldTransform();
 
     return mWorldScale;
 
-    //using namespace DirectX;
-
     //XMVECTOR scale, quat, trans;
     //XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
-
     //return XMFLOAT3(
     //    XMVectorGetX(scale), 
     //    XMVectorGetY(scale), 
     //    XMVectorGetZ(scale));
 }
 
-DirectX::XMFLOAT4 CSceneComponent::getWorldRotation()
+const DirectX::XMFLOAT4 CSceneComponent::getWorldRotation()
 {
     if (mIsWorldDirty) 
         updateWorldTransform();
     
     return mWorldRotation;
-    //using namespace DirectX;
 
     //XMVECTOR scale, quat, trans;
     //XMMatrixDecompose(&scale, &quat, &trans, XMLoadFloat4x4(&getWorldMatrix()));
-
     //XMFLOAT4 result;
     //XMStoreFloat4(&result, quat);
     //return result;
 }
 
-DirectX::XMFLOAT3 CSceneComponent::getWorldPosition()
+const DirectX::XMFLOAT3 CSceneComponent::getWorldPosition()
 {
     if (mIsWorldDirty) 
         updateWorldTransform();
@@ -344,7 +345,6 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
     }
 
     mIsLocalDirty = true;
-    //mEulerDirty = true;
 	invalidateTransform();
     //updateWorldTransform();
 }
@@ -452,44 +452,72 @@ bool CSceneComponent::init()
     return true;
 }
 
-bool CSceneComponent::init(const char* name)
-{
-    return true;
+bool CSceneComponent::init(const char* name) 
+{ 
+    return true; 
 }
 
 void CSceneComponent::preUpdate(float dt)
 {
     CComponent::preUpdate(dt);
+
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->preUpdate(dt); });
 }
 
 void CSceneComponent::update(float dt)
 {
     CComponent::update(dt);
+
+	processChildren(dt, [](CSceneComponent* child, float dt)
+		{ child->update(dt); });;
 }
 
 void CSceneComponent::postUpdate(float dt)
 {
     CComponent::postUpdate(dt);
+
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->postUpdate(dt); });
 }
 
 void CSceneComponent::collision(float dt)
 {
 	CComponent::collision(dt);
+
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->collision(dt); });
 }
 
 void CSceneComponent::preRender()
 {
     CComponent::preRender();
+
+    // Render 출력 전 1회 생성된 객체를 갱신
+    // worldMatrix 생성
+    updateWorldTransform();
+
+    float dt = 0.f;
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->preRender(); });
 }
 
 void CSceneComponent::render()
 {
     CComponent::render();
+
+    float dt = 0.f;
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->render(); });
 }
 
 void CSceneComponent::postRender()
 {
     CComponent::postRender();
+
+    float dt = 0.f;
+    processChildren(dt, [](CSceneComponent* child, float dt)
+        { child->postRender(); });
 }
 
 std::unique_ptr<CComponent> CSceneComponent::clone() const
@@ -535,6 +563,28 @@ bool CSceneComponent::isDescendant(CSceneComponent* node)
             return true;
 
     return false;
+}
+
+void CSceneComponent::processChildren(float dt, std::function<void(CSceneComponent*, float)> func)
+{
+    auto it = mChildList.begin();
+    while (it != mChildList.end())
+    {
+        if (!(*it)->getActive())
+        {
+            it = mChildList.erase(it);
+            continue;
+        }
+
+        if (!(*it)->getEnable())
+        {
+            ++it;
+            continue;
+        }
+
+        func(*it, dt);
+        ++it;
+    }
 }
 
 //void CSceneComponent::detachFromParent()

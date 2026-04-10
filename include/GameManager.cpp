@@ -4,8 +4,7 @@
 #include "Asset/Mesh/StaticMesh.h"
 #include "Asset/Mesh/MeshManager.h"
 #include "Shader/ColorMeshShader.h"
-
-#include "Shader/TransformConstantBuffer.h" //TEST
+#include "ServiceLocator.h"
 
 DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
@@ -82,7 +81,7 @@ void CGameManager::logic()
     float deltaTime = mTime.update();
 
     input(deltaTime);
-    if (update(deltaTime)) return;
+    update(deltaTime);
     collision(deltaTime);
     render(deltaTime);
 }
@@ -91,14 +90,14 @@ void CGameManager::input(float dt)
 {
 }
 
-bool CGameManager::update(float dt)
+void CGameManager::update(float dt)
 {
-    return false;
+    mScene.update(dt);
 }
-
 
 void CGameManager::collision(float dt)
 {
+    mScene.collision(dt);
 }
 
 void CGameManager::render(float dt)
@@ -108,6 +107,8 @@ void CGameManager::render(float dt)
 
     // 2. 기하 단계 (G-Buffer)
     mDevice.BeginGeometryPass();
+
+    mScene.render();
 
     testRender();
 
@@ -161,14 +162,21 @@ bool CGameManager::init(HINSTANCE hInst)
 
     if(false == mDevice.init(mhWnd, rc.right, rc.bottom, true))
 		return false;
+    CServiceLocator::provideDevice(mDevice);
  
-    if (false == mAsset.init(mDevice))
+    if (false == mAsset.init())
         return false;
+    CServiceLocator::provideAsset(mAsset);
 
-    if (false == mShader.init(mDevice))
+    if (false == mShader.init())
+        return false;
+    CServiceLocator::provideShader(mShader);
+
+    if (false == mScene.init())
         return false;
 
     mTime.init();
+
 
 	return true;
 }
@@ -195,6 +203,7 @@ int CGameManager::run()
 
 void CGameManager::testRender()
 {
+    /*
 	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 10.0f, 1.0f);
 	static DirectX::XMVECTOR rot = DirectX::XMQuaternionIdentity();
     DirectX::XMVECTOR dirY = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -270,12 +279,13 @@ void CGameManager::testRender()
     testCBuffer.setProjection(projection);
 
 	testCBuffer.updateBuffer(mDevice.getContext());
+    */
 
     CShader* testShader = mShader.findShader("TestShader");
-    testShader->setShader(mDevice.getContext());
+    testShader->setShader();
 
     CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
-    testMesh->render(mDevice.getContext());
+    testMesh->render();
 
     mDevice.testRender();
 }

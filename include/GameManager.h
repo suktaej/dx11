@@ -4,6 +4,7 @@
 #include "Share/TimeManager.h"
 #include "Asset/AssetManager.h"
 #include "Shader/ShaderManager.h"
+#include "Scene/SceneManager.h"
 
 class CGameManager
 {
@@ -26,6 +27,7 @@ private:
 	CTimeManager mTime;
 	CAssetManager mAsset;
 	CShaderManager mShader;
+	CSceneManager mScene;
 	
 private:
 	void RegisterWindowClass();
@@ -34,7 +36,7 @@ private:
 	
 	void logic();
 	void input(float dt);
-	bool update(float dt);
+	void update(float dt);
 	void collision(float dt);
 	void render(float dt);
 

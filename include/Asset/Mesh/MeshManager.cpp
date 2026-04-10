@@ -1,5 +1,4 @@
 #include "MeshManager.h"
-#include "../../DeviceManager.h"
 #include "StaticMesh.h"
 
 CMeshManager::CMeshManager()
@@ -10,12 +9,15 @@ CMeshManager::~CMeshManager()
 {
 }
 
-bool CMeshManager::init(CDeviceManager& device)
+bool CMeshManager::init()
 {
-    mDeviceMgr = &device;
     testCode();
 
 	return true;
+}
+
+void CMeshManager::serviceInit()
+{
 }
 
 CMesh* CMeshManager::findMesh(const std::string& name)
@@ -64,7 +66,6 @@ void CMeshManager::testCode()
     };
 
     FMeshDesc desc;
-    desc.device = mDeviceMgr->getDevice();
     desc.Name = "ColoredBox";
     desc.pVertexData = boxVertex;
     desc.VertexSize = sizeof(FVertexPosColor);

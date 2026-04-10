@@ -1,17 +1,20 @@
 #pragma once
 #include "../GameInfo.h"
+#include "../ServiceInterface.h"
 
-class CAssetManager
+class CAssetManager : public IAsset
 {
 public:
 	CAssetManager();
 	~CAssetManager();
 
 private:
-	class CDeviceManager* mDeviceMgr = nullptr;
 	std::unique_ptr<class CMeshManager> mMeshMgr;
 
+private:
+	void serviceInit() override;
+
 public:
-	bool init(CDeviceManager& device);
+	bool init();
 	CMeshManager* getMeshManager() { return mMeshMgr.get(); }
 };

@@ -3,8 +3,14 @@
 
 class CScene abstract
 {
-protected:
-	CScene();
+public:
+	class SceneKey
+	{
+		friend class CSceneManager;	
+		SceneKey() {}
+	};
+
+	CScene(SceneKey key);
 	virtual ~CScene();
 
 protected:

@@ -5,10 +5,14 @@ CTransformConstantBuffer::CTransformConstantBuffer()
 }
 
 CTransformConstantBuffer::CTransformConstantBuffer(const CTransformConstantBuffer& data)
+	: CConstantBufferData(data),
+	mData(data.mData)
 {
 }
 
 CTransformConstantBuffer::CTransformConstantBuffer(CTransformConstantBuffer&& data) noexcept
+	: CConstantBufferData(data),
+	mData(data.mData)
 {
 }
 
@@ -45,6 +49,11 @@ void CTransformConstantBuffer::updateBuffer(ID3D11DeviceContext* context)
 }
 
 std::unique_ptr<CConstantBufferData> CTransformConstantBuffer::clone() const
+{
+	return std::make_unique<CTransformConstantBuffer>(*this);
+}
+
+std::unique_ptr<CTransformConstantBuffer> CTransformConstantBuffer::cloneTransform() const
 {
 	return std::make_unique<CTransformConstantBuffer>(*this);
 }

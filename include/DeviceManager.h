@@ -1,5 +1,6 @@
 #pragma once
 #include "GameInfo.h"
+#include "ServiceInterface.h"
 
 struct FPostProcessVertex
 {
@@ -7,7 +8,7 @@ struct FPostProcessVertex
 	DirectX::XMFLOAT2 uv;
 };
 
-class CDeviceManager
+class CDeviceManager : public IDevice
 {
 	//DECLARE_SINGLE(CDeviceManager);
 	friend class CGameManager;
@@ -96,6 +97,10 @@ private:
 	void BeginFinalPass(); // 최종 백버퍼를 타겟으로 설정 (포스트 프로세스의 마지막 단계)
 	void drawFullScreenQuad();
 	void present(); // 스왑체인 Present 호출
+
+	void serviceInit() override;
+	ID3D11Device* getDevice() override;
+	ID3D11DeviceContext* getContext() override;
 	
 	void testRender();
 

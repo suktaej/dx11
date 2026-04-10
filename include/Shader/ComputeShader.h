@@ -8,7 +8,7 @@ public:
 
 public:
 	//bool init() override;
-	bool create(ID3D11Device* device) override;
-	void setShader(ID3D11DeviceContext* context) final;
+	bool create() override;
+	void setShader() final;
 };
 

@@ -141,13 +141,17 @@
     <ClCompile Include="Asset\Mesh\MeshManager.cpp" />
     <ClCompile Include="Asset\Mesh\StaticMesh.cpp" />
     <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Component\SceneComponent.cpp" />
+    <ClCompile Include="Component\StaticMeshComponent.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Shader\ColorMeshShader.cpp" />
     <ClCompile Include="Shader\ComputeShader.cpp" />
     <ClCompile Include="Shader\ConstantBuffer.cpp" />
@@ -165,7 +169,9 @@
     <ClInclude Include="Asset\Mesh\MeshManager.h" />
     <ClInclude Include="Asset\Mesh\StaticMesh.h" />
     <ClInclude Include="Component\Component.h" />
+    <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
+    <ClInclude Include="Component\StaticMeshComponent.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />
@@ -177,6 +183,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneMain.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="ServiceInterface.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Shader\ColorMeshShader.h" />
     <ClInclude Include="Shader\ComputeShader.h" />
     <ClInclude Include="Shader\ConstantBuffer.h" />
