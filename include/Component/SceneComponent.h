@@ -29,19 +29,6 @@ protected:
 	bool mIsLocalDirty = true;
 	bool mIsWorldDirty = true;
 
-	enum class EAxis { x, y, z, end };
-	struct FAxis {
-		static DirectX::XMVECTOR Get(EAxis axis) 
-		{
-			switch (axis) {
-			case EAxis::x: return DirectX::g_XMIdentityR0; // {1, 0, 0, 0}
-			case EAxis::y: return DirectX::g_XMIdentityR1; // {0, 1, 0, 0}
-			case EAxis::z: return DirectX::g_XMIdentityR2; // {0, 0, 1, 0}
-			default: return DirectX::XMVectorZero();
-			}
-		}
-	};
-
 private:
 	void updateWorldTransform();
 	void invalidateTransform();
@@ -68,16 +55,25 @@ public:
 public:
 	void setLocalScale(const DirectX::XMFLOAT3& scale);
 	void setLocalScale(const EAxis& axis, const float& scale);
+	void setLocalScale(float x, float y, float z);
+
 	void setLocalPosition(const DirectX::XMFLOAT3& position);
 	void setLocalPosition(const EAxis& axis, const float& pos);
+	void setLocalPosition(float x, float y, float z);
+
 	void setLocalRotation(const DirectX::XMFLOAT3& rotation);
+	void setLocalRotation(float x, float y, float z);
 
 	void setWorldScale(const DirectX::XMFLOAT3& scale);
 	void setWorldScale(const EAxis& axis, const float& scale);
+	void setWorldScale(float x, float y, float z);
+
 	void setWorldPosition(const DirectX::XMFLOAT3& position);
 	void setWorldPosition(float x, float y, float z);
 	void setWorldPosition(const EAxis& axis, const float& pos);
+
 	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
+	void setWorldRotation(float x, float y, float z);
 	
 	void addLocalScale(const EAxis& axis, const float& scale);
 	void addLocalPosition(const EAxis& axis, const float& pos);

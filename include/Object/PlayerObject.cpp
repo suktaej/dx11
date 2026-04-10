@@ -19,6 +19,8 @@ bool CPlayerObject::init()
 	root->setMesh("ColoredBox");
 	root->setShader("TestShader");
 	root->setWorldPosition(0.f, 0.f, 5.5f);
+	root->setWorldRotation(0.f, 45.f, 45.f);
+	root->setWorldScale(2.f, 2.f, 2.f);
 
 	setRootComponent(root);
 

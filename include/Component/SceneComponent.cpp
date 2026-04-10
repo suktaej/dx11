@@ -82,6 +82,11 @@ void CSceneComponent::setLocalScale(const EAxis& axis, const float& scale)
     invalidateTransform();
 }
 
+void CSceneComponent::setLocalScale(float x, float y, float z)
+{
+    setLocalScale((DirectX::XMFLOAT3(x, y, z)));
+}
+
 void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT3& rotation)
 {
     using namespace DirectX;
@@ -101,6 +106,11 @@ void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT3& rotation)
     //updateWorldTransform();
     // Lazy Evaluation
     invalidateTransform();
+}
+
+void CSceneComponent::setLocalRotation(float x, float y, float z)
+{
+    setLocalRotation((DirectX::XMFLOAT3(x, y, z)));
 }
 
 void CSceneComponent::addLocalRotation(const EAxis& axis, const float& angle)
@@ -170,6 +180,11 @@ void CSceneComponent::setLocalPosition(const EAxis& axis, const float& pos)
 
     mIsLocalDirty = true;
     invalidateTransform();
+}
+
+void CSceneComponent::setLocalPosition(float x, float y, float z)
+{
+    setLocalPosition((DirectX::XMFLOAT3(x, y, z)));
 }
 
 void CSceneComponent::invalidateTransform()
@@ -311,6 +326,11 @@ void CSceneComponent::setWorldScale(const EAxis& axis, const float& scale)
     setWorldScale(worldScale);
 }
 
+void CSceneComponent::setWorldScale(float x, float y, float z)
+{
+    setWorldScale(DirectX::XMFLOAT3(x, y, z));
+}
+
 void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
 {
     using namespace DirectX;
@@ -347,6 +367,11 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
     mIsLocalDirty = true;
 	invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::setWorldRotation(float x, float y, float z)
+{
+    setWorldRotation(DirectX::XMFLOAT3(x, y, z));
 }
 
 void CSceneComponent::addLocalScale(const EAxis& axis, const float& scale)

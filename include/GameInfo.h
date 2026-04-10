@@ -135,6 +135,20 @@ enum class EAssetType
 	Sound
 };
 
+enum class EAxis { x, y, z, end };
+
+struct FAxis {
+	static DirectX::XMVECTOR Get(EAxis axis)
+	{
+		switch (axis) {
+		case EAxis::x: return DirectX::g_XMIdentityR0; // {1, 0, 0, 0}
+		case EAxis::y: return DirectX::g_XMIdentityR1; // {0, 1, 0, 0}
+		case EAxis::z: return DirectX::g_XMIdentityR2; // {0, 0, 1, 0}
+		default: return DirectX::XMVectorZero();
+		}
+	}
+};
+
 /*
 struct FIndexBuffer
 {
