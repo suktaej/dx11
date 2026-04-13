@@ -11,6 +11,8 @@ CPlayerObject::CPlayerObject(ObjectKey key, CPlayerObject& other) : CObject(key,
 
 CPlayerObject::~CPlayerObject()
 {
+	delete mRootComponent;
+	mRootComponent = nullptr;
 }
 
 bool CPlayerObject::init()

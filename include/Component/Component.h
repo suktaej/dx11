@@ -40,7 +40,7 @@ public:
 	virtual void preRender();
 	virtual void render();
 	virtual void postRender();
-	// CRTR Pattern 사용 고려
+	// TODO : CRTR Pattern 사용 고려
 	//virtual std::unique_ptr<CComponent> cloneHierarchy() const = 0;
 	virtual std::unique_ptr<CComponent> clone() const = 0;
 	virtual void eraseOwner();

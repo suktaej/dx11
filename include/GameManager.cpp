@@ -110,16 +110,20 @@ void CGameManager::render(float dt)
 
     mScene.render();
 
-    testRender();
+    CShader* testShader = mShader.findShader("TestShader");
+    testShader->setShader();
 
-    // TODO: 모든 오브젝트 Draw (깊이 쓰기 ON 상태)
+    CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
+    testMesh->render();
+
+    mDevice.testRender();
+
 
     /*
     // 3. 라이팅 단계 (Lighting Buffer)
     mDevice.unbindShaderResources(); // G-Buffer RTV를 해제하기 위해
     mDevice.setLightingTarget(); // 여기서 깊이 쓰기 OFF 권장
     mDevice.setPostProcessSource(mDevice.getGBufferSRV(0)); // t0, t1, t2... 바인딩 필요
-    // TODO: FSQ Draw (Lighting Shader)
 
     // 4. Resolve (MSAA -> Non-MSAA)
     mDevice.unbindShaderResources(); // 입력으로 썼던 G-Buffer 해제
@@ -129,19 +133,16 @@ void CGameManager::render(float dt)
     // Step A: HDR -> Post0
     mDevice.setPostProcessTarget(0);
     mDevice.setPostProcessSource(mDevice.getResolvedHDRSRV());
-    // TODO: FSQ Draw (Effect 1)
     mDevice.unbindShaderResources();
 
     // Step B: Post0 -> Post1
     mDevice.setPostProcessTarget(1);
     mDevice.setPostProcessSource(mDevice.getPostProcessSRV(0));
-    // TODO: FSQ Draw (Effect 2)
     mDevice.unbindShaderResources();
 
     // 6. 최종 출력 (톤 매핑 및 백버퍼)
     mDevice.setFinalTarget();
     mDevice.setPostProcessSource(mDevice.getPostProcessSRV(1));
-    // TODO: FSQ Draw (Tone-mapping Shader)
 
     // 7. UI 및 Present
     // mDevice.drawUI(); // UI는 보통 백버퍼 위에 직접 그림
@@ -280,12 +281,4 @@ void CGameManager::testRender()
 
 	testCBuffer.updateBuffer(mDevice.getContext());
     */
-
-    CShader* testShader = mShader.findShader("TestShader");
-    testShader->setShader();
-
-    CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
-    testMesh->render();
-
-    mDevice.testRender();
 }

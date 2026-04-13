@@ -28,6 +28,7 @@ public:
 	virtual void prevRender();
 	virtual void render();
 	virtual void postRender();
+	void processObject(float dt, std::function<void(class CObject*, float)> func);
 
 public:
 	template<typename T>

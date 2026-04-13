@@ -21,71 +21,20 @@ bool CScene::init(const char* filePath)
 
 void CScene::prevUpdate(float dt)
 {
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->prevUpdate(dt);
-		++it;
-	}
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->prevUpdate(dt); });
 }
 
 void CScene::update(float dt)
 {
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->update(dt);
-		++it;
-	}
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->update(dt); });
 }
 
 void CScene::postUpdate(float dt)
 {
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->postUpdate(dt);
-		++it;
-	}
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->postUpdate(dt); });
 }
 
 void CScene::prevCollision(float dt)
@@ -102,51 +51,29 @@ void CScene::postCollision(float dt)
 
 void CScene::prevRender()
 {
-	auto it = mObjectList.begin();
+	float dt = 0.f;
 
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->prevRender();
-		++it;
-	}
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->prevRender(); });
 }
 
 void CScene::render()
 {
-	auto it = mObjectList.begin();
+	float dt = 0.f;
 
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->render();
-		++it;
-	}
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->render(); });
 }
 
 void CScene::postRender()
+{
+	float dt = 0.f;
+
+	processObject(dt, [](CObject* obj, float dt)
+		{ obj->postRender(); });
+}
+
+void CScene::processObject(float dt, std::function<void(CObject*, float)> func)
 {
 	auto it = mObjectList.begin();
 
@@ -163,8 +90,8 @@ void CScene::postRender()
 			++it;
 			continue;
 		}
-
-		(*it)->postRender();
+		
+		func((*it).get(), dt);
 		++it;
 	}
 }

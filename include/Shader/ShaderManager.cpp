@@ -16,7 +16,10 @@ bool CShaderManager::init()
 	// Shader
 	createShader<CColorMeshShader>("TestShader");
 	// Constant Buffer
-	createConstantBuffer("Transform", sizeof(FTransformConstantBufferInfo), 0, EShaderBufferType::Vertex);
+	// Per-Frame buffer (b0)
+	createConstantBuffer("FrameCB", sizeof(FFrameConstantBufferInfo), 0, EShaderBufferType::Vertex);
+	// Per-Object buffer (b3)
+	createConstantBuffer("ObjectCB", sizeof(FObjectConstantBufferInfo), 3, EShaderBufferType::Vertex);
 
 	return true;
 }

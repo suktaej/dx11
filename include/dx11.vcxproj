@@ -157,10 +157,15 @@
     <ClCompile Include="Shader\ComputeShader.cpp" />
     <ClCompile Include="Shader\ConstantBuffer.cpp" />
     <ClCompile Include="Shader\ConstantBufferData.cpp" />
+    <ClCompile Include="Shader\FrameConstantBuffer.cpp" />
     <ClCompile Include="Shader\GraphicShader.cpp" />
+    <ClCompile Include="Shader\ObjectConstantBuffer.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp" />
-    <ClCompile Include="Shader\TransformConstantBuffer.cpp" />
+    <ClCompile Include="Shader\TransformConstantBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Share\TimeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,10 +181,6 @@
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="Matrix.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\PlayerObject.h" />
     <ClInclude Include="resource.h" />
@@ -193,10 +194,15 @@
     <ClInclude Include="Shader\ConstantBuffer.h" />
     <ClInclude Include="Shader\ConstantBufferData.h" />
     <ClInclude Include="Shader\ConstantBufferInfo.h" />
+    <ClInclude Include="Shader\FrameConstantBuffer.h" />
     <ClInclude Include="Shader\GraphicShader.h" />
+    <ClInclude Include="Shader\ObjectConstantBuffer.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\ShaderManager.h" />
-    <ClInclude Include="Shader\TransformConstantBuffer.h" />
+    <ClInclude Include="Shader\TransformConstantBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Share\TimeManager.h" />
   </ItemGroup>
   <ItemGroup>

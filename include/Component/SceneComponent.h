@@ -11,7 +11,6 @@ public:
 
 protected:
 	CSceneComponent* mParent = nullptr;
-	// TODO: unique_ptr °í·Á
 	std::vector<CSceneComponent*> mChildList;
 
 	DirectX::XMFLOAT3 mLocalScale;

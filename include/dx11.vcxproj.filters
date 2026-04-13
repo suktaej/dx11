@@ -138,6 +138,12 @@
     <ClCompile Include="Object\PlayerObject.cpp">
       <Filter>05_Object</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\FrameConstantBuffer.cpp">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ObjectConstantBuffer.cpp">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -181,9 +187,6 @@
     </ClInclude>
     <ClInclude Include="Shader\ColorMeshShader.h">
       <Filter>03_Shader\Shader\ColorMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ConstantBuffer.h">
       <Filter>03_Shader\ConstantBuffer</Filter>
@@ -232,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="Object\PlayerObject.h">
       <Filter>05_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\FrameConstantBuffer.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ObjectConstantBuffer.h">
+      <Filter>03_Shader\ConstantBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
