@@ -9,8 +9,24 @@ CMeshComponent::CMeshComponent(ComponentKey key) : CSceneComponent(key)
 
 CMeshComponent::CMeshComponent(ComponentKey key, const CMeshComponent& other) : CSceneComponent(key, other)
 {
-    auto cloned = other.mObjectCB->clone();
+    std::unique_ptr<CConstantBufferData> cloned = other.mObjectCB->clone();
+    
+    // 안정성
+    // dynamic_cast의 경우 런타임 오버해드 존재
+    /*
+    auto ptr = dynamic_cast<CObjectConstantBuffer*>(cloned.get());
 
+    if (ptr)
+    {
+        cloned.release();
+        mObjectCB.reset(ptr);
+    }
+    else
+        assert(false && "Failed to cloned object to CObject Constant Buffer");
+    */
+
+    // 성능 및 확신
+    // 변환하고자 하는 타입임이 보장
     mObjectCB = std::unique_ptr<CObjectConstantBuffer>(
         static_cast<CObjectConstantBuffer*>(cloned.release()));
 }
