@@ -118,7 +118,6 @@ void CGameManager::render(float dt)
 
     mDevice.testRender();
 
-
     /*
     // 3. 라이팅 단계 (Lighting Buffer)
     mDevice.unbindShaderResources(); // G-Buffer RTV를 해제하기 위해

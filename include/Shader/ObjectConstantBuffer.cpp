@@ -23,17 +23,17 @@ bool CObjectConstantBuffer::init()
 
 void CObjectConstantBuffer::updateBuffer()
 {
+	using namespace DirectX;
+
 	// 전송용 임시 구조체 생성
 	FObjectConstantBufferInfo objectData;
 
-	// 연산은 Row-Major로 수행 (CPU 방식)
-	DirectX::XMMATRIX world = DirectX::XMLoadFloat4x4(&mData.World);
-	DirectX::XMMATRIX vp = 
-	DirectX::XMMATRIX wvp = world * vp;
+	XMMATRIX world = XMLoadFloat4x4(&mData.World);
+	XMMATRIX wvp = XMLoadFloat4x4(&mData.WVP);
 
 	// GPU에 저장하기 위해 Transpose (GPU 방식-HLSL-인 Column-Major로 변환)
-	DirectX::XMStoreFloat4x4(&objectData.World, DirectX::XMMatrixTranspose(world));
-	DirectX::XMStoreFloat4x4(&objectData.WVP, DirectX::XMMatrixTranspose(wvp));
+	XMStoreFloat4x4(&objectData.World, XMMatrixTranspose(world));
+	XMStoreFloat4x4(&objectData.WVP, XMMatrixTranspose(wvp));
 
 	mBuffer->updateBuffer(&objectData);
 }

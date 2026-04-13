@@ -1,18 +1,18 @@
 #include "MeshComponent.h"
-#include "../Shader/TransformConstantBuffer.h"
+#include "../Shader/ObjectConstantBuffer.h"
 
 CMeshComponent::CMeshComponent(ComponentKey key) : CSceneComponent(key)
 {
-    mTransformConstantBuffer = std::make_unique<CTransformConstantBuffer>();
-    mTransformConstantBuffer->init();
+    mObjectCB = std::make_unique<CObjectConstantBuffer>();
+    mObjectCB->init();
 }
 
 CMeshComponent::CMeshComponent(ComponentKey key, const CMeshComponent& other) : CSceneComponent(key, other)
 {
-    auto cloned = other.mTransformConstantBuffer->clone();
+    auto cloned = other.mObjectCB->clone();
 
-    mTransformConstantBuffer = std::unique_ptr<CTransformConstantBuffer>(
-        static_cast<CTransformConstantBuffer*>(cloned.release()));
+    mObjectCB = std::unique_ptr<CObjectConstantBuffer>(
+        static_cast<CObjectConstantBuffer*>(cloned.release()));
 }
 
 CMeshComponent::~CMeshComponent()
@@ -60,24 +60,34 @@ void CMeshComponent::preRender()
 
 void CMeshComponent::render()
 {
+    using namespace DirectX;
+
     CSceneComponent::render();
 
-    mTransformConstantBuffer->setWorld(mWorldMatrix);
+    mObjectCB->setWorld(mWorldMatrix);
 
     // 임시자료
-    DirectX::XMFLOAT4X4 view, projection;
+    XMFLOAT4X4 view, projection;
     // view
-    DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
-    DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-    DirectX::XMStoreFloat4x4(&view, DirectX::XMMatrixLookAtLH(eye, at, up));
+    XMVECTOR eye = XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
+    XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+    XMStoreFloat4x4(&view, XMMatrixLookAtLH(eye, at, up));
     // projection
     RECT rc = { 0, 0, 1280, 720 };
-    DirectX::XMStoreFloat4x4(&projection, DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), (float)rc.right / rc.bottom, 0.1f, 100.0f));
+    XMStoreFloat4x4(&projection, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), (float)rc.right / rc.bottom, 0.1f, 100.0f));
 
-    mTransformConstantBuffer->setView(view);
-    mTransformConstantBuffer->setProjection(projection);
-    mTransformConstantBuffer->updateBuffer();
+    XMMATRIX wvp = XMLoadFloat4x4(&mWorldMatrix) * XMLoadFloat4x4(&view) * XMLoadFloat4x4(&projection);
+    XMFLOAT4X4 mwvp;
+    XMStoreFloat4x4(&mwvp, wvp);
+
+    mObjectCB->setWVP(mwvp);
+    mObjectCB->updateBuffer();
+    //XMMATRIX vp = mScene->GetMainCamera()->GetViewProjectionMatrix();
+
+    //mTransformConstantBuffer->setView(view);
+    //mTransformConstantBuffer->setProjection(projection);
+    //mTransformConstantBuffer->updateBuffer();
 }
 
 void CMeshComponent::postRender()
