@@ -72,6 +72,7 @@ private:
 	FResolution mResolution;
 	// Windows 핸들 저장 (초기화 시 전달받음)
 	HWND mhWnd = nullptr;
+	bool mWindowMode = false;
 
 private:
 	bool createDevice();                    // ID3D11Device 생성 및 MSAA 체크
@@ -97,18 +98,19 @@ private:
 	void BeginFinalPass(); // 최종 백버퍼를 타겟으로 설정 (포스트 프로세스의 마지막 단계)
 	void drawFullScreenQuad();
 	void present(); // 스왑체인 Present 호출
-
-	void serviceInit() override;
-	ID3D11Device* getDevice() override;
-	ID3D11DeviceContext* getContext() override;
-	
 	void testRender();
 
+	ID3D11Device* getDevice() override { return mDevice.Get(); }
+	ID3D11DeviceContext* getContext() override { return mContext.Get(); }
+	bool getWindowMode() const override { return mWindowMode; }
+	FResolution getResolution() const override { return mResolution; }
+	DirectX::XMFLOAT2 getResolutionRatio() const;
+
 public:
-	ID3D11Device* getDevice() const { return mDevice.Get(); }
-	ID3D11DeviceContext* getContext() const { return mContext.Get(); }
+	//ID3D11Device* getDevice() const { return mDevice.Get(); }
+	//ID3D11DeviceContext* getContext() const { return mContext.Get(); }
 	IDXGISwapChain1* getSwapChain() const { return mSwapChain.Get(); }
-	FResolution getResolution() const { return mResolution; }
+	//FResolution getResolution() const { return mResolution; }
 	ID3D11ShaderResourceView* getGBufferSRV(int index) const { return mMSAAShaderResourceView[index].Get(); }
 	ID3D11ShaderResourceView* getResolvedHDRSRV() const { return mResolvedHDRSRV.Get(); }
 	ID3D11ShaderResourceView* getPostProcessSRV(int index) const { return mPostProcessSRVs[index].Get(); }

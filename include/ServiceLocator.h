@@ -4,6 +4,8 @@
 class CServiceLocator
 {
 public:
+	static IGame& getGame() { return *mGame; }
+	static void provideGame(IGame& game) { mGame = &game; }
 	static IDevice& getDevice() { return *mDevice; }
 	static void provideDevice(IDevice& device) { mDevice = &device; }
 	static IAsset& getAsset() { return *mAsset; }
@@ -14,6 +16,7 @@ public:
 	static void provideShader(IShader& shader) { mShader = &shader; }
 
 private:
+	static IGame* mGame;
 	static IDevice* mDevice;
 	static IAsset* mAsset;
 	static IMesh* mMesh;

@@ -11,7 +11,7 @@ CMeshManager::~CMeshManager()
 
 bool CMeshManager::init()
 {
-    testCode();
+    coloredBox();
 
 	return true;
 }
@@ -36,7 +36,7 @@ CMesh* CMeshManager::findMesh(const std::string& name)
     return nullptr;
 }
 
-void CMeshManager::testCode()
+void CMeshManager::coloredBox()
 {
     // TestCode
     FVertexPosColor boxVertex[8] =

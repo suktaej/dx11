@@ -11,10 +11,6 @@ CAssetManager::~CAssetManager()
 {
 }
 
-void CAssetManager::serviceInit()
-{
-}
-
 bool CAssetManager::init()
 {
 	//mMeshMgr = std::make_unique<CMeshManager>();

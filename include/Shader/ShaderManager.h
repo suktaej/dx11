@@ -20,7 +20,6 @@ public:
 	class CConstantBuffer* findConstantBuffer(const std::string& name);
 	void releaseConstantBuffer(const std::string& name);
 
-	void serviceInit() override;
 	class CShader* getShader(const std::string& name) override;
 	class CConstantBuffer* getConstant(const std::string& name) override;
 

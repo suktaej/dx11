@@ -57,6 +57,7 @@ bool CDeviceManager::init(HWND hWnd, unsigned int width, unsigned int height, bo
 	mhWnd = hWnd;
 	mResolution.width = width;
 	mResolution.height = height;
+	mWindowMode = windowMode;
 
 	if (!createDevice()) return false;
 	if (!createSwapChain(windowMode)) return false;
@@ -606,19 +607,6 @@ void CDeviceManager::present()
 	mSwapChain->Present(1, 0);
 }
 
-void CDeviceManager::serviceInit()
-{
-}
-
-ID3D11Device* CDeviceManager::getDevice()
-{
-	return mDevice.Get();
-}
-
-ID3D11DeviceContext* CDeviceManager::getContext()
-{
-	return mContext.Get();
-}
 
 void CDeviceManager::unbindShaderResources()
 {
@@ -645,4 +633,16 @@ void CDeviceManager::testRender()
 	}
 
 	mSwapChain->Present(1, 0);
+}
+
+DirectX::XMFLOAT2 CDeviceManager::getResolutionRatio() const
+{
+	RECT	WindowRC;
+
+	GetClientRect(mhWnd, &WindowRC);
+
+	float Width = (float)WindowRC.right - WindowRC.left;
+	float Height = (float)WindowRC.bottom - WindowRC.top;
+
+	return DirectX::XMFLOAT2(mResolution.width / Width, mResolution.height / Height);
 }

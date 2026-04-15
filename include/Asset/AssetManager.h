@@ -11,9 +11,6 @@ public:
 private:
 	std::unique_ptr<class CMeshManager> mMeshMgr;
 
-private:
-	void serviceInit() override;
-
 public:
 	bool init();
 	CMeshManager* getMeshManager() { return mMeshMgr.get(); }

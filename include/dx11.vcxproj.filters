@@ -55,6 +55,9 @@
     <Filter Include="00_Shared">
       <UniqueIdentifier>{3b919f56-8362-4e53-ac1a-78762edc428b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04_Scene\Input">
+      <UniqueIdentifier>{d4e3e990-cfcf-4054-a9d5-b0b5a62fac98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -143,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="Shader\ObjectConstantBuffer.cpp">
       <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\InputManager.cpp">
+      <Filter>04_Scene\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="Shader\ObjectConstantBuffer.h">
       <Filter>03_Shader\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\InputManager.h">
+      <Filter>04_Scene\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

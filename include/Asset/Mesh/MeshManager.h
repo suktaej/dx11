@@ -22,7 +22,7 @@ private:
 
 public:
 	class CMesh* findMesh(const std::string& name);
-    void testCode();
+    void coloredBox();
 
 private:
     template <typename T>

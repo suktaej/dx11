@@ -30,26 +30,22 @@ bool CTransformConstantBuffer::init()
 void CTransformConstantBuffer::updateBuffer()
 {
 	// 전송용 임시 구조체 생성
-	//FTransformConstantBufferInfo sendData;
-	FFrameConstantBufferInfo frameData;
-	FObjectConstantBufferInfo objectData;
+	FTransformConstantBufferInfo sendData;
 
 	// 연산은 Row-Major로 수행 (CPU 방식)
-	DirectX::XMMATRIX world = DirectX::XMLoadFloat4x4(&mObjectData.World);
-	DirectX::XMMATRIX view = DirectX::XMLoadFloat4x4(&mFrameData.View);
-	DirectX::XMMATRIX proj = DirectX::XMLoadFloat4x4(&mFrameData.Projection);
+	DirectX::XMMATRIX world = DirectX::XMLoadFloat4x4(&mData.World);
+	DirectX::XMMATRIX view = DirectX::XMLoadFloat4x4(&mData.View);
+	DirectX::XMMATRIX proj = DirectX::XMLoadFloat4x4(&mData.Projection);
 	DirectX::XMMATRIX vp = view * proj;
 	DirectX::XMMATRIX wvp = world * vp;
 
 	// GPU에 저장하기 위해 Transpose (GPU 방식-HLSL-인 Column-Major로 변환)
-	DirectX::XMStoreFloat4x4(&frameData.View, DirectX::XMMatrixTranspose(view));
-	DirectX::XMStoreFloat4x4(&frameData.Projection, DirectX::XMMatrixTranspose(proj));
-	DirectX::XMStoreFloat4x4(&frameData.VP, DirectX::XMMatrixTranspose(vp));
-	mBuffer->updateBuffer(&frameData);
-	
-	DirectX::XMStoreFloat4x4(&objectData.World, DirectX::XMMatrixTranspose(world));
-	DirectX::XMStoreFloat4x4(&objectData.WVP, DirectX::XMMatrixTranspose(wvp));
-	mBuffer->updateBuffer(&objectData);
+	DirectX::XMStoreFloat4x4(&sendData.View, DirectX::XMMatrixTranspose(view));
+	DirectX::XMStoreFloat4x4(&sendData.Projection, DirectX::XMMatrixTranspose(proj));
+	DirectX::XMStoreFloat4x4(&sendData.VP, DirectX::XMMatrixTranspose(vp));
+	DirectX::XMStoreFloat4x4(&sendData.World, DirectX::XMMatrixTranspose(world));
+	DirectX::XMStoreFloat4x4(&sendData.WVP, DirectX::XMMatrixTranspose(wvp));
+	mBuffer->updateBuffer(&sendData);
 }
 
 std::unique_ptr<CConstantBufferData> CTransformConstantBuffer::clone() const

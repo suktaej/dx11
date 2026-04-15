@@ -149,6 +149,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\PlayerObject.cpp" />
+    <ClCompile Include="Scene\InputManager.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\PlayerObject.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\InputManager.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneMain.h" />
     <ClInclude Include="Scene\SceneManager.h" />

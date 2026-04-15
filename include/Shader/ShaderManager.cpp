@@ -14,7 +14,8 @@ CShaderManager::~CShaderManager()
 bool CShaderManager::init()
 {
 	// Shader
-	createShader<CColorMeshShader>("TestShader");
+	createShader<CColorMeshShader>("ColorMeshShader");
+
 	// Constant Buffer
 	// Per-Frame buffer (b0)
 	createConstantBuffer("FrameCB", sizeof(FFrameConstantBufferInfo), 0, EShaderBufferType::Vertex);
@@ -77,10 +78,6 @@ void CShaderManager::releaseConstantBuffer(const std::string& name)
 
 	if (it != mConstantBufferMap.end())
 		mConstantBufferMap.erase(it);
-}
-
-void CShaderManager::serviceInit()
-{
 }
 
 CShader* CShaderManager::getShader(const std::string& name)

@@ -14,6 +14,7 @@ private:
 
 public:
 	bool init();
+	void input(float dt);
 	void update(float dt);
 	void collision(float dt);
 	void render();

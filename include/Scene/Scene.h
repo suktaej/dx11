@@ -15,10 +15,12 @@ public:
 
 protected:
 	std::vector<std::unique_ptr<class CObject>> mObjectList;
+	std::unique_ptr<class CInputManager> mInput;
 
 public:
 	virtual bool init();
 	virtual bool init(const char* filePath);
+	virtual void input(float dt);
 	virtual void prevUpdate(float dt);
 	virtual void update(float dt);
 	virtual void postUpdate(float dt);

@@ -19,6 +19,11 @@ bool CSceneManager::init()
 	return true;
 }
 
+void CSceneManager::input(float dt)
+{
+	mCurrentScene->input(dt);
+}
+
 void CSceneManager::update(float dt)
 {
 	mCurrentScene->prevUpdate(dt);

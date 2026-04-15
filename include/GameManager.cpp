@@ -6,7 +6,7 @@
 #include "Shader/ColorMeshShader.h"
 #include "ServiceLocator.h"
 
-DEFINITION_SINGLE(CGameManager)
+//DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
 
 CGameManager::CGameManager()
@@ -88,6 +88,7 @@ void CGameManager::logic()
 
 void CGameManager::input(float dt)
 {
+    mScene.input(dt);
 }
 
 void CGameManager::update(float dt)
@@ -102,19 +103,13 @@ void CGameManager::collision(float dt)
 
 void CGameManager::render(float dt)
 {
-    // 1. 초기화
+    // 초기화
     mDevice.clearBuffers(mClearColor);
 
-    // 2. 기하 단계 (G-Buffer)
+    // 기하 단계 (G-Buffer)
     mDevice.BeginGeometryPass();
 
     mScene.render();
-
-    CShader* testShader = mShader.findShader("TestShader");
-    testShader->setShader();
-
-    CMesh* testMesh = mAsset.getMeshManager()->findMesh("ColoredBox");
-    testMesh->render();
 
     mDevice.testRender();
 
@@ -157,23 +152,19 @@ bool CGameManager::init(HINSTANCE hInst)
 
 	RegisterWindowClass();
 
-    if (!InitInstance())
-        return false;
+    if (!InitInstance()) return false;
+    CServiceLocator::provideGame(*this);
 
-    if(false == mDevice.init(mhWnd, rc.right, rc.bottom, true))
-		return false;
+    if(false == mDevice.init(mhWnd, rc.right, rc.bottom, true)) return false;
     CServiceLocator::provideDevice(mDevice);
  
-    if (false == mAsset.init())
-        return false;
+    if (false == mAsset.init()) return false;
     CServiceLocator::provideAsset(mAsset);
 
-    if (false == mShader.init())
-        return false;
+    if (false == mShader.init()) return false;
     CServiceLocator::provideShader(mShader);
 
-    if (false == mScene.init())
-        return false;
+    if (false == mScene.init()) return false;
 
     mTime.init();
 
@@ -201,9 +192,9 @@ int CGameManager::run()
     return (int)msg.wParam;
 }
 
+/*
 void CGameManager::testRender()
 {
-    /*
 	static DirectX::XMVECTOR pos = DirectX::XMVectorSet(0.0f, 0.0f, 10.0f, 1.0f);
 	static DirectX::XMVECTOR rot = DirectX::XMQuaternionIdentity();
     DirectX::XMVECTOR dirY = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -279,5 +270,5 @@ void CGameManager::testRender()
     testCBuffer.setProjection(projection);
 
 	testCBuffer.updateBuffer(mDevice.getContext());
-    */
 }
+*/
