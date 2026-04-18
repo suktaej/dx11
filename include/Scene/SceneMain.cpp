@@ -1,6 +1,6 @@
 #include "SceneMain.h"
 #include "../Object/PlayerObject.h"
-#include "InputManager.h"
+#include "../InputManager.h"
 
 CSceneMain::CSceneMain(SceneKey key) 
 	: CScene(key)

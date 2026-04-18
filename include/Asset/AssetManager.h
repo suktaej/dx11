@@ -4,7 +4,9 @@
 
 class CAssetManager : public IAsset
 {
-public:
+	friend class CGameManager;
+
+private:
 	CAssetManager();
 	~CAssetManager();
 

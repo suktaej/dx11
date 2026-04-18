@@ -1,11 +1,11 @@
-#include "InputManager.h"
+#include "DInputManager.h"
 #include "../ServiceLocator.h"
 
-CInputManager::CInputManager(InputKey key)
+CDInputManager::CDInputManager(InputKey key)
 {
 }
 
-CInputManager::~CInputManager()
+CDInputManager::~CDInputManager()
 {
 	if (mKeyboard)
 		mKeyboard->Unacquire();
@@ -14,7 +14,7 @@ CInputManager::~CInputManager()
 		mMouse->Unacquire();
 }
 
-bool CInputManager::initInput()
+bool CDInputManager::initInput()
 {
 	/* 키보드 설정 */
 	// 키보드 생성
@@ -38,11 +38,11 @@ bool CInputManager::initInput()
 	else
 		// fullscreen mode
 		hr = mKeyboard->SetCooperativeLevel(mhWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
-	
+
 	if (FAILED(hr))	return false;
 
 	// 키보드 장치획득
-	 hr = mKeyboard->Acquire();
+	hr = mKeyboard->Acquire();
 	if (FAILED(hr)) return false;
 
 	/* 마우스 설정*/
@@ -65,9 +65,9 @@ bool CInputManager::initInput()
 	return true;
 }
 
-bool CInputManager::updateKeyboard()
+bool CDInputManager::updateKeyboard()
 {
-	if(!mKeyboard)
+	if (!mKeyboard)
 		return false;
 
 	HRESULT hr = mKeyboard->GetDeviceState(sizeof(mKeyState), (LPVOID)&mKeyState);
@@ -81,9 +81,9 @@ bool CInputManager::updateKeyboard()
 	return true;
 }
 
-bool CInputManager::updateMouse()
+bool CDInputManager::updateMouse()
 {
-	if(!mMouse)
+	if (!mMouse)
 		return false;
 
 	HRESULT hr = mMouse->GetDeviceState(sizeof(mMouseState), (LPVOID)&mMouseState);
@@ -97,7 +97,7 @@ bool CInputManager::updateMouse()
 	return true;
 }
 
-void CInputManager::updateInput(float dt)
+void CDInputManager::updateInput(float dt)
 {
 	switch (mInputType)
 	{
@@ -260,7 +260,7 @@ void CInputManager::updateInput(float dt)
 	}
 }
 
-FKeyState* CInputManager::findKeyState(unsigned char Key)
+FKeyState* CDInputManager::findKeyState(unsigned char Key)
 {
 	auto    iter = mKeyStateMap.find(Key);
 
@@ -270,7 +270,7 @@ FKeyState* CInputManager::findKeyState(unsigned char Key)
 	return iter->second;
 }
 
-FBindKey* CInputManager::findBindKey(const std::string& Name)
+FBindKey* CDInputManager::findBindKey(const std::string& Name)
 {
 	auto    iter = mBindKeyMap.find(Name);
 
@@ -280,7 +280,7 @@ FBindKey* CInputManager::findBindKey(const std::string& Name)
 	return iter->second;
 }
 
-void CInputManager::addBindKey(const std::string& Name, unsigned char Key)
+void CDInputManager::addBindKey(const std::string& Name, unsigned char Key)
 {
 	// 중복된 이름이 있는지 판단한다.
 	if (findBindKey(Name))
@@ -305,7 +305,7 @@ void CInputManager::addBindKey(const std::string& Name, unsigned char Key)
 	mBindKeyMap.insert(std::make_pair(Name, NewKey));
 }
 
-void CInputManager::changeKeyCtrl(const std::string& Name, bool Ctrl)
+void CDInputManager::changeKeyCtrl(const std::string& Name, bool Ctrl)
 {
 	FBindKey* Key = findBindKey(Name);
 
@@ -315,7 +315,7 @@ void CInputManager::changeKeyCtrl(const std::string& Name, bool Ctrl)
 	Key->Ctrl = Ctrl;
 }
 
-void CInputManager::changeKeyAlt(const std::string& Name, bool Alt)
+void CDInputManager::changeKeyAlt(const std::string& Name, bool Alt)
 {
 	FBindKey* Key = findBindKey(Name);
 
@@ -325,7 +325,7 @@ void CInputManager::changeKeyAlt(const std::string& Name, bool Alt)
 	Key->Alt = Alt;
 }
 
-void CInputManager::changeKeyShift(const std::string& Name, bool Shift)
+void CDInputManager::changeKeyShift(const std::string& Name, bool Shift)
 {
 	FBindKey* Key = findBindKey(Name);
 
@@ -335,7 +335,7 @@ void CInputManager::changeKeyShift(const std::string& Name, bool Shift)
 	Key->Shift = Shift;
 }
 
-void CInputManager::updateMousePos(float DeltaTime)
+void CDInputManager::updateMousePos(float DeltaTime)
 {
 	using namespace DirectX;
 	// 윈도우 창에서의 마우스 위치 확인
@@ -381,7 +381,7 @@ void CInputManager::updateMousePos(float DeltaTime)
 	//mMouseWorldPos2D.y = WorldPos.y + mMousePos.y - ViewportRS.Height * 0.5f;
 }
 
-void CInputManager::updateBind(float DeltaTime)
+void CDInputManager::updateBind(float DeltaTime)
 {
 	auto	iter = mBindKeyMap.begin();
 	auto	iterEnd = mBindKeyMap.end();
@@ -452,8 +452,8 @@ void CInputManager::updateBind(float DeltaTime)
 	}
 }
 
-bool CInputManager::init()
-{ 
+bool CDInputManager::init()
+{
 	IGame& game = CServiceLocator::getGame();
 	mhInst = game.getInstance();
 	mhWnd = game.getHandle();
@@ -471,7 +471,8 @@ bool CInputManager::init()
 
 	return true;
 }
-void CInputManager::update(float dt)
+
+void CDInputManager::update(float dt)
 {
 	if (mInputType == EInputSystem::DInput)
 	{
@@ -484,7 +485,7 @@ void CInputManager::update(float dt)
 	updateBind(dt);
 }
 
-unsigned char CInputManager::convertKey(unsigned char Key)
+unsigned char CDInputManager::convertKey(unsigned char Key)
 {
 	if (mInputType == EInputSystem::DInput)
 	{
@@ -733,3 +734,4 @@ unsigned char CInputManager::convertKey(unsigned char Key)
 
 	return Key;
 }
+

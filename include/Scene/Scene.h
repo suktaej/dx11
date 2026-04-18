@@ -15,7 +15,7 @@ public:
 
 protected:
 	std::vector<std::unique_ptr<class CObject>> mObjectList;
-	std::unique_ptr<class CInputManager> mInput;
+	//std::unique_ptr<class CInputManager> mInput;
 
 public:
 	virtual bool init();

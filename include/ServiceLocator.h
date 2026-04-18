@@ -14,6 +14,8 @@ public:
 	static void provideMesh(IMesh& mesh) { mMesh = &mesh; }
 	static IShader& getShader() { return *mShader; }
 	static void provideShader(IShader& shader) { mShader = &shader; }
+	static IInput& getInput() { return *mInput; }
+	static void provideInput(IInput& input) { mInput = &input; }
 
 private:
 	static IGame* mGame;
@@ -21,4 +23,5 @@ private:
 	static IAsset* mAsset;
 	static IMesh* mMesh;
 	static IShader* mShader;
+	static IInput* mInput;
 };

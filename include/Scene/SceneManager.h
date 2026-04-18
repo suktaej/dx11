@@ -4,7 +4,10 @@
 
 class CSceneManager
 {
-public:
+//public:
+	friend class CGameManager;
+
+private:
 	CSceneManager();
 	~CSceneManager();
 

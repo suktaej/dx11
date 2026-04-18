@@ -13,14 +13,6 @@ enum class EInputSystem { DInput, RawInput, XInput, Win32 };
 namespace EMouseButtonType { enum Type { LButton, RButton, MButton, End }; }
 namespace EInputType { enum Type { Down, Hold, Up, End }; }
 
-//enum EInputState
-//{
-//	STATE_NONE = 0,
-//	STATE_DOWN = 1 << 0,
-//	STATE_HOLD = 1 << 1,
-//	STATE_UP = 1 << 2
-//};
-
 struct FKeyState
 {
 	unsigned char	Key = 0;
@@ -45,7 +37,7 @@ struct FBindKey
 	std::vector<FBindFunction>	FunctionList[static_cast<int>(EInputType::End)];
 };
 
-class CInputManager
+class CDInputManager
 {
 public:
 	class InputKey
@@ -54,8 +46,8 @@ public:
 		InputKey() {}
 	};
 
-	CInputManager(InputKey key);
-	~CInputManager();
+	CDInputManager(InputKey key);
+	~CDInputManager();
 
 private:
 	HINSTANCE mhInst;
@@ -115,7 +107,7 @@ private:
 public:
 	bool getMouseDown(EMouseButtonType::Type Type) { return mMouseDown[Type]; }
 	bool getMouseHold(EMouseButtonType::Type Type) { return mMouseHold[Type]; }
-	 bool getMouseUp(EMouseButtonType::Type Type) { return mMouseUp[Type]; }
+	bool getMouseUp(EMouseButtonType::Type Type) { return mMouseUp[Type]; }
 	const DirectX::XMFLOAT2& getMousePos()	const { return mMousePos; }
 	const DirectX::XMFLOAT2& getMouseWorldPos2D()	const { return mMouseWorldPos2D; }
 	const DirectX::XMFLOAT2& getMouseMove()	const { return mMouseMove; }

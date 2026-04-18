@@ -40,6 +40,9 @@ void CGameManager::RegisterWindowClass()
 
 LRESULT CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (CServiceLocator::getInput().processMessage(message, wParam, lParam))
+        return 0;
+
     switch (message)
     {
     case WM_DESTROY:
@@ -151,6 +154,9 @@ bool CGameManager::init(HINSTANCE hInst)
 	lstrcpy(mTitleName, TEXT("DX11"));
 
 	RegisterWindowClass();
+    
+    if (false == mInput.init())  return false;
+    CServiceLocator::provideInput(mInput);
 
     if (!InitInstance()) return false;
     CServiceLocator::provideGame(*this);
@@ -167,8 +173,7 @@ bool CGameManager::init(HINSTANCE hInst)
     if (false == mScene.init()) return false;
 
     mTime.init();
-
-
+    
 	return true;
 }
 

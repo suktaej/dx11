@@ -4,7 +4,9 @@
 
 class CShaderManager : public IShader
 {
-public:
+	friend class CGameManager;
+
+private:
 	CShaderManager();
 	~CShaderManager();
 

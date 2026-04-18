@@ -147,7 +147,13 @@
     <ClCompile Include="Shader\ObjectConstantBuffer.cpp">
       <Filter>03_Shader\ConstantBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\InputManager.cpp">
+    <ClCompile Include="Scene\DInputManager.cpp">
+      <Filter>04_Scene\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>01_GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\InputContext.cpp">
       <Filter>04_Scene\Input</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,7 +254,13 @@
     <ClInclude Include="Shader\ObjectConstantBuffer.h">
       <Filter>03_Shader\ConstantBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\InputManager.h">
+    <ClInclude Include="Scene\DInputManager.h">
+      <Filter>04_Scene\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>01_GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\InputContext.h">
       <Filter>04_Scene\Input</Filter>
     </ClInclude>
   </ItemGroup>

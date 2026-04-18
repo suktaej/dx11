@@ -2,6 +2,7 @@
 #include "GameInfo.h"
 #include "ServiceInterface.h"
 #include "DeviceManager.h"
+#include "InputManager.h"
 #include "Share/TimeManager.h"
 #include "Asset/AssetManager.h"
 #include "Shader/ShaderManager.h"
@@ -24,6 +25,7 @@ private:
 	static bool mLoop;
 
 private:
+	CInputManager mInput;
 	CDeviceManager mDevice;
 	CTimeManager mTime;
 	CAssetManager mAsset;
