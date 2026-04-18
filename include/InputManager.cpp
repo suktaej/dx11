@@ -82,7 +82,7 @@ bool CInputManager::init()
 	return true;
 }
 
-void CInputManager::update(float dt)
+void CInputManager::update()
 {
 	for (auto& [key, state] : mKeyStateMap)
 	{

@@ -9,7 +9,13 @@ public:
     CPlayerObject(ObjectKey key, CPlayerObject& other);
     virtual ~CPlayerObject();
 
+private:
+    void MoveUp(float dt);
+    void MoveDown(float dt);
+    void RotY(float dt);
+    void RotZ(float dt);
+
 public:
-    bool init() override;
+    bool init(class CScene* scene) override;
 };
 

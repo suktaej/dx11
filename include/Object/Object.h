@@ -31,8 +31,8 @@ protected:
 	bool mIsVisible = true;
 
 public:
-	virtual bool init();
-	virtual bool init(const char* filePath);
+	virtual bool init(class CScene* scene);
+	virtual bool init(class CScene* scene, const char* filePath);
 	virtual void prevUpdate(float dt);
 	virtual void update(float dt);
 	virtual void postUpdate(float dt);

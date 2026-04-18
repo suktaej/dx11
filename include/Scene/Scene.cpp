@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "../Object/Object.h"
-//#include "InputManager.h"
+#include "InputContext.h"
 
 CScene::CScene(SceneKey key)
 {
@@ -12,23 +12,23 @@ CScene::~CScene()
 
 bool CScene::init()
 {
-	//mInput = std::make_unique<CInputManager>(CInputManager::InputKey{});
-	//if (!mInput->init()) return false;
+	mInput = std::make_unique<CInputContext>(CInputContext::InputKey{});
+	if (!mInput->init()) return false;
 
 	return true;
 }
 
 bool CScene::init(const char* filePath)
 {
-	//mInput = std::make_unique<CInputManager>(CInputManager::InputKey{});
-	//if (!mInput->init()) return false;
+	mInput = std::make_unique<CInputContext>(CInputContext::InputKey{});
+	if (!mInput->init()) return false;
 	
 	return true;
 }
 
 void CScene::input(float dt)
 {
-	//mInput->update(dt);
+	mInput->update(dt);
 }
 
 void CScene::prevUpdate(float dt)

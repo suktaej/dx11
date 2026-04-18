@@ -13,6 +13,7 @@ C:\MyCode\dx11\include\InputManager.cpp;C:\MyCode\dx11\Intermediate\InputManager
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj
 C:\MyCode\dx11\include\Object\Object.cpp;C:\MyCode\dx11\Intermediate\Object.obj
 C:\MyCode\dx11\include\Object\PlayerObject.cpp;C:\MyCode\dx11\Intermediate\PlayerObject.obj
+C:\MyCode\dx11\include\Scene\InputContext.cpp;C:\MyCode\dx11\Intermediate\InputContext.obj
 C:\MyCode\dx11\include\Scene\Scene.cpp;C:\MyCode\dx11\Intermediate\Scene.obj
 C:\MyCode\dx11\include\Scene\SceneMain.cpp;C:\MyCode\dx11\Intermediate\SceneMain.obj
 C:\MyCode\dx11\include\Scene\SceneManager.cpp;C:\MyCode\dx11\Intermediate\SceneManager.obj

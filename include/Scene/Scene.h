@@ -15,7 +15,10 @@ public:
 
 protected:
 	std::vector<std::unique_ptr<class CObject>> mObjectList;
-	//std::unique_ptr<class CInputManager> mInput;
+	std::unique_ptr<class CInputContext> mInput;
+	
+private:
+	void processObject(float dt, std::function<void(class CObject*, float)> func);
 
 public:
 	virtual bool init();
@@ -30,7 +33,9 @@ public:
 	virtual void prevRender();
 	virtual void render();
 	virtual void postRender();
-	void processObject(float dt, std::function<void(class CObject*, float)> func);
+
+public:
+	class CInputContext* getInput() { return mInput.get(); }
 
 public:
 	template<typename T>
@@ -43,7 +48,7 @@ public:
 		newObj->setName(name);
 		newObj->setScene(*this);
 
-		if(!newObj->init())
+		if(!newObj->init(this))
 			return nullptr;
 
 		T* newObjPtr = newObj.get();

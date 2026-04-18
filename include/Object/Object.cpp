@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "../ServiceLocator.h"
 #include "../Component/Component.h"
 
 CObject::CObject(ObjectKey key)
@@ -17,13 +18,15 @@ CObject::~CObject()
 {
 }
 
-bool CObject::init()
+bool CObject::init(class CScene* scene)
 {
+	mScene = scene;
 	return true;
 }
 
-bool CObject::init(const char* filePath)
+bool CObject::init(class CScene* scene,const char* filePath)
 {
+	mScene = scene;
 	return true;
 }
 

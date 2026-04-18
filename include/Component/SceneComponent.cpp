@@ -7,7 +7,8 @@ CSceneComponent::CSceneComponent(ComponentKey key)
 	mLocalPosition(0.f, 0.f, 0.f),
     mWorldScale(1.f, 1.f, 1.f),
     mWorldRotation(0.f, 0.f, 0.f, 1.f),
-    mWorldPosition(0.f, 0.f, 0.f)
+    mWorldPosition(0.f, 0.f, 0.f),
+    mEulerRoatation(0.f,0.f,0.f)
 {
     XMStoreFloat4x4(&mLocalMatrix, DirectX::XMMatrixIdentity());
     XMStoreFloat4x4(&mWorldMatrix, DirectX::XMMatrixIdentity());
@@ -21,6 +22,7 @@ CSceneComponent::CSceneComponent(ComponentKey key, const CSceneComponent& other)
     mWorldScale(other.mWorldScale),
     mWorldRotation(other.mWorldRotation),
     mWorldPosition(other.mWorldPosition),
+    mEulerRoatation(other.mEulerRoatation),
     mParent(nullptr),
     mIsLocalDirty(true),
     mIsWorldDirty(true)
@@ -91,6 +93,8 @@ void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT3& rotation)
 {
     using namespace DirectX;
 
+    mEulerRoatation = rotation;
+
     XMVECTOR quat = XMQuaternionRotationRollPitchYaw(
             XMConvertToRadians(rotation.x),
             XMConvertToRadians(rotation.y),
@@ -108,6 +112,14 @@ void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT3& rotation)
     invalidateTransform();
 }
 
+void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT4& rotation)
+{
+    mLocalRotation =  rotation;
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
 void CSceneComponent::setLocalRotation(float x, float y, float z)
 {
     setLocalRotation((DirectX::XMFLOAT3(x, y, z)));
@@ -120,8 +132,24 @@ void CSceneComponent::addLocalRotation(const EAxis& axis, const float& angle)
     XMVECTOR curQuat = XMLoadFloat4(&mLocalRotation);
     XMVECTOR delta = XMQuaternionRotationAxis(FAxis::Get(axis), XMConvertToRadians(angle));
     curQuat = XMQuaternionMultiply(curQuat, delta);
-
     XMStoreFloat4(&mLocalRotation, curQuat);
+
+    float* target;
+
+    switch (axis)
+    {
+        case EAxis::x: {target = &mEulerRoatation.x; break;}
+        case EAxis::y: {target = &mEulerRoatation.y; break;}
+        case EAxis::z: {target = &mEulerRoatation.z; break;}
+    }
+
+    *target += angle;
+
+    if (*target > 180.f) 
+        *target -= 360.f;
+    
+    if (*target < -180.f) 
+        *target += 360.f;
 
     mIsLocalDirty = true;
     invalidateTransform();
@@ -367,6 +395,33 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
     mIsLocalDirty = true;
 	invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT4& rotation)
+{
+    using namespace DirectX;
+
+    XMVECTOR worldQuat = XMLoadFloat4(&rotation);
+    
+    if (mParent)
+    {
+        XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
+        XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
+        XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
+        
+        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        localQuat = XMQuaternionNormalize(localQuat);
+
+        XMStoreFloat4(&mLocalRotation, localQuat);
+    }
+    else
+    {
+        worldQuat = XMQuaternionNormalize(worldQuat);
+        XMStoreFloat4(&mLocalRotation, worldQuat);
+    }
+
+    mIsLocalDirty = true;
+    invalidateTransform();
 }
 
 void CSceneComponent::setWorldRotation(float x, float y, float z)

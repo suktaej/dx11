@@ -9,6 +9,11 @@ CInputContext::~CInputContext()
 {
 }
 
+bool CInputContext::init()
+{
+	return true;
+}
+
 FBindKey* CInputContext::findBindKey(const std::string& name)
 {
 	auto it = mBindKeyMap.find(name);

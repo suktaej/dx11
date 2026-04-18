@@ -96,6 +96,7 @@ void CGameManager::input(float dt)
 
 void CGameManager::update(float dt)
 {
+    mInput.update();
     mScene.update(dt);
 }
 
