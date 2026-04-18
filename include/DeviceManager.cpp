@@ -637,7 +637,7 @@ void CDeviceManager::testRender()
 
 DirectX::XMFLOAT2 CDeviceManager::getResolutionRatio() const
 {
-	RECT	WindowRC;
+	RECT WindowRC;
 
 	GetClientRect(mhWnd, &WindowRC);
 

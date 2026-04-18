@@ -24,16 +24,7 @@ void CPlayerObject::MoveUp(float dt)
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
 
 	if (sceneComp)
-	{
-		XMVECTOR offset = XMVectorScale(FAxis::Get(EAxis::y), dt);
-
-		XMVECTOR currentPos = XMLoadFloat3(&sceneComp->getLocalPosition());
-		XMVECTOR newPos = XMVectorAdd(currentPos, offset);
-
-		XMFLOAT3 res;
-		XMStoreFloat3(&res, newPos);
-		sceneComp->setLocalPosition(res);
-	}
+		sceneComp->addLocalPosition(EAxis::y, dt);
 }
 
 void CPlayerObject::MoveDown(float dt)
@@ -49,19 +40,10 @@ void CPlayerObject::RotY(float dt)
 {
 	using namespace DirectX;
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
 
 	if (sceneComp)
-	{
-		float speed = 200.f * dt;
-
-		XMVECTOR quat = XMLoadFloat4(&sceneComp->getLocalRotation());
-		XMVECTOR delta = XMQuaternionRotationAxis(FAxis::Get(EAxis::y), XMConvertToRadians(speed));
-		quat = XMQuaternionMultiply(quat, delta);
-
-		XMFLOAT4 res;
-		XMStoreFloat4(&res, quat);
-		sceneComp->setLocalRotation(res);
-	}
+		sceneComp->addLocalRotation(EAxis::y, speed);
 }
 
 void CPlayerObject::RotZ(float dt)

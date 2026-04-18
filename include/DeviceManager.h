@@ -104,13 +104,13 @@ private:
 	ID3D11DeviceContext* getContext() override { return mContext.Get(); }
 	bool getWindowMode() const override { return mWindowMode; }
 	FResolution getResolution() const override { return mResolution; }
-	DirectX::XMFLOAT2 getResolutionRatio() const;
+	DirectX::XMFLOAT2 getResolutionRatio() const override;
 
 public:
 	//ID3D11Device* getDevice() const { return mDevice.Get(); }
 	//ID3D11DeviceContext* getContext() const { return mContext.Get(); }
-	IDXGISwapChain1* getSwapChain() const { return mSwapChain.Get(); }
 	//FResolution getResolution() const { return mResolution; }
+	IDXGISwapChain1* getSwapChain() const { return mSwapChain.Get(); }
 	ID3D11ShaderResourceView* getGBufferSRV(int index) const { return mMSAAShaderResourceView[index].Get(); }
 	ID3D11ShaderResourceView* getResolvedHDRSRV() const { return mResolvedHDRSRV.Get(); }
 	ID3D11ShaderResourceView* getPostProcessSRV(int index) const { return mPostProcessSRVs[index].Get(); }

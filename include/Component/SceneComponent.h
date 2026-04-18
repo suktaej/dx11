@@ -22,8 +22,6 @@ protected:
 	DirectX::XMFLOAT4 mWorldRotation;
 	DirectX::XMFLOAT3 mWorldPosition;
 	DirectX::XMFLOAT4X4 mWorldMatrix;
-	
-	DirectX::XMFLOAT3 mEulerRoatation;
 
 	bool mIsLocalDirty = true;
 	bool mIsWorldDirty = true;
@@ -61,7 +59,7 @@ public:
 	void setLocalPosition(float x, float y, float z);
 
 	void setLocalRotation(const DirectX::XMFLOAT3& rotation);
-	void setLocalRotation(const DirectX::XMFLOAT4& rotation);
+	void setLocalRotation(const EAxis& axis, const float& angle);
 	void setLocalRotation(float x, float y, float z);
 
 	void setWorldScale(const DirectX::XMFLOAT3& scale);
@@ -73,7 +71,6 @@ public:
 	void setWorldPosition(const EAxis& axis, const float& pos);
 
 	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
-	void setWorldRotation(const DirectX::XMFLOAT4& rotation);
 	void setWorldRotation(float x, float y, float z);
 	
 	void addLocalScale(const EAxis& axis, const float& scale);

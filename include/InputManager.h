@@ -1,6 +1,8 @@
 #pragma once
 #include "GameInfo.h"
 #include "ServiceInterface.h"
+#define	VK_WHEEL_UP 0xfc
+#define	VK_WHEEL_DOWN 0xfd
 
 class CInputManager : public IInput
 {
@@ -15,6 +17,14 @@ private:
 	unsigned char mPrevState[256] = {};
 	std::unordered_map<unsigned char, std::unique_ptr<FKeyState>> mKeyStateMap;
 
+	bool mMouseCompute = false;
+	DirectX::XMFLOAT2 mMousePos;
+	DirectX::XMFLOAT2 mMouseMove;
+
+private:
+	void updateMousePos();
+	void printMousePos();
+
 public:
 	bool init();
 	void update();
@@ -24,4 +34,5 @@ public:
 	bool processMessage(UINT message, WPARAM wParam, LPARAM lParam) override;
 	FKeyState* findKeyState(unsigned char key) override;
 	FKeyState* addKeyState(unsigned char Key) override;
+
 };
