@@ -156,6 +156,9 @@
     <ClCompile Include="Scene\InputContext.cpp">
       <Filter>04_Scene\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Object\CollisionObject.cpp">
+      <Filter>05_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -262,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="Scene\InputContext.h">
       <Filter>04_Scene\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\CollisionObject.h">
+      <Filter>05_Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

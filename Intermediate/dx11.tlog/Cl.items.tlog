@@ -11,6 +11,7 @@ C:\MyCode\dx11\include\DeviceManager.cpp;C:\MyCode\dx11\Intermediate\DeviceManag
 C:\MyCode\dx11\include\GameManager.cpp;C:\MyCode\dx11\Intermediate\GameManager.obj
 C:\MyCode\dx11\include\InputManager.cpp;C:\MyCode\dx11\Intermediate\InputManager.obj
 C:\MyCode\dx11\include\main.cpp;C:\MyCode\dx11\Intermediate\main.obj
+C:\MyCode\dx11\include\Object\CollisionObject.cpp;C:\MyCode\dx11\Intermediate\CollisionObject.obj
 C:\MyCode\dx11\include\Object\Object.cpp;C:\MyCode\dx11\Intermediate\Object.obj
 C:\MyCode\dx11\include\Object\PlayerObject.cpp;C:\MyCode\dx11\Intermediate\PlayerObject.obj
 C:\MyCode\dx11\include\Scene\InputContext.cpp;C:\MyCode\dx11\Intermediate\InputContext.obj

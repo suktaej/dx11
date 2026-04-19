@@ -148,6 +148,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\CollisionObject.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\PlayerObject.cpp" />
     <ClCompile Include="Scene\DInputManager.cpp">
@@ -188,6 +189,7 @@
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Object\CollisionObject.h" />
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\PlayerObject.h" />
     <ClInclude Include="resource.h" />

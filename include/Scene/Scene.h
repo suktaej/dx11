@@ -39,7 +39,7 @@ public:
 
 public:
 	template<typename T>
-	T* createObject(const std::string& name)
+	T* createObject(const std::string& name = "Object")
 	{
 		static_assert(std::is_base_of_v<CObject, T>, "T must be derived from CObject");
 

@@ -46,6 +46,7 @@ public:
 	void postRender() override;
 	std::unique_ptr<CComponent> clone() const override;
 	//std::unique_ptr<CComponent> cloneHierarchy() const override;
+
 	void addChild(CSceneComponent& child);
 	void eraseOwner() override;
 
@@ -59,6 +60,7 @@ public:
 	void setLocalPosition(float x, float y, float z);
 
 	void setLocalRotation(const DirectX::XMFLOAT3& rotation);
+	void setLocalRotation(const DirectX::XMFLOAT4& rotation);
 	void setLocalRotation(const EAxis& axis, const float& angle);
 	void setLocalRotation(float x, float y, float z);
 
@@ -71,13 +73,18 @@ public:
 	void setWorldPosition(const EAxis& axis, const float& pos);
 
 	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
+	void setWorldRotation(const DirectX::XMFLOAT4& rotation);
 	void setWorldRotation(const EAxis& axis, const float& angle);
 	void setWorldRotation(float x, float y, float z);
 	
 	void addLocalScale(const EAxis& axis, const float& scale);
 	void addLocalPosition(const EAxis& axis, const float& pos);
 	void addLocalRotation(const EAxis& axis, const float& angle);
+
 	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
+	void addForwardVector(const float& speed);
+	void addRightVector(const float& speed);
+	void addUpVector(const float& speed);
 
 	void addWorldScale(const EAxis& axis, const float& scale);
 	void addWorldPosition(const EAxis& axis, const float& pos);
@@ -92,6 +99,7 @@ public:
 	const DirectX::XMFLOAT3 getWorldPosition();
 	const DirectX::XMFLOAT4 getWorldRotation();
 
+	const DirectX::XMFLOAT3 getVector(DirectX::XMFLOAT3 base) const;
 	const DirectX::XMFLOAT3 getForwardVector() const;
 	const DirectX::XMFLOAT3 getRightVector() const;
 	const DirectX::XMFLOAT3 getUpVector() const;

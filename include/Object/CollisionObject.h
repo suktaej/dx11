@@ -1,0 +1,18 @@
+#pragma once
+#include "Object.h"
+
+class CCollisionObject
+    : public CObject
+{
+public:
+    CCollisionObject(ObjectKey key);
+    CCollisionObject(ObjectKey key, CCollisionObject& other);
+    virtual ~CCollisionObject();
+
+private:
+    std::unique_ptr<class CStaticMeshComponent> mMeshComp;
+
+public:
+    bool init(class CScene* scene) override;
+    void update(float dt) override;
+};

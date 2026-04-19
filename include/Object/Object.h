@@ -53,21 +53,24 @@ public:
 	void setActive(bool active) { mIsActive = active; }
 	bool isActive() const { return mIsActive; }
 	void setRootComponent(class CComponent* root) { mRootComponent = root; }
+	CComponent* getRootComponent() { return mRootComponent; }
 
 public:
 	template<typename T>
-	T* createComponent(const std::string& name)
+	std::unique_ptr<T> createComponent(const std::string& name = "Component")
 	{
 		static_assert(std::is_base_of_v<CComponent, T>, "T must inherit from CComponent");
-		// TODO : unique_ptr È®ÀÎ
-		T* comp = new T(typename T::ComponentKey{});
 
-		if (!comp->init())
+		std::unique_ptr<T> newComp = std::make_unique<T>(typename T::ComponentKey{});
+
+		if (!newComp->init())
 			return nullptr;
 
-		comp->setName(name);
+		newComp->setName(name);
+		
+		T* newCompPtr = newComp.get();
 
-		return comp;
+		return std::move(newComp);
 	}
 };
 
