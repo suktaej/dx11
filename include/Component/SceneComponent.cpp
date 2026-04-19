@@ -617,33 +617,25 @@ bool CSceneComponent::init(const char* name)
 void CSceneComponent::preUpdate(float dt)
 {
     CComponent::preUpdate(dt);
-
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->preUpdate(dt); });
+    processChildren(&CSceneComponent::preUpdate, dt);
 }
 
 void CSceneComponent::update(float dt)
 {
     CComponent::update(dt);
-
-	processChildren(dt, [](CSceneComponent* child, float dt)
-		{ child->update(dt); });;
+    processChildren(&CSceneComponent::update, dt);
 }
 
 void CSceneComponent::postUpdate(float dt)
 {
     CComponent::postUpdate(dt);
-
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->postUpdate(dt); });
+    processChildren(&CSceneComponent::postUpdate, dt);
 }
 
 void CSceneComponent::collision(float dt)
 {
 	CComponent::collision(dt);
-
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->collision(dt); });
+    processChildren(&CSceneComponent::collision, dt);
 }
 
 void CSceneComponent::preRender()
@@ -653,28 +645,19 @@ void CSceneComponent::preRender()
     // Render 출력 전 1회 생성된 객체를 갱신
     // worldMatrix 생성
     updateWorldTransform();
-
-    float dt = 0.f;
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->preRender(); });
+    processChildren(&CSceneComponent::preRender);
 }
 
 void CSceneComponent::render()
 {
     CComponent::render();
-
-    float dt = 0.f;
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->render(); });
+    processChildren(&CSceneComponent::render);
 }
 
 void CSceneComponent::postRender()
 {
     CComponent::postRender();
-
-    float dt = 0.f;
-    processChildren(dt, [](CSceneComponent* child, float dt)
-        { child->postRender(); });
+    processChildren(&CSceneComponent::postRender);
 }
 
 std::unique_ptr<CComponent> CSceneComponent::clone() const
@@ -720,28 +703,6 @@ bool CSceneComponent::isDescendant(CSceneComponent* node)
             return true;
 
     return false;
-}
-
-void CSceneComponent::processChildren(float dt, std::function<void(CSceneComponent*, float)> func)
-{
-    auto it = mChildList.begin();
-    while (it != mChildList.end())
-    {
-        if (!(*it)->isActive())
-        {
-            it = mChildList.erase(it);
-            continue;
-        }
-
-        if (!(*it)->isEnable())
-        {
-            ++it;
-            continue;
-        }
-
-        func(*it, dt);
-        ++it;
-    }
 }
 
 //void CSceneComponent::setLocalRotation(const DirectX::XMFLOAT4& rotation)

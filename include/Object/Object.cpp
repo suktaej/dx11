@@ -33,18 +33,26 @@ bool CObject::init(class CScene* scene,const char* filePath)
 void CObject::prevUpdate(float dt)
 {
 	mRootComponent->preUpdate(dt);
+
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->preUpdate(dt); });
 }
 
 void CObject::update(float dt)
 {
 	mRootComponent->update(dt);
 
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->update(dt); });
 	lifeTimer(dt);
 }
 
 void CObject::postUpdate(float dt)
 {
 	mRootComponent->postUpdate(dt);
+	
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->postUpdate(dt); });
 }
 
 void CObject::collision(float dt)
@@ -55,16 +63,28 @@ void CObject::collision(float dt)
 void CObject::prevRender()
 {
 	mRootComponent->preRender();
+	
+	float dt = 0.f;
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->preRender(); });
 }
 
 void CObject::render()
 {
 	mRootComponent->render();
+	
+	float dt = 0.f;
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->render(); });
 }
 
 void CObject::postRender()
 {
 	mRootComponent->postRender();
+	
+	float dt = 0.f;
+	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
+		{comp->postRender(); });
 }
 
 void CObject::destroy()
@@ -149,7 +169,7 @@ void CObject::nonSceneCompUpdate(float dt, std::function<void(class CComponent*,
 			continue;
 		}
 		
-		func(*it, dt);
+		func((*it).get(), dt);
 		++it;
 	}
 }

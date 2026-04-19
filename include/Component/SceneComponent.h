@@ -106,4 +106,31 @@ public:
 	
 	//void setLocalRotation(EAxis axis, const float& angle);
 	//void setWorldRotation(EAxis axis, const float& rotation);
+
+private:
+	template<typename Func, typename... Args>
+	void processChildren(Func func, Args&&... args)
+	{
+		auto it = mChildList.begin();
+		while (it != mChildList.end())
+		{
+			CSceneComponent* child = *it;
+
+			if (!child->isActive())
+			{
+				it = mChildList.erase(it);
+				continue;
+			}
+
+			if (!child->isEnable())
+			{
+				++it;
+				continue;
+			}
+
+			(child->*func)(std::forward<Args>(args)...);
+
+			++it;
+		}
+	}
 };
