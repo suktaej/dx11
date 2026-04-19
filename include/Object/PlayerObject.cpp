@@ -18,13 +18,18 @@ CPlayerObject::~CPlayerObject()
 	mRootComponent = nullptr;
 }
 
+
 void CPlayerObject::MoveUp(float dt)
 {
 	using namespace DirectX;
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
 
 	if (sceneComp)
-		sceneComp->addLocalPosition(EAxis::y, dt);
+	{
+		//sceneComp->addLocalPosition(EAxis::y, dt);
+		DirectX::XMFLOAT3 up = sceneComp->getUpVector();
+		sceneComp->addLocalPositionByDirection(up, dt);
+	}
 }
 
 void CPlayerObject::MoveDown(float dt)
@@ -33,7 +38,11 @@ void CPlayerObject::MoveDown(float dt)
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
 
 	if (sceneComp)
-		sceneComp->addLocalPosition(EAxis::y,-dt);
+	{
+		//sceneComp->addLocalPosition(EAxis::y,-dt);
+		DirectX::XMFLOAT3 up = sceneComp->getUpVector();
+		sceneComp->addLocalPositionByDirection(up, -dt);
+	}
 }
 
 void CPlayerObject::RotY(float dt)
@@ -56,10 +65,38 @@ void CPlayerObject::RotZ(float dt)
 		sceneComp->addLocalRotation(EAxis::z, speed);
 }
 
+void CPlayerObject::RotNorm(float dt)
+{
+	using namespace DirectX;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
+
+	if (sceneComp)
+		sceneComp->addLocalRotation(EAxis::x, speed);
+}
+
+void CPlayerObject::RotInv(float dt)
+{
+	using namespace DirectX;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
+
+	if (sceneComp)
+		sceneComp->addLocalRotation(EAxis::x, -speed);
+}
+
 bool CPlayerObject::init(class CScene* scene)
 {
 	CObject::init(scene);
 
+	createMesh();
+	keyBind();
+
+	return true;
+}
+
+void CPlayerObject::createMesh()
+{
 	CStaticMeshComponent* root = createComponent<CStaticMeshComponent>("PlayerComponent");
 	root->setMesh("ColoredBox");
 	root->setShader("ColorMeshShader");
@@ -68,18 +105,24 @@ bool CPlayerObject::init(class CScene* scene)
 	root->setWorldScale(2.f, 2.f, 2.f);
 
 	setRootComponent(root);
-	
+}
+
+void CPlayerObject::keyBind()
+{
 	CInputContext* input = mScene->getInput();
-	
+
 	input->addBindKey("MoveUp", 'W');
 	input->addBindKey("MoveDown", 'S');
 	input->addBindKey("RotY", 'Q');
 	input->addBindKey("RotZ", 'E');
+	input->addBindKey("RotNorm", 'A');
+	input->addBindKey("RotInv", 'D');
 
 	input->BindAction(this, &CPlayerObject::MoveUp, "MoveUp", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveDown, "MoveDown", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotY, "RotY", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotZ, "RotZ", EInputType::Hold);
-
-	return true;
+	input->BindAction(this, &CPlayerObject::RotNorm, "RotNorm", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::RotInv, "RotInv", EInputType::Hold);
 }
+

@@ -71,11 +71,13 @@ public:
 	void setWorldPosition(const EAxis& axis, const float& pos);
 
 	void setWorldRotation(const DirectX::XMFLOAT3& rotation);
+	void setWorldRotation(const EAxis& axis, const float& angle);
 	void setWorldRotation(float x, float y, float z);
 	
 	void addLocalScale(const EAxis& axis, const float& scale);
 	void addLocalPosition(const EAxis& axis, const float& pos);
 	void addLocalRotation(const EAxis& axis, const float& angle);
+	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
 
 	void addWorldScale(const EAxis& axis, const float& scale);
 	void addWorldPosition(const EAxis& axis, const float& pos);
@@ -89,6 +91,10 @@ public:
 	const DirectX::XMFLOAT3 getWorldScale();
 	const DirectX::XMFLOAT3 getWorldPosition();
 	const DirectX::XMFLOAT4 getWorldRotation();
+
+	const DirectX::XMFLOAT3 getForwardVector() const;
+	const DirectX::XMFLOAT3 getRightVector() const;
+	const DirectX::XMFLOAT3 getUpVector() const;
 	
 	//void setLocalRotation(EAxis axis, const float& angle);
 	//void setWorldRotation(EAxis axis, const float& rotation);

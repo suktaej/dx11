@@ -133,6 +133,18 @@ void CSceneComponent::addLocalRotation(const EAxis& axis, const float& angle)
     invalidateTransform();
 }
 
+void CSceneComponent::addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist)
+{
+    using namespace DirectX;
+
+    XMVECTOR curPos = XMLoadFloat3(&mLocalPosition);
+    XMVECTOR offset = XMVectorScale(XMLoadFloat3(&dir), dist);
+    XMStoreFloat3(&mLocalPosition, XMVectorAdd(curPos, offset));
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
 void CSceneComponent::addWorldScale(const EAxis& axis, const float& scale)
 {
     using namespace DirectX;
@@ -237,6 +249,46 @@ const DirectX::XMFLOAT4 CSceneComponent::getWorldRotation()
     //XMFLOAT4 result;
     //XMStoreFloat4(&result, quat);
     //return result;
+}
+
+const DirectX::XMFLOAT3 CSceneComponent::getForwardVector() const
+{
+    using namespace DirectX;
+
+    // Unreal,DirectX ±âÁØ Forward = -Z
+    XMVECTOR baseForward = XMVectorSet(0.f, 0.f, -1.f, 0.f);
+    XMVECTOR quat = XMQuaternionNormalize(XMLoadFloat4(&mLocalRotation));
+    XMVECTOR forward = XMVector3Rotate(baseForward, quat);
+    XMFLOAT3 result;
+    XMStoreFloat3(&result, XMVector3Normalize(forward));
+
+    return result;
+}
+
+const DirectX::XMFLOAT3 CSceneComponent::getRightVector() const
+{
+    using namespace DirectX;
+
+    XMVECTOR baseRight = XMVectorSet(1.f, 0.f, 0.f, 0.f);
+    XMVECTOR quat = XMQuaternionNormalize(XMLoadFloat4(&mLocalRotation));
+    XMVECTOR right = XMVector3Rotate(baseRight, quat);
+    XMFLOAT3 result;
+    XMStoreFloat3(&result, XMVector3Normalize(right));
+
+    return result;
+}
+
+const DirectX::XMFLOAT3 CSceneComponent::getUpVector() const
+{
+    using namespace DirectX;
+
+    XMVECTOR baseUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+    XMVECTOR quat = XMQuaternionNormalize(XMLoadFloat4(&mLocalRotation));
+    XMVECTOR up = XMVector3Rotate(baseUp, quat);
+    XMFLOAT3 result;
+    XMStoreFloat3(&result, XMVector3Normalize(up));
+
+    return result;
 }
 
 const DirectX::XMFLOAT3 CSceneComponent::getWorldPosition()
@@ -373,6 +425,33 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
     mIsLocalDirty = true;
 	invalidateTransform();
     //updateWorldTransform();
+}
+
+void CSceneComponent::setWorldRotation(const EAxis& axis, const float& angle)
+{
+    using namespace DirectX;
+
+    XMVECTOR worldQuat = XMQuaternionRotationAxis(FAxis::Get(axis), XMConvertToRadians(angle));
+
+    if (mParent)
+    {
+        XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
+        XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
+        XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+
+        localQuat = XMQuaternionNormalize(localQuat);
+
+        XMStoreFloat4(&mLocalRotation, localQuat);
+    }
+    else
+    {
+        worldQuat = XMQuaternionNormalize(worldQuat);
+        XMStoreFloat4(&mLocalRotation, worldQuat);
+    }
+
+    mIsLocalDirty = true;
+    invalidateTransform();
 }
 
 void CSceneComponent::setWorldRotation(float x, float y, float z)
