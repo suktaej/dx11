@@ -114,13 +114,9 @@ void CPlayerObject::MoveDown(float dt)
 	if (sceneComp)
 	{
 		using namespace DirectX;
-		XMFLOAT3 forward = sceneComp->getForwardVector();
-		XMVECTOR vec = XMLoadFloat3(&forward);
-		vec = XMVectorScale(vec, -1.f);
-		XMFLOAT3 inv; 
-		XMStoreFloat3(&inv, vec);
 
-		mMove->addVelocity(inv);
+		XMVECTOR vForward = XMLoadFloat3(&sceneComp->getForwardVector());
+		mMove->addVelocity(vForward * -1.0f);
 	}
 }
 

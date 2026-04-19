@@ -27,6 +27,11 @@ void CMovementComponent::addVelocity(const DirectX::XMFLOAT3& velocity)
     mVelocity = velocity;
 }
 
+void CMovementComponent::addVelocity(const DirectX::XMVECTOR& velocity)
+{
+    DirectX::XMStoreFloat3(&mVelocity, velocity);
+}
+
 const float CMovementComponent::getDistance() const
 {
     DirectX::XMVECTOR vec = DirectX::XMLoadFloat3(&mMoveAmount);

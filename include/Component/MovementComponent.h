@@ -36,6 +36,7 @@ public:
 
 	void addVelocity(float x, float y, float z);
 	void addVelocity(const DirectX::XMFLOAT3& velocity);
+	void addVelocity(const DirectX::XMVECTOR& velocity);
 
 	const DirectX::XMFLOAT3 getMoveAmount() const { return mMoveAmount; }
 	const float getDistance() const;
