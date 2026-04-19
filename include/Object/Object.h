@@ -49,7 +49,12 @@ public:
 	void destroy();
 	
 	void componentCleanUp();
-	void LifeTimer(float dt);
+	void lifeTimer(float dt);
+
+private:
+	void sceneCompCleanUp();
+	void nonSceneCompCleanUp();
+	void nonSceneCompUpdate(float dt, std::function<void(class CComponent*, float)> func);
 
 public:
 	class CScene* getScene() const { return mScene; }

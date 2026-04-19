@@ -39,7 +39,7 @@ void CObject::update(float dt)
 {
 	mRootComponent->update(dt);
 
-	LifeTimer(dt);
+	lifeTimer(dt);
 }
 
 void CObject::postUpdate(float dt)
@@ -86,44 +86,75 @@ void CObject::destroy()
 
 void CObject::componentCleanUp()
 {
-	auto sceneIt = mSceneCompList.begin();
+	sceneCompCleanUp();
+	nonSceneCompCleanUp();
+}
 
-	while (sceneIt != mSceneCompList.end())
+void CObject::sceneCompCleanUp()
+{
+	auto it = mSceneCompList.begin();
+
+	while (it != mSceneCompList.end())
 	{
-		if (!(*sceneIt)->isActive())
+		if (!(*it)->isActive())
 		{
-			sceneIt = mSceneCompList.erase(sceneIt);
+			it = mSceneCompList.erase(it);
 			continue;
 		}
-		else if (!(*sceneIt)->isEnable())
+		else if (!(*it)->isEnable())
 		{
-			++sceneIt;
-			continue;
-		}
-
-		++sceneIt;
-	}
-
-	auto nonSceneIt = mNonSceneCompList.begin();
-
-	while (nonSceneIt != mNonSceneCompList.end())
-	{
-		if (!(*nonSceneIt)->isActive())
-		{
-			nonSceneIt = mNonSceneCompList.erase(nonSceneIt);
-			continue;
-		}
-		else if (!(*nonSceneIt)->isEnable())
-		{
-			++nonSceneIt;
+			++it;
 			continue;
 		}
 
-		++nonSceneIt;
+		++it;
 	}
 }
 
-void CObject::LifeTimer(float dt)
+void CObject::nonSceneCompCleanUp()
+{
+	auto it = mNonSceneCompList.begin();
+
+	while (it != mNonSceneCompList.end())
+	{
+		if (!(*it)->isActive())
+		{
+			it = mNonSceneCompList.erase(it);
+			continue;
+		}
+		else if (!(*it)->isEnable())
+		{
+			++it;
+			continue;
+		}
+
+		++it;
+	}
+}
+
+void CObject::nonSceneCompUpdate(float dt, std::function<void(class CComponent*, float)> func)
+{
+	auto it = mNonSceneCompList.begin();
+
+	while (it != mNonSceneCompList.end())
+	{
+		if (!(*it)->isActive())
+		{
+			it = mNonSceneCompList.erase(it);
+			continue;
+		}
+		else if (!(*it)->isEnable())
+		{
+			++it;
+			continue;
+		}
+		
+		func(*it, dt);
+		++it;
+	}
+}
+
+void CObject::lifeTimer(float dt)
 {
 	if (mLifeTime > 0.f)
 	{

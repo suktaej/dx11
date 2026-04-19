@@ -58,6 +58,9 @@
     <Filter Include="04_Scene\Input">
       <UniqueIdentifier>{d4e3e990-cfcf-4054-a9d5-b0b5a62fac98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06_Component\NonSceneComponent">
+      <UniqueIdentifier>{0e295955-326d-4b68-bf03-dc265debd96d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="Object\CollisionObject.cpp">
       <Filter>05_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\MovementComponent.cpp">
+      <Filter>06_Component\NonSceneComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="Object\CollisionObject.h">
       <Filter>05_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\MovementComponent.h">
+      <Filter>06_Component\NonSceneComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
