@@ -13,6 +13,7 @@ private:
     class CStaticMeshComponent* mObjRoot;
     class CStaticMeshComponent* mSub;
     class CSceneComponent* mRot;
+    class CMovementComponent* mMove;
 
 public:
     bool init(class CScene* scene) override;

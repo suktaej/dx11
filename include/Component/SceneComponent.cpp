@@ -194,6 +194,19 @@ void CSceneComponent::addWorldPosition(const EAxis& axis, const float& pos)
     setWorldPosition(worldPos);
 }
 
+void CSceneComponent::addWorldPosition(const DirectX::XMFLOAT3& pos)
+{
+    using namespace DirectX;
+
+    XMFLOAT3 worldPos = getWorldPosition();
+    XMVECTOR worldPosVec = XMLoadFloat3(&worldPos);
+    XMVECTOR offset = XMLoadFloat3(&pos);
+    XMVECTOR newPos = XMVectorAdd(worldPosVec, offset);
+
+    XMStoreFloat3(&worldPos, newPos);
+    setWorldPosition(worldPos);
+}
+
 void CSceneComponent::setLocalPosition(const DirectX::XMFLOAT3& position)
 {
     mLocalPosition = position;

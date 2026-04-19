@@ -81,12 +81,15 @@ public:
 	void addLocalRotation(const EAxis& axis, const float& angle);
 
 	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
-	void addForwardVector(const float& speed);
-	void addRightVector(const float& speed);
-	void addUpVector(const float& speed);
+	void addForwardVector(const float& pos);
+	void addRightVector(const float& pos);
+	void addUpVector(const float& pos);
 
 	void addWorldScale(const EAxis& axis, const float& scale);
+
 	void addWorldPosition(const EAxis& axis, const float& pos);
+	void addWorldPosition(const DirectX::XMFLOAT3& pos);
+	
 	void addWorldRotation(const EAxis& axis, const float& angle);
 
 	const DirectX::XMFLOAT3& getLocalScale() { return mLocalScale; }

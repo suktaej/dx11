@@ -105,7 +105,7 @@ private:
 
 		while (it != mNonSceneCompList.end())
 		{
-			class CComponent* comp = (*it).get();
+			CComponent* comp = (*it).get();
 			
 			if (!comp->isActive())
 			{

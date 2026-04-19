@@ -2,6 +2,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/InputContext.h"
 #include "../Component/StaticMeshComponent.h"
+#include "../Component/MovementComponent.h"
 #include "CollisionObject.h"
 
 
@@ -55,6 +56,10 @@ void CPlayerObject::createMesh()
 	mSub->setShader("ColorMeshShader");
 	mSub->setLocalPosition(0.f, 0.f, 10.f);
 	mSub->setLocalScale(0.5f, 0.5f, 0.5f);
+
+	mMove = createComponent<CMovementComponent>("Move");
+	mMove->setUpdateComponent(mObjRoot);
+	mMove->setSpeed(5.f);
 }
 
 void CPlayerObject::keyBind()
@@ -91,27 +96,31 @@ void CPlayerObject::keyBind()
 
 void CPlayerObject::MoveUp(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-	float speed = 20.f * dt;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
+
 	if (sceneComp)
-	{
-		//sceneComp->addLocalPosition(EAxis::y, dt);
-		DirectX::XMFLOAT3 up = sceneComp->getUpVector();
-		sceneComp->addLocalPositionByDirection(up, speed);
-	}
+		mMove->addVelocity(sceneComp->getForwardVector());
+	//{
+	//	//sceneComp->addLocalPosition(EAxis::y, dt);
+	//	DirectX::XMFLOAT3 up = sceneComp->getUpVector();
+	//	sceneComp->addLocalPositionByDirection(up, speed);
+	//}
 }
 
 void CPlayerObject::MoveDown(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-	float speed = 20.f * dt;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
+
 	if (sceneComp)
 	{
-		//sceneComp->addLocalPosition(EAxis::y,-dt);
-		DirectX::XMFLOAT3 up = sceneComp->getUpVector();
-		sceneComp->addLocalPositionByDirection(up, -speed);
+		using namespace DirectX;
+		XMFLOAT3 forward = sceneComp->getForwardVector();
+		XMVECTOR vec = XMLoadFloat3(&forward);
+		vec = XMVectorScale(vec, -1.f);
+		XMFLOAT3 inv; 
+		XMStoreFloat3(&inv, vec);
+
+		mMove->addVelocity(inv);
 	}
 }
 

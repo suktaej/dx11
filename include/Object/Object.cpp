@@ -1,6 +1,5 @@
 #include "Object.h"
 #include "../ServiceLocator.h"
-#include "../Component/Component.h"
 
 CObject::CObject(ObjectKey key)
 {
