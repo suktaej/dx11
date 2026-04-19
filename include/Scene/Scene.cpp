@@ -47,6 +47,8 @@ void CScene::postUpdate(float dt)
 {
 	processObject(dt, [](CObject* obj, float dt)
 		{ obj->postUpdate(dt); });
+
+	objectCleanUp();
 }
 
 void CScene::prevCollision(float dt)
@@ -104,6 +106,28 @@ void CScene::processObject(float dt, std::function<void(CObject*, float)> func)
 		}
 		
 		func((*it).get(), dt);
+		++it;
+	}
+}
+
+void CScene::objectCleanUp()
+{
+	auto it = mObjectList.begin();
+
+	while (it != mObjectList.end())
+	{
+		if (!(*it)->isActive())
+		{
+			it = mObjectList.erase(it);
+			continue;
+		}
+		else if (!(*it)->isEnabled())
+		{
+			++it;
+			continue;
+		}
+
+		(*it)->componentCleanUp();
 		++it;
 	}
 }

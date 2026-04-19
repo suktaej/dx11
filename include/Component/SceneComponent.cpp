@@ -727,13 +727,13 @@ void CSceneComponent::processChildren(float dt, std::function<void(CSceneCompone
     auto it = mChildList.begin();
     while (it != mChildList.end())
     {
-        if (!(*it)->getActive())
+        if (!(*it)->isActive())
         {
             it = mChildList.erase(it);
             continue;
         }
 
-        if (!(*it)->getEnable())
+        if (!(*it)->isEnable())
         {
             ++it;
             continue;

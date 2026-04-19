@@ -25,10 +25,14 @@ public:
 protected:
 	class CScene* mScene = nullptr;
 	class CComponent* mRootComponent = nullptr;
+	std::vector<std::unique_ptr<class CComponent>> mNonSceneCompList;
+	std::vector<std::unique_ptr<class CComponent>> mSceneCompList;
 	std::string mName;
 	bool mIsActive = true;
 	bool mIsEnabled = true;
 	bool mIsVisible = true;
+	float mLifeTime = 0.f;
+	float mSpeed = 0.f;
 
 public:
 	virtual bool init(class CScene* scene);
@@ -42,6 +46,10 @@ public:
 	virtual void prevRender();
 	virtual void render();
 	virtual void postRender();
+	void destroy();
+	
+	void componentCleanUp();
+	void LifeTimer(float dt);
 
 public:
 	class CScene* getScene() const { return mScene; }
@@ -52,12 +60,16 @@ public:
 	bool isEnabled() const { return mIsEnabled; }
 	void setActive(bool active) { mIsActive = active; }
 	bool isActive() const { return mIsActive; }
+	void setLifeTime(float time) { mLifeTime = time; }
+	float getLifeTime() { return mLifeTime; }
+	void setSpeed(float speed) { mSpeed = speed; }
+	float getSpeed() { return mSpeed; }
 	void setRootComponent(class CComponent* root) { mRootComponent = root; }
-	CComponent* getRootComponent() { return mRootComponent; }
+	class CComponent* getRootComponent() { return mRootComponent; }
 
 public:
 	template<typename T>
-	std::unique_ptr<T> createComponent(const std::string& name = "Component")
+	T* createComponent(const std::string& name = "Component")
 	{
 		static_assert(std::is_base_of_v<CComponent, T>, "T must inherit from CComponent");
 
@@ -70,7 +82,14 @@ public:
 		
 		T* newCompPtr = newComp.get();
 
-		return std::move(newComp);
+		class CSceneComponent* sceneComp = dynamic_cast<class CSceneComponent*>(newCompPtr);
+
+		if (sceneComp)
+			mSceneCompList.emplace_back(std::move(newComp));
+		else
+			mNonSceneCompList.emplace_back(std::move(newComp));
+
+		return newCompPtr;
 	}
 };
 

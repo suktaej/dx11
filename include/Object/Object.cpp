@@ -38,6 +38,8 @@ void CObject::prevUpdate(float dt)
 void CObject::update(float dt)
 {
 	mRootComponent->update(dt);
+
+	LifeTimer(dt);
 }
 
 void CObject::postUpdate(float dt)
@@ -63,4 +65,71 @@ void CObject::render()
 void CObject::postRender()
 {
 	mRootComponent->postRender();
+}
+
+void CObject::destroy()
+{
+	mIsActive = false;
+
+	//auto sit = mSceneCompList.begin();
+	//while (sit != mSceneCompList.end())
+	//	(*sit++)->setActive(false);
+
+	mSceneCompList.clear();
+
+	//auto nit = mNonSceneCompList.begin();
+	//while (nit != mNonSceneCompList.end())
+	//	(*nit++)->setActive(false);
+
+	mNonSceneCompList.clear();
+}
+
+void CObject::componentCleanUp()
+{
+	auto sceneIt = mSceneCompList.begin();
+
+	while (sceneIt != mSceneCompList.end())
+	{
+		if (!(*sceneIt)->isActive())
+		{
+			sceneIt = mSceneCompList.erase(sceneIt);
+			continue;
+		}
+		else if (!(*sceneIt)->isEnable())
+		{
+			++sceneIt;
+			continue;
+		}
+
+		++sceneIt;
+	}
+
+	auto nonSceneIt = mNonSceneCompList.begin();
+
+	while (nonSceneIt != mNonSceneCompList.end())
+	{
+		if (!(*nonSceneIt)->isActive())
+		{
+			nonSceneIt = mNonSceneCompList.erase(nonSceneIt);
+			continue;
+		}
+		else if (!(*nonSceneIt)->isEnable())
+		{
+			++nonSceneIt;
+			continue;
+		}
+
+		++nonSceneIt;
+	}
+}
+
+void CObject::LifeTimer(float dt)
+{
+	if (mLifeTime > 0.f)
+	{
+		mLifeTime -= dt;
+
+		if (mLifeTime <= 0)
+			destroy();
+	}
 }

@@ -18,7 +18,7 @@ bool CCollisionObject::init(CScene* scene)
 	mMeshComp = createComponent<CStaticMeshComponent>();
 	mMeshComp->setMesh("ColoredBox");
 	mMeshComp->setShader("ColorMeshShader");
-	setRootComponent(mMeshComp.get());
+	setRootComponent(mMeshComp);
 	
 	return true;
 }

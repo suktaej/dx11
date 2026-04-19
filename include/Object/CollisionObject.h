@@ -10,7 +10,7 @@ public:
     virtual ~CCollisionObject();
 
 private:
-    std::unique_ptr<class CStaticMeshComponent> mMeshComp;
+    class CStaticMeshComponent* mMeshComp;
 
 public:
     bool init(class CScene* scene) override;

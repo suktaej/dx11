@@ -50,8 +50,8 @@ public:
 	class CScene* getScene() const { return mScene; }
 	const char* getName() const { return mName.c_str(); }
 	void setName(const std::string& name) { mName = name; }
-	bool getActive() { return mIsActive; }
-	bool getEnable() { return mIsEnabled; }
+	bool isActive() { return mIsActive; }
+	bool isEnable() { return mIsEnabled; }
 	void setActive(bool active) { mIsActive = active; }
 	void setEnable(bool enable) { mIsEnabled = enable; }
 };

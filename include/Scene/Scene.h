@@ -19,6 +19,7 @@ protected:
 	
 private:
 	void processObject(float dt, std::function<void(class CObject*, float)> func);
+	void objectCleanUp();
 
 public:
 	virtual bool init();

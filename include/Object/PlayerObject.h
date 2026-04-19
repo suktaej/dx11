@@ -10,9 +10,9 @@ public:
     virtual ~CPlayerObject();
 
 private:
-    std::unique_ptr<class CStaticMeshComponent> mObjRoot;
-    std::unique_ptr<class CStaticMeshComponent> mSub;
-    std::unique_ptr<class CSceneComponent> mRot;
+    class CStaticMeshComponent* mObjRoot;
+    class CStaticMeshComponent* mSub;
+    class CSceneComponent* mRot;
 
 public:
     bool init(class CScene* scene) override;
@@ -24,10 +24,12 @@ private:
 
     void MoveUp(float dt);
     void MoveDown(float dt);
+    void RotX(float dt);
     void RotY(float dt);
     void RotZ(float dt);
-    void RotNorm(float dt);
-    void RotInv(float dt);
+    void RotXInv(float dt);
+    void RotYInv(float dt);
+    void RotZInv(float dt);
     void Fire(float dt);
 };
 

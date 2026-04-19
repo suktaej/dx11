@@ -15,7 +15,6 @@ CPlayerObject::CPlayerObject(ObjectKey key, CPlayerObject& other) : CObject(key,
 
 CPlayerObject::~CPlayerObject()
 {
-	//delete mRootComponent;
 }
 
 bool CPlayerObject::init(class CScene* scene)
@@ -45,7 +44,7 @@ void CPlayerObject::createMesh()
 	mObjRoot->setWorldRotation(0.f, 45.f, 45.f);
 	mObjRoot->setWorldScale(2.f, 2.f, 2.f);
 
-	setRootComponent(mObjRoot.get());
+	setRootComponent(mObjRoot);
 
 	mRot = createComponent<CSceneComponent>("Rotator");
 	mObjRoot->addChild(*mRot);
@@ -64,18 +63,29 @@ void CPlayerObject::keyBind()
 
 	input->addBindKey("MoveUp", 'W');
 	input->addBindKey("MoveDown", 'S');
-	input->addBindKey("RotY", 'Q');
-	input->addBindKey("RotZ", 'E');
-	input->addBindKey("RotNorm", 'A');
-	input->addBindKey("RotInv", 'D');
+
+	input->addBindKey("RotY", 'Z');
+	input->addBindKey("RotYInv", 'Z');
+	input->setModifier("RotYInv", EModifier::Ctrl);
+
+	input->addBindKey("RotZ", 'X');
+	input->addBindKey("RotZInv", 'X');
+	input->setModifier("RotZInv", EModifier::Ctrl);
+
+	input->addBindKey("RotX", 'C');
+	input->addBindKey("RotXInv", 'C');
+	input->setModifier("RotXInv", EModifier::Ctrl);
+
 	input->addBindKey("Fire", VK_SPACE);
 
 	input->BindAction(this, &CPlayerObject::MoveUp, "MoveUp", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveDown, "MoveDown", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotY, "RotY", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotZ, "RotZ", EInputType::Hold);
-	input->BindAction(this, &CPlayerObject::RotNorm, "RotNorm", EInputType::Hold);
-	input->BindAction(this, &CPlayerObject::RotInv, "RotInv", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::RotX, "RotX", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::RotXInv, "RotXInv", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::RotYInv, "RotYInv", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::RotZInv, "RotZInv", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::Fire, "Fire", EInputType::Down);
 }
 
@@ -105,6 +115,16 @@ void CPlayerObject::MoveDown(float dt)
 	}
 }
 
+void CPlayerObject::RotX(float dt)
+{
+	using namespace DirectX;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
+
+	if (sceneComp)
+		sceneComp->addLocalRotation(EAxis::x, speed);
+}
+
 void CPlayerObject::RotY(float dt)
 {
 	using namespace DirectX;
@@ -125,17 +145,7 @@ void CPlayerObject::RotZ(float dt)
 		sceneComp->addLocalRotation(EAxis::z, speed);
 }
 
-void CPlayerObject::RotNorm(float dt)
-{
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-	float speed = 200.f * dt;
-
-	if (sceneComp)
-		sceneComp->addLocalRotation(EAxis::x, speed);
-}
-
-void CPlayerObject::RotInv(float dt)
+void CPlayerObject::RotXInv(float dt)
 {
 	using namespace DirectX;
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
@@ -145,9 +155,30 @@ void CPlayerObject::RotInv(float dt)
 		sceneComp->addLocalRotation(EAxis::x, -speed);
 }
 
+void CPlayerObject::RotYInv(float dt)
+{
+	using namespace DirectX;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
+
+	if (sceneComp)
+		sceneComp->addLocalRotation(EAxis::y, -speed);
+}
+
+void CPlayerObject::RotZInv(float dt)
+{
+	using namespace DirectX;
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+	float speed = 200.f * dt;
+
+	if (sceneComp)
+		sceneComp->addLocalRotation(EAxis::z, -speed);
+}
+
 void CPlayerObject::Fire(float dt)
 {
 	CCollisionObject* obj = mScene->createObject<CCollisionObject>();
+	obj->setLifeTime(1.f);
 
 	CComponent* root = obj->getRootComponent();
 	CSceneComponent* sceneRoot = dynamic_cast<CSceneComponent*>(root);
