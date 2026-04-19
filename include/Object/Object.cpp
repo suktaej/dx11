@@ -33,58 +33,45 @@ bool CObject::init(class CScene* scene,const char* filePath)
 void CObject::prevUpdate(float dt)
 {
 	mRootComponent->preUpdate(dt);
-
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->preUpdate(dt); });
+	nonSceneCompUpdate(&CComponent::preUpdate,dt);
 }
 
 void CObject::update(float dt)
 {
 	mRootComponent->update(dt);
+	nonSceneCompUpdate(&CComponent::update, dt);
 
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->update(dt); });
 	lifeTimer(dt);
 }
 
 void CObject::postUpdate(float dt)
 {
 	mRootComponent->postUpdate(dt);
-	
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->postUpdate(dt); });
+	nonSceneCompUpdate(&CComponent::postUpdate, dt);
 }
 
 void CObject::collision(float dt)
 {
 	mRootComponent->collision(dt);
+	nonSceneCompUpdate(&CComponent::collision, dt);
 }
 
 void CObject::prevRender()
 {
 	mRootComponent->preRender();
-	
-	float dt = 0.f;
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->preRender(); });
+	nonSceneCompUpdate(&CComponent::preRender);
 }
 
 void CObject::render()
 {
 	mRootComponent->render();
-	
-	float dt = 0.f;
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->render(); });
+	nonSceneCompUpdate(&CComponent::render);
 }
 
 void CObject::postRender()
 {
 	mRootComponent->postRender();
-	
-	float dt = 0.f;
-	nonSceneCompUpdate(dt, [](CComponent* comp, float dt)
-		{comp->postRender(); });
+	nonSceneCompUpdate(&CComponent::postRender);
 }
 
 void CObject::destroy()
@@ -148,28 +135,6 @@ void CObject::nonSceneCompCleanUp()
 			continue;
 		}
 
-		++it;
-	}
-}
-
-void CObject::nonSceneCompUpdate(float dt, std::function<void(class CComponent*, float)> func)
-{
-	auto it = mNonSceneCompList.begin();
-
-	while (it != mNonSceneCompList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mNonSceneCompList.erase(it);
-			continue;
-		}
-		else if (!(*it)->isEnable())
-		{
-			++it;
-			continue;
-		}
-		
-		func((*it).get(), dt);
 		++it;
 	}
 }

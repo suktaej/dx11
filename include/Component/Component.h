@@ -1,5 +1,5 @@
 #pragma once
-#include "../Object/Object.h"
+#include "../GameInfo.h"
 
 class CComponent abstract
 {

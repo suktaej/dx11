@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameInfo.h"
+#include "../Object/Object.h"
 
 class CScene abstract
 {
@@ -14,11 +15,10 @@ public:
 	virtual ~CScene();
 
 protected:
-	std::vector<std::unique_ptr<class CObject>> mObjectList;
+	std::vector<std::unique_ptr<CObject>> mObjectList;
 	std::unique_ptr<class CInputContext> mInput;
 	
 private:
-	void processObject(float dt, std::function<void(class CObject*, float)> func);
 	void objectCleanUp();
 
 public:
@@ -57,6 +57,33 @@ public:
 		mObjectList.push_back(std::move(newObj));
 
 		return newObjPtr;
+	}
+
+private:
+	template<typename F>
+	void processObject(F&& func)
+	{
+		auto it = mObjectList.begin();
+
+		while (it != mObjectList.end())
+		{
+			CObject* obj = (*it).get();
+
+			if (!obj->isActive())
+			{
+				it = mObjectList.erase(it);
+				continue;
+			}
+
+			if (!obj->isEnabled())
+			{
+				++it;
+				continue;
+			}
+
+			func(obj);
+			++it;
+		}
 	}
 };
 

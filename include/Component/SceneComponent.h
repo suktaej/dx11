@@ -30,7 +30,6 @@ private:
 	void updateWorldTransform();
 	void invalidateTransform();
 	bool isDescendant(CSceneComponent* node);
-	void processChildren(float dt, std::function<void(CSceneComponent*, float)> func);
 	//void detachFromParent();
 	//DirectX::XMFLOAT3 quaternionToEuler(DirectX::XMVECTOR quat);
 

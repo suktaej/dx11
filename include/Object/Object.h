@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameInfo.h"
+#include "../Component/Component.h"
 
 class CObject abstract
 {
@@ -54,7 +55,6 @@ public:
 private:
 	void sceneCompCleanUp();
 	void nonSceneCompCleanUp();
-	void nonSceneCompUpdate(float dt, std::function<void(class CComponent*, float)> func);
 
 public:
 	class CScene* getScene() const { return mScene; }
@@ -96,5 +96,30 @@ public:
 
 		return newCompPtr;
 	}
-};
 
+private:
+	template <typename F, typename... Args>
+	void nonSceneCompUpdate(F func, Args&&... args)
+	{
+		auto it = mNonSceneCompList.begin();
+
+		while (it != mNonSceneCompList.end())
+		{
+			class CComponent* comp = (*it).get();
+			
+			if (!comp->isActive())
+			{
+				it = mNonSceneCompList.erase(it);
+				continue;
+			}
+			else if (!comp->isEnable())
+			{
+				++it;
+				continue;
+			}
+
+			(comp->*func)(std::forward<Args>(args)...);
+			++it;
+		}
+	}
+};

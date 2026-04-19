@@ -33,19 +33,19 @@ void CScene::input(float dt)
 
 void CScene::prevUpdate(float dt)
 {
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([dt](CObject* obj)
 		{ obj->prevUpdate(dt); });
 }
 
 void CScene::update(float dt)
 {
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([dt](CObject* obj)
 		{ obj->update(dt); });
 }
 
 void CScene::postUpdate(float dt)
 {
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([dt](CObject* obj)
 		{ obj->postUpdate(dt); });
 
 	objectCleanUp();
@@ -67,7 +67,7 @@ void CScene::prevRender()
 {
 	float dt = 0.f;
 
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([](CObject* obj)
 		{ obj->prevRender(); });
 }
 
@@ -75,7 +75,7 @@ void CScene::render()
 {
 	float dt = 0.f;
 
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([](CObject* obj)
 		{ obj->render(); });
 }
 
@@ -83,31 +83,8 @@ void CScene::postRender()
 {
 	float dt = 0.f;
 
-	processObject(dt, [](CObject* obj, float dt)
+	processObject([](CObject* obj)
 		{ obj->postRender(); });
-}
-
-void CScene::processObject(float dt, std::function<void(CObject*, float)> func)
-{
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-
-		if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-		
-		func((*it).get(), dt);
-		++it;
-	}
 }
 
 void CScene::objectCleanUp()
