@@ -11,8 +11,9 @@ public:
 
 protected:
 	class CSceneComponent* mUpdateComponent = nullptr;
-	DirectX::XMFLOAT3 mVelocity = { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 mDirection = { 0.f, 0.f, 0.f };
 	DirectX::XMFLOAT3 mMoveAmount = { 0.f, 0.f, 0.f };
+	bool mVelocity = true;
 	float mSpeed = 1.f;
 
 public:
@@ -28,30 +29,32 @@ public:
 	std::unique_ptr<CComponent> clone() const override;
 
 public:
-	void setVelocity(const DirectX::XMFLOAT3& velocity) { mVelocity = velocity; }
-	void setVelocity(float x, float y, float z) { mVelocity = { x,y,z }; }
-	void setVelocity(const EAxis& axis) { DirectX::XMStoreFloat3(&mVelocity, FAxis::Get(EAxis::x)); }
+	void setDirection(float x, float y, float z) { mDirection = { x,y,z }; }
+	void setDirection(const DirectX::XMFLOAT3& dir) { mDirection = dir; }
+	void setDirection(const DirectX::XMVECTOR& dir) { DirectX::XMStoreFloat3(&mDirection, dir); }
+	void setDirection(const EAxis& axis) { DirectX::XMStoreFloat3(&mDirection, FAxis::Get(EAxis::x)); }
 	void setSpeed(float speed) { mSpeed = speed; }
 	void setUpdateComponent(class CSceneComponent* comp) { mUpdateComponent = comp; }
 
-	void addVelocity(float x, float y, float z);
-	void addVelocity(const DirectX::XMFLOAT3& velocity);
-	void addVelocity(const DirectX::XMVECTOR& velocity);
+	void addDirection(float x, float y, float z);
+	void addDirection(const DirectX::XMFLOAT3& dir);
+	void addDirection(const DirectX::XMVECTOR& dir);
 
 	const DirectX::XMFLOAT3 getMoveAmount() const { return mMoveAmount; }
 	const float getDistance() const;
+	void setVelocity(bool init) { mVelocity = init; }
 
-	void addMoveX(const float& x) { mVelocity.x += x; }
-	void addMoveY(const float& y) { mVelocity.y += y; }
-	void addMoveZ(const float& z) { mVelocity.z += z; }
+	void addDirX(const float& x) { mDirection.x += x; }
+	void addDirY(const float& y) { mDirection.y += y; }
+	void addDirZ(const float& z) { mDirection.z += z; }
 
-	void setMoveX(const float& x) { mVelocity.x = x; }
-	void setMoveY(const float& y) { mVelocity.y = y; }
-	void setMoveZ(const float& z) { mVelocity.z = z; }
+	void setDirX(const float& x) { mDirection.x = x; }
+	void setDirY(const float& y) { mDirection.y = y; }
+	void setDirZ(const float& z) { mDirection.z = z; }
 
-	float getMoveX() { return mVelocity.x; }
-	float getMoveY() { return mVelocity.y; }
-	float getMoveZ() { return mVelocity.z; }
+	float getDirX() { return mDirection.x; }
+	float getDirY() { return mDirection.y; }
+	float getDirZ() { return mDirection.z; }
 
 };
 

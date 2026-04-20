@@ -1,0 +1,58 @@
+#pragma once
+#include "SceneComponent.h"
+using namespace DirectX;
+
+enum class EProjectionType
+{
+	Perspective,
+	Ortho
+};
+
+class CCameraComponent :
+	public CSceneComponent
+{
+public:
+	CCameraComponent(ComponentKey key);
+	CCameraComponent(ComponentKey key, const CCameraComponent& other);
+	~CCameraComponent() override;
+
+private:
+
+	XMFLOAT4X4 mView;
+	XMVECTOR mEye = XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
+	XMVECTOR mAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	XMVECTOR mUp = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+
+	XMFLOAT4X4 mProjection;
+	EProjectionType mProjectionType = EProjectionType::Perspective;
+	float mViewAngle = 90.f;
+	float mNear = 0.f;
+	float mFar = 1000.f;
+	float mWidth = 0.f;
+	float mHeight = 0.f;
+
+private:
+	XMMATRIX makeViewProjMat();
+
+public:
+	void setProjectionType(EProjectionType type);
+	void setAngle(float angle) { mViewAngle = angle; }
+	void setNear(float value) { mNear = value; }
+	void setFar(float value) { mFar = value; }
+	void setViewResolution(float width, float height) { mWidth = width, height = height; }
+	XMFLOAT4X4 getViewMat() { return mView; }
+	XMFLOAT4X4 getProjMat() { return mProjection; }
+
+public:
+	bool init() override;
+	bool init(const char* name) override;
+	void preUpdate(float dt) override;
+	void update(float dt) override;
+	void postUpdate(float dt) override;
+	void collision(float dt) override;
+	void preRender() override;
+	void render() override;
+	void postRender() override;
+	std::unique_ptr<CComponent> clone() const override;
+};
+

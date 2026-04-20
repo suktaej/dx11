@@ -89,9 +89,6 @@ void CMeshComponent::render()
     XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
     XMStoreFloat4x4(&view, XMMatrixLookAtLH(eye, at, up));
-    // projection
-    RECT rc = { 0, 0, 1280, 720 };
-    XMStoreFloat4x4(&projection, XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), (float)rc.right / rc.bottom, 0.1f, 100.0f));
 
     XMMATRIX wvp = XMLoadFloat4x4(&mWorldMatrix) * XMLoadFloat4x4(&view) * XMLoadFloat4x4(&projection);
     XMFLOAT4X4 mwvp;

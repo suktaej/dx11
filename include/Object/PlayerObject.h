@@ -25,6 +25,8 @@ private:
 
     void MoveUp(float dt);
     void MoveDown(float dt);
+    void MoveRight(float dt);
+    void MoveLeft(float dt);
     void RotX(float dt);
     void RotY(float dt);
     void RotZ(float dt);

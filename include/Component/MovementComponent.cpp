@@ -15,21 +15,28 @@ CMovementComponent::~CMovementComponent()
 {
 }
 
-void CMovementComponent::addVelocity(float x, float y, float z)
+void CMovementComponent::addDirection(float x, float y, float z)
 {
-    mVelocity.x += x;
-    mVelocity.y += y;
-    mVelocity.z += z;
+    mDirection.x += x;
+    mDirection.y += y;
+    mDirection.z += z;
 }
 
-void CMovementComponent::addVelocity(const DirectX::XMFLOAT3& velocity)
+void CMovementComponent::addDirection(const DirectX::XMFLOAT3& dir)
 {
-    mVelocity = velocity;
+    mDirection.x += dir.x;
+    mDirection.y += dir.y;
+    mDirection.z += dir.z;
 }
 
-void CMovementComponent::addVelocity(const DirectX::XMVECTOR& velocity)
+void CMovementComponent::addDirection(const DirectX::XMVECTOR& dir)
 {
-    DirectX::XMStoreFloat3(&mVelocity, velocity);
+    DirectX::XMFLOAT3 temp;
+    DirectX::XMStoreFloat3(&temp, dir); 
+
+    mDirection.x += temp.x;
+    mDirection.y += temp.y;
+    mDirection.z += temp.z;
 }
 
 const float CMovementComponent::getDistance() const
@@ -78,7 +85,7 @@ void CMovementComponent::update(float dt)
         {
             using namespace DirectX;
 
-            XMVECTOR vel = XMLoadFloat3(&mVelocity);
+            XMVECTOR vel = XMLoadFloat3(&mDirection);
             XMVECTOR unit = XMVector3Normalize(vel);
             XMVECTOR len = XMVector3Length(vel);
 
@@ -118,7 +125,8 @@ void CMovementComponent::postRender()
 {
     CComponent::postRender();
 
-    mVelocity = { 0.f,0.f,0.f };
+    if(mVelocity)
+		mDirection = { 0.f,0.f,0.f };
 }
 
 std::unique_ptr<CComponent> CMovementComponent::clone() const

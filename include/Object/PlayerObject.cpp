@@ -68,6 +68,8 @@ void CPlayerObject::keyBind()
 
 	input->addBindKey("MoveUp", 'W');
 	input->addBindKey("MoveDown", 'S');
+	input->addBindKey("MoveRight", 'D');
+	input->addBindKey("MoveLeft", 'A');
 
 	input->addBindKey("RotY", 'Z');
 	input->addBindKey("RotYInv", 'Z');
@@ -85,6 +87,8 @@ void CPlayerObject::keyBind()
 
 	input->BindAction(this, &CPlayerObject::MoveUp, "MoveUp", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveDown, "MoveDown", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveRight, "MoveRight", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveLeft, "MoveLeft", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotY, "RotY", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotZ, "RotZ", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotX, "RotX", EInputType::Hold);
@@ -99,12 +103,7 @@ void CPlayerObject::MoveUp(float dt)
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
 
 	if (sceneComp)
-		mMove->addVelocity(sceneComp->getForwardVector());
-	//{
-	//	//sceneComp->addLocalPosition(EAxis::y, dt);
-	//	DirectX::XMFLOAT3 up = sceneComp->getUpVector();
-	//	sceneComp->addLocalPositionByDirection(up, speed);
-	//}
+		mMove->addDirection(sceneComp->getForwardVector());
 }
 
 void CPlayerObject::MoveDown(float dt)
@@ -114,9 +113,32 @@ void CPlayerObject::MoveDown(float dt)
 	if (sceneComp)
 	{
 		using namespace DirectX;
+	
+		XMFLOAT3 forward = sceneComp->getForwardVector();
+		XMVECTOR vecForward = XMLoadFloat3(&forward);
+		mMove->addDirection(vecForward * -1.0f);
+	}
+}
 
-		XMVECTOR vForward = XMLoadFloat3(&sceneComp->getForwardVector());
-		mMove->addVelocity(vForward * -1.0f);
+void CPlayerObject::MoveRight(float dt)
+{
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+
+	if (sceneComp)
+		mMove->addDirection(sceneComp->getRightVector());
+}
+
+void CPlayerObject::MoveLeft(float dt)
+{
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+
+	if (sceneComp)
+	{
+		using namespace DirectX;
+
+		XMFLOAT3 right = sceneComp->getRightVector();
+		XMVECTOR vecright = XMLoadFloat3(&right);
+		mMove->addDirection(vecright * -1.0f);
 	}
 }
 

@@ -3,6 +3,7 @@ D:\DXProject\include\Asset\AssetManager.cpp;D:\DXProject\Intermediate\AssetManag
 D:\DXProject\include\Asset\Mesh\Mesh.cpp;D:\DXProject\Intermediate\Mesh.obj
 D:\DXProject\include\Asset\Mesh\MeshManager.cpp;D:\DXProject\Intermediate\MeshManager.obj
 D:\DXProject\include\Asset\Mesh\StaticMesh.cpp;D:\DXProject\Intermediate\StaticMesh.obj
+D:\DXProject\include\Component\CameraComponent.cpp;D:\DXProject\Intermediate\CameraComponent.obj
 D:\DXProject\include\Component\Component.cpp;D:\DXProject\Intermediate\Component.obj
 D:\DXProject\include\Component\MeshComponent.cpp;D:\DXProject\Intermediate\MeshComponent.obj
 D:\DXProject\include\Component\MovementComponent.cpp;D:\DXProject\Intermediate\MovementComponent.obj
