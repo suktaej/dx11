@@ -19,9 +19,9 @@ public:
 private:
 
 	XMFLOAT4X4 mView;
-	XMVECTOR mEye = XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f);
-	XMVECTOR mAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	XMVECTOR mUp = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+	//XMFLOAT3 mForward;
+	//XMFLOAT3 mRight;
+	//XMFLOAT3 mUp;
 
 	XMFLOAT4X4 mProjection;
 	EProjectionType mProjectionType = EProjectionType::Perspective;

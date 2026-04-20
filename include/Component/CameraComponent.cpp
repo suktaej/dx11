@@ -17,7 +17,21 @@ CCameraComponent::~CCameraComponent()
 
 void CCameraComponent::makeViewMat()
 {
-	XMStoreFloat4x4(&mView, XMMatrixLookAtLH(mEye, mAt, mUp));
+	XMMATRIX worldMat = XMLoadFloat4x4(&getWorldMatrix());
+	
+	XMVECTOR up = worldMat.r[1];
+	XMVECTOR forward = worldMat.r[2];
+	XMVECTOR pos = worldMat.r[3];
+
+	forward = XMVector3Normalize(forward);
+	up = XMVector3Normalize(up);
+
+	XMVECTOR at = XMVectorAdd(pos, forward);
+	XMStoreFloat4x4(&mView, XMMatrixLookAtLH(pos, at, up));
+
+	//XMStoreFloat3(&mForward, forward);
+	//XMStoreFloat3(&mUp, up);
+	//XMStoreFloat3(&mRight, worldMat.r[0]);
 }
 
 void CCameraComponent::setProjectionType(EProjectionType type)
@@ -57,6 +71,7 @@ bool CCameraComponent::init()
 	mWidth = (float)value.width;
 	mHeight = (float)value.height;
 
+	setLocalPosition(0.f, 0.f, -100.f);
 	makeViewMat();
 	setProjectionType(EProjectionType::Perspective);
 

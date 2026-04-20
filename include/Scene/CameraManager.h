@@ -18,7 +18,6 @@ private:
 	class CCameraComponent* mViewTarget;
 
 public:
-	// TODO : unique ptr check
 	void setViewTarget(class CCameraComponent* target) { mViewTarget = target; }
 	class CCameraComponent* getVIewTarget() const { return mViewTarget; }
 	const XMFLOAT4X4& getViewMat() const override;
