@@ -54,5 +54,7 @@ public:
 	bool isEnable() { return mIsEnabled; }
 	void setActive(bool active) { mIsActive = active; }
 	void setEnable(bool enable) { mIsEnabled = enable; }
+	void setScene(class CScene* scene) { mScene = scene; }
+	void setOwner(class CObject* obj) { mOwner = obj; }
 };
 

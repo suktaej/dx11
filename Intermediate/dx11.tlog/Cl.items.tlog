@@ -16,6 +16,7 @@ D:\DXProject\include\main.cpp;D:\DXProject\Intermediate\main.obj
 D:\DXProject\include\Object\CollisionObject.cpp;D:\DXProject\Intermediate\CollisionObject.obj
 D:\DXProject\include\Object\Object.cpp;D:\DXProject\Intermediate\Object.obj
 D:\DXProject\include\Object\PlayerObject.cpp;D:\DXProject\Intermediate\PlayerObject.obj
+D:\DXProject\include\Scene\CameraManager.cpp;D:\DXProject\Intermediate\CameraManager.obj
 D:\DXProject\include\Scene\InputContext.cpp;D:\DXProject\Intermediate\InputContext.obj
 D:\DXProject\include\Scene\Scene.cpp;D:\DXProject\Intermediate\Scene.obj
 D:\DXProject\include\Scene\SceneMain.cpp;D:\DXProject\Intermediate\SceneMain.obj

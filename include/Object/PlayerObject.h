@@ -14,6 +14,7 @@ private:
     class CStaticMeshComponent* mSub;
     class CSceneComponent* mRot;
     class CMovementComponent* mMove;
+    class CCameraComponent* mCamera;
 
 public:
     bool init(class CScene* scene) override;

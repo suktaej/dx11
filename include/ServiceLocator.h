@@ -16,6 +16,8 @@ public:
 	static void provideShader(IShader& shader) { mShader = &shader; }
 	static IInput& getInput() { return *mInput; }
 	static void provideInput(IInput& input) { mInput = &input; }
+	static ICamera& getCamera() { return *mCamera; }
+	static void provideCamera(ICamera& camera) { mCamera = &camera; }
 
 private:
 	static IGame* mGame;
@@ -24,4 +26,5 @@ private:
 	static IMesh* mMesh;
 	static IShader* mShader;
 	static IInput* mInput;
+	static ICamera* mCamera;
 };

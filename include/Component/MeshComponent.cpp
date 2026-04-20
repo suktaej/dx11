@@ -1,5 +1,6 @@
 #include "MeshComponent.h"
 #include "../Shader/ObjectConstantBuffer.h"
+#include "../ServiceLocator.h"
 
 CMeshComponent::CMeshComponent(ComponentKey key) : CSceneComponent(key)
 {
@@ -82,21 +83,18 @@ void CMeshComponent::render()
 
     mObjectCB->setWorld(mWorldMatrix);
 
-    // 임시자료
-    XMFLOAT4X4 view, projection;
-    // view
-    XMVECTOR eye = XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
-    XMVECTOR at = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-    XMStoreFloat4x4(&view, XMMatrixLookAtLH(eye, at, up));
+    ICamera& camera = CServiceLocator::getCamera();
 
-    XMMATRIX wvp = XMLoadFloat4x4(&mWorldMatrix) * XMLoadFloat4x4(&view) * XMLoadFloat4x4(&projection);
+    XMMATRIX wvp = 
+        XMLoadFloat4x4(&mWorldMatrix) * 
+        XMLoadFloat4x4(&camera.getViewMat()) * 
+        XMLoadFloat4x4(&camera.getProjMat());
+
     XMFLOAT4X4 mwvp;
     XMStoreFloat4x4(&mwvp, wvp);
 
     mObjectCB->setWVP(mwvp);
     mObjectCB->updateBuffer();
-    //XMMATRIX vp = mScene->GetMainCamera()->GetViewProjectionMatrix();
 
     //mTransformConstantBuffer->setView(view);
     //mTransformConstantBuffer->setProjection(projection);

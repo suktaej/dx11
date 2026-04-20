@@ -15,9 +15,9 @@ CCameraComponent::~CCameraComponent()
 {
 }
 
-XMMATRIX CCameraComponent::makeViewProjMat()
+void CCameraComponent::makeViewMat()
 {
-	return XMLoadFloat4x4(&mView) * XMLoadFloat4x4(&mProjection);
+	XMStoreFloat4x4(&mView, XMMatrixLookAtLH(mEye, mAt, mUp));
 }
 
 void CCameraComponent::setProjectionType(EProjectionType type)
@@ -54,8 +54,16 @@ bool CCameraComponent::init()
 
 	IDevice& device = CServiceLocator::getDevice();
 	FResolution value = device.getResolution();
-	mWidth = value.width;
-	mHeight = value.height;
+	mWidth = (float)value.width;
+	mHeight = (float)value.height;
+
+	makeViewMat();
+	setProjectionType(EProjectionType::Perspective);
+
+	ICamera& camera = CServiceLocator::getCamera();
+
+	if (!camera.getVIewTarget())
+		camera.setViewTarget(this);
 
 	return true;
 }
@@ -99,8 +107,6 @@ void CCameraComponent::render()
 void CCameraComponent::postRender()
 {
 	CSceneComponent::postRender();
-
-	makeViewProjMat();
 }
 
 std::unique_ptr<CComponent> CCameraComponent::clone() const

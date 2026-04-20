@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include "../Object/Object.h"
 #include "InputContext.h"
+#include "CameraManager.h"
+#include "../ServiceLocator.h"
 
 CScene::CScene(SceneKey key)
 {
@@ -13,7 +15,14 @@ CScene::~CScene()
 bool CScene::init()
 {
 	mInput = std::make_unique<CInputContext>(CInputContext::InputKey{});
-	if (!mInput->init()) return false;
+	if (!mInput->init()) 
+		return false;
+
+	mCamera = std::make_unique<CCameraManager>(CCameraManager::CameraKey{});
+	if (!mCamera->init()) 
+		return false;
+
+	CServiceLocator::provideCamera(*mCamera.get());
 
 	return true;
 }
@@ -21,8 +30,13 @@ bool CScene::init()
 bool CScene::init(const char* filePath)
 {
 	mInput = std::make_unique<CInputContext>(CInputContext::InputKey{});
-	if (!mInput->init()) return false;
+	if (!mInput->init()) 
+		return false;
 	
+	mCamera = std::make_unique<CCameraManager>(CCameraManager::CameraKey{});
+	if (!mCamera->init()) 
+		return false;
+
 	return true;
 }
 
@@ -41,6 +55,8 @@ void CScene::update(float dt)
 {
 	processObject([dt](CObject* obj)
 		{ obj->update(dt); });
+
+	mCamera->update(dt);
 }
 
 void CScene::postUpdate(float dt)

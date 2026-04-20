@@ -3,6 +3,7 @@
 #include "../Scene/InputContext.h"
 #include "../Component/StaticMeshComponent.h"
 #include "../Component/MovementComponent.h"
+#include "../Component/CameraComponent.h"
 #include "CollisionObject.h"
 
 
@@ -56,6 +57,9 @@ void CPlayerObject::createMesh()
 	mSub->setShader("ColorMeshShader");
 	mSub->setLocalPosition(0.f, 0.f, 10.f);
 	mSub->setLocalScale(0.5f, 0.5f, 0.5f);
+	
+	mCamera = createComponent<CCameraComponent>("Camera");
+	mObjRoot->addChild(*mCamera);
 
 	mMove = createComponent<CMovementComponent>("Move");
 	mMove->setUpdateComponent(mObjRoot);

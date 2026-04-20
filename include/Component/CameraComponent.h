@@ -19,20 +19,20 @@ public:
 private:
 
 	XMFLOAT4X4 mView;
-	XMVECTOR mEye = XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f);
+	XMVECTOR mEye = XMVectorSet(0.0f, 0.0f, -1.0f, 1.0f);
 	XMVECTOR mAt = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	XMVECTOR mUp = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 
 	XMFLOAT4X4 mProjection;
 	EProjectionType mProjectionType = EProjectionType::Perspective;
 	float mViewAngle = 90.f;
-	float mNear = 0.f;
+	float mNear = 1.f;
 	float mFar = 1000.f;
 	float mWidth = 0.f;
 	float mHeight = 0.f;
 
 private:
-	XMMATRIX makeViewProjMat();
+	void makeViewMat();
 
 public:
 	void setProjectionType(EProjectionType type);
@@ -40,8 +40,8 @@ public:
 	void setNear(float value) { mNear = value; }
 	void setFar(float value) { mFar = value; }
 	void setViewResolution(float width, float height) { mWidth = width, height = height; }
-	XMFLOAT4X4 getViewMat() { return mView; }
-	XMFLOAT4X4 getProjMat() { return mProjection; }
+	const XMFLOAT4X4& getViewMat() const { return mView; }
+	const XMFLOAT4X4& getProjMat() const { return mProjection; }
 
 public:
 	bool init() override;

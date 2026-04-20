@@ -17,6 +17,7 @@ public:
 protected:
 	std::vector<std::unique_ptr<CObject>> mObjectList;
 	std::unique_ptr<class CInputContext> mInput;
+	std::unique_ptr<class CCameraManager> mCamera;
 	
 private:
 	void objectCleanUp();
@@ -36,7 +37,8 @@ public:
 	virtual void postRender();
 
 public:
-	class CInputContext* getInput() { return mInput.get(); }
+	class CInputContext* getInput() const { return mInput.get(); }
+	class CCameraManager* getCameraManager() const { return mCamera.get(); }
 
 public:
 	template<typename T>

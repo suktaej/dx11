@@ -44,3 +44,12 @@ struct IInput
 	virtual FKeyState* addKeyState(unsigned char Key) = 0;
 	virtual FKeyState* findKeyState(unsigned char key) = 0;
 };
+
+struct ICamera
+{
+	virtual ~ICamera() {}
+	virtual const DirectX::XMFLOAT4X4& getViewMat() const = 0;
+	virtual const DirectX::XMFLOAT4X4& getProjMat() const = 0;
+	virtual class CCameraComponent* getVIewTarget() const = 0;
+	virtual void setViewTarget(class CCameraComponent* target) = 0;
+};
