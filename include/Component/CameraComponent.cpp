@@ -71,13 +71,13 @@ void CCameraComponent::setProjectionType(EProjectionType type)
 
 void CCameraComponent::setCameraPosition(float x, float y, float z)
 {
-	CSceneComponent::setWorldPosition(x, y, z);
+	CSceneComponent::setLocalPosition(x, y, z);
 	updateViewMatrix();
 }
 
 void CCameraComponent::setCameraRotation(float x, float y, float z)
 {
-	CSceneComponent::setWorldRotation(x, y, z);
+	CSceneComponent::setLocalRotation(x, y, z);
 	updateViewMatrix();
 }
 

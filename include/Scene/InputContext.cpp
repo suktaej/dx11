@@ -58,12 +58,7 @@ void CInputContext::update(float dt)
 
 	for (auto& [name, bind] : mBindKeyMap)
 	{
-		// None인 바인딩은 Modifier가 뭐가 눌려있든 실행
-		// 기타 바인딩은 정확히 눌려있을 때만 실행
-		bool modMatch = (bind->modifier == EModifier::None) || 
-						(bind->modifier == curMod);
-
-		if (!modMatch) 
+		if(bind->modifier != curMod)
 			continue;
 
 		bool active[static_cast<int>(EInputType::End)] = 

@@ -225,7 +225,7 @@ void CMovementComponent::postRender()
 		mDirection = { 0.f,0.f,0.f };
 
     if (mRotVelocity)
-        mRotAmount = { 0.f, 0.f, 0.f };
+        mRotation = { 0.f, 0.f, 0.f };
 }
 
 std::unique_ptr<CComponent> CMovementComponent::clone() const

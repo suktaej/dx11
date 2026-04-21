@@ -12,9 +12,10 @@ public:
 private:
     class CStaticMeshComponent* mObjRoot;
     class CStaticMeshComponent* mSub;
-    class CSceneComponent* mRot;
+    class CSceneComponent* mPivot;
     class CMovementComponent* mMove;
     class CCameraComponent* mCamera;
+    class CMovementComponent* mPivotRot;
 
 public:
     bool init(class CScene* scene) override;
