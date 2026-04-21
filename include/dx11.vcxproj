@@ -150,6 +150,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\CameraObject.cpp" />
     <ClCompile Include="Object\CollisionObject.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\PlayerObject.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\SceneTester.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Shader\ColorMeshShader.cpp" />
     <ClCompile Include="Shader\ComputeShader.cpp" />
@@ -194,6 +196,7 @@
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\CollisionObject.h" />
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\PlayerObject.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneMain.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\SceneTester.h" />
     <ClInclude Include="ServiceInterface.h" />
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Shader\ColorMeshShader.h" />

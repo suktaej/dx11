@@ -1,6 +1,12 @@
 #pragma once
 #include "Component.h"
 
+enum class ENegative
+{
+	None,
+	Negative
+};
+
 class CMovementComponent :
 	public CComponent
 {
@@ -36,9 +42,9 @@ public:
 	void setSpeed(float speed) { mSpeed = speed; }
 	void setUpdateComponent(class CSceneComponent* comp) { mUpdateComponent = comp; }
 
-	void addDirection(float x, float y, float z);
-	void addDirection(const DirectX::XMFLOAT3& dir);
-	void addDirection(const DirectX::XMVECTOR& dir);
+	void addDirection(float x, float y, float z, ENegative flag = ENegative::None);
+	void addDirection(const DirectX::XMFLOAT3& dir, ENegative flag = ENegative::None);
+	void addDirection(const DirectX::XMVECTOR& dir, ENegative flag = ENegative::None);
 
 	const DirectX::XMFLOAT3 getMoveAmount() const { return mMoveAmount; }
 	const float getDistance() const;

@@ -43,6 +43,7 @@ struct IInput
 	virtual EModifier getCurrentMod() const = 0;
 	virtual FKeyState* addKeyState(unsigned char Key) = 0;
 	virtual FKeyState* findKeyState(unsigned char key) = 0;
+	virtual const DirectX::XMFLOAT2& getMouseMoveAmount() const = 0;
 };
 
 struct ICamera

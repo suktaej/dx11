@@ -106,7 +106,6 @@ FKeyState* CInputManager::addKeyState(unsigned char key)
 	return state;
 }
 
-
 bool CInputManager::init()
 { 
 	return true;

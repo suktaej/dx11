@@ -287,31 +287,34 @@ const DirectX::XMFLOAT4 CSceneComponent::getWorldRotation()
     //return result;
 }
 
-const DirectX::XMFLOAT3 CSceneComponent::getForwardVector() const
+const DirectX::XMFLOAT3 CSceneComponent::getForwardVector()
 {
     // Unreal,DirectX 기준 Forward = -Z
-    DirectX::XMFLOAT3 baseForward = { 0.f, 0.f, -1.f };
+    DirectX::XMFLOAT3 baseForward = { 0.f, 0.f, 1.f };
     return getVector(baseForward);
 }
 
-const DirectX::XMFLOAT3 CSceneComponent::getRightVector() const
+const DirectX::XMFLOAT3 CSceneComponent::getRightVector()
 {
     DirectX::XMFLOAT3 baseRight = { 1.f, 0.f, 0.f };
     return getVector(baseRight);
 }
 
-const DirectX::XMFLOAT3 CSceneComponent::getUpVector() const
+const DirectX::XMFLOAT3 CSceneComponent::getUpVector()
 {
     DirectX::XMFLOAT3 baseUp = { 0.f, 1.f, 0.f };
     return getVector(baseUp);
 }
 
-const DirectX::XMFLOAT3 CSceneComponent::getVector(DirectX::XMFLOAT3 base) const
+const DirectX::XMFLOAT3 CSceneComponent::getVector(DirectX::XMFLOAT3 base)
 {
     using namespace DirectX;
 
+    if (mIsWorldDirty)
+        updateWorldTransform(); // 최신값 보장
+
     XMVECTOR baseVector = XMLoadFloat3(&base);
-	XMVECTOR quat = XMQuaternionNormalize(XMLoadFloat4(&mLocalRotation));
+	XMVECTOR quat = XMQuaternionNormalize(XMLoadFloat4(&mWorldRotation));
     XMVECTOR up = XMVector3Rotate(baseVector, quat);
     XMFLOAT3 result;
     XMStoreFloat3(&result, XMVector3Normalize(up));

@@ -26,13 +26,13 @@ private:
 	XMFLOAT4X4 mProjection;
 	EProjectionType mProjectionType = EProjectionType::Perspective;
 	float mViewAngle = 90.f;
-	float mNear = 1.f;
+	float mNear = 0.5f;
 	float mFar = 1000.f;
 	float mWidth = 0.f;
 	float mHeight = 0.f;
 
 private:
-	void makeViewMat();
+	void updateViewMatrix();
 
 public:
 	void setProjectionType(EProjectionType type);

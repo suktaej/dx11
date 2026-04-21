@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "../DeviceManager.h"
 #include "SceneMain.h"
+#include "SceneTester.h"
 
 CSceneManager::CSceneManager()
 {
@@ -14,7 +15,8 @@ CSceneManager::~CSceneManager()
 
 bool CSceneManager::init()
 {
-	mCurrentScene = createScene<CSceneMain>();
+	//mCurrentScene = createScene<CSceneMain>();
+	mCurrentScene = createScene<CSceneTester>();
 
 	return true;
 }

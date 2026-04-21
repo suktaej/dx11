@@ -5,6 +5,7 @@
 #include "../Component/MovementComponent.h"
 #include "../Component/CameraComponent.h"
 #include "CollisionObject.h"
+#include "CameraObject.h"
 
 
 CPlayerObject::CPlayerObject(ObjectKey key) : CObject(key)

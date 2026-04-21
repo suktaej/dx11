@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+
 class CSceneComponent :
 	public CComponent
 {
@@ -101,10 +102,10 @@ public:
 	const DirectX::XMFLOAT3 getWorldPosition();
 	const DirectX::XMFLOAT4 getWorldRotation();
 
-	const DirectX::XMFLOAT3 getVector(DirectX::XMFLOAT3 base) const;
-	const DirectX::XMFLOAT3 getForwardVector() const;
-	const DirectX::XMFLOAT3 getRightVector() const;
-	const DirectX::XMFLOAT3 getUpVector() const;
+	const DirectX::XMFLOAT3 getVector(DirectX::XMFLOAT3 base);
+	const DirectX::XMFLOAT3 getForwardVector();
+	const DirectX::XMFLOAT3 getRightVector();
+	const DirectX::XMFLOAT3 getUpVector();
 	
 	//void setLocalRotation(EAxis axis, const float& angle);
 	//void setWorldRotation(EAxis axis, const float& rotation);

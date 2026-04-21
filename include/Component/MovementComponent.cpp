@@ -15,28 +15,70 @@ CMovementComponent::~CMovementComponent()
 {
 }
 
-void CMovementComponent::addDirection(float x, float y, float z)
+void CMovementComponent::addDirection(float x, float y, float z, ENegative flag)
 {
-    mDirection.x += x;
-    mDirection.y += y;
-    mDirection.z += z;
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mDirection.x += x;
+        mDirection.y += y;
+        mDirection.z += z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mDirection.x -= x;
+        mDirection.y -= y;
+        mDirection.z -= z;
+        break;
+    }
+    }
 }
 
-void CMovementComponent::addDirection(const DirectX::XMFLOAT3& dir)
+void CMovementComponent::addDirection(const DirectX::XMFLOAT3& dir, ENegative flag)
 {
-    mDirection.x += dir.x;
-    mDirection.y += dir.y;
-    mDirection.z += dir.z;
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mDirection.x += dir.x;
+        mDirection.y += dir.y;
+        mDirection.z += dir.z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mDirection.x -= dir.x;
+        mDirection.y -= dir.y;
+        mDirection.z -= dir.z;
+        break;
+    }
+    }
 }
 
-void CMovementComponent::addDirection(const DirectX::XMVECTOR& dir)
+void CMovementComponent::addDirection(const DirectX::XMVECTOR& dir, ENegative flag)
 {
     DirectX::XMFLOAT3 temp;
     DirectX::XMStoreFloat3(&temp, dir); 
 
-    mDirection.x += temp.x;
-    mDirection.y += temp.y;
-    mDirection.z += temp.z;
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mDirection.x += temp.x;
+        mDirection.y += temp.y;
+        mDirection.z += temp.z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mDirection.x -= temp.x;
+        mDirection.y -= temp.y;
+        mDirection.z -= temp.z;
+        break;
+    }
+    }
 }
 
 const float CMovementComponent::getDistance() const

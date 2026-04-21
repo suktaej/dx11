@@ -27,5 +27,5 @@ void CCollisionObject::update(float dt)
 {
 	CObject::update(dt);
 	
-	mMeshComp->addForwardVector(50.f * dt);
+	//mMeshComp->addForwardVector(50.f * dt);
 }

@@ -34,5 +34,6 @@ public:
 	bool processMessage(UINT message, WPARAM wParam, LPARAM lParam) override;
 	FKeyState* findKeyState(unsigned char key) override;
 	FKeyState* addKeyState(unsigned char Key) override;
+	const DirectX::XMFLOAT2& getMouseMoveAmount() const override { return mMouseMove; }
 
 };

@@ -15,7 +15,7 @@ CCameraComponent::~CCameraComponent()
 {
 }
 
-void CCameraComponent::makeViewMat()
+void CCameraComponent::updateViewMatrix()
 {
 	XMMATRIX worldMat = XMLoadFloat4x4(&getWorldMatrix());
 	
@@ -70,9 +70,8 @@ bool CCameraComponent::init()
 	FResolution value = device.getResolution();
 	mWidth = (float)value.width;
 	mHeight = (float)value.height;
-
-	setLocalPosition(0.f, 0.f, -100.f);
-	makeViewMat();
+	
+	updateViewMatrix();
 	setProjectionType(EProjectionType::Perspective);
 
 	ICamera& camera = CServiceLocator::getCamera();
@@ -92,6 +91,7 @@ bool CCameraComponent::init(const char* name)
 void CCameraComponent::preUpdate(float dt)
 {
 	CSceneComponent::preUpdate(dt);
+	
 }
 
 void CCameraComponent::update(float dt)
@@ -102,6 +102,8 @@ void CCameraComponent::update(float dt)
 void CCameraComponent::postUpdate(float dt)
 {
 	CSceneComponent::postUpdate(dt);
+	
+	updateViewMatrix();
 }
 
 void CCameraComponent::collision(float dt)
