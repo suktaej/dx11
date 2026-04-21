@@ -69,6 +69,18 @@ void CCameraComponent::setProjectionType(EProjectionType type)
 	}
 }
 
+void CCameraComponent::setCameraPosition(float x, float y, float z)
+{
+	CSceneComponent::setWorldPosition(x, y, z);
+	updateViewMatrix();
+}
+
+void CCameraComponent::setCameraRotation(float x, float y, float z)
+{
+	CSceneComponent::setWorldRotation(x, y, z);
+	updateViewMatrix();
+}
+
 bool CCameraComponent::init()
 {
 	CSceneComponent::init();
@@ -93,6 +105,21 @@ bool CCameraComponent::init()
 bool CCameraComponent::init(const char* name)
 {
 	CSceneComponent::init(name);
+
+	IDevice& device = CServiceLocator::getDevice();
+	FResolution value = device.getResolution();
+	mWidth = (float)value.width;
+	mHeight = (float)value.height;
+
+	calcVerticalFOV();
+	updateViewMatrix();
+	setProjectionType(EProjectionType::Perspective);
+
+	ICamera& camera = CServiceLocator::getCamera();
+
+	if (!camera.getVIewTarget())
+		camera.setViewTarget(this);
+
 	return true;
 }
 

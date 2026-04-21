@@ -15,8 +15,8 @@ CSceneManager::~CSceneManager()
 
 bool CSceneManager::init()
 {
-	//mCurrentScene = createScene<CSceneMain>();
-	mCurrentScene = createScene<CSceneTester>();
+	mCurrentScene = createScene<CSceneMain>();
+	//mCurrentScene = createScene<CSceneTester>();
 
 	return true;
 }

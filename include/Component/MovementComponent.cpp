@@ -259,8 +259,7 @@ void CMovementComponent::updateRotation(float dt)
 
     if (!XMVector3Equal(velo, XMVectorZero()))
     {
-        float dist = mRotSpeed * dt;
-        XMVECTOR amount = XMVectorScale(velo, dist);
+        XMVECTOR amount = XMVectorScale(velo, dt);
         XMStoreFloat3(&mRotAmount, amount);
 
         mUpdateComponent->addWorldRotation(mRotAmount);

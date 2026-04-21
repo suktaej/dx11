@@ -43,7 +43,7 @@ void CPlayerObject::createMesh()
 	mObjRoot = createComponent<CStaticMeshComponent>("PlayerComponent");
 	mObjRoot->setMesh("ColoredBox");
 	mObjRoot->setShader("ColorMeshShader");
-	mObjRoot->setWorldPosition(0.f, 0.f, 5.5f);
+	mObjRoot->setWorldPosition(0.f, 0.f, 0.f);
 	mObjRoot->setWorldRotation(0.f, 45.f, 45.f);
 	mObjRoot->setWorldScale(2.f, 2.f, 2.f);
 
@@ -60,11 +60,12 @@ void CPlayerObject::createMesh()
 	mSub->setLocalScale(0.5f, 0.5f, 0.5f);
 	
 	mCamera = createComponent<CCameraComponent>("Camera");
-	mObjRoot->addChild(*mCamera);
+	mCamera->setCameraPosition(0.f, 0.f, -50.f);
+	mCamera->setCameraRotation(30.f, 10.f, 60.f);
 
 	mMove = createComponent<CMovementComponent>("Move");
 	mMove->setUpdateComponent(mObjRoot);
-	mMove->setSpeed(5.f);
+	mMove->setSpeed(50.f);
 }
 
 void CPlayerObject::keyBind()

@@ -37,6 +37,8 @@ public:
 	void setNear(float value) { mNear = value; }
 	void setFar(float value) { mFar = value; }
 	void setViewResolution(float width, float height) { mWidth = width, height = height; }
+	void setCameraPosition(float x, float y, float z);
+	void setCameraRotation(float x, float y, float z);
 	const XMFLOAT4X4& getViewMat() const { return mView; }
 	const XMFLOAT4X4& getProjMat() const { return mProjection; }
 

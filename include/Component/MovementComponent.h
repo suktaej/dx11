@@ -25,7 +25,6 @@ protected:
 	DirectX::XMFLOAT3 mRotation= { 0.f, 0.f, 0.f };
 	DirectX::XMFLOAT3 mRotAmount = { 0.f, 0.f, 0.f };
 	bool mRotVelocity = true;
-	float mRotSpeed = 0.f;
 
 public:
 	bool init() override;
@@ -78,7 +77,6 @@ public:
 	void setRotation(const DirectX::XMFLOAT3& dir) { mRotation = dir; }
 	void setRotation(const DirectX::XMVECTOR& dir) { DirectX::XMStoreFloat3(&mRotation, dir); }
 	void setRotation(const EAxis& axis) { DirectX::XMStoreFloat3(&mRotation, FAxis::Get(EAxis::x)); }
-	void setRotSpeed(float speed) { mRotSpeed = speed; }
 
 	void addRotation(float x, float y, float z, ENegative flag = ENegative::None);
 	void addRotation(const DirectX::XMFLOAT3& dir, ENegative flag = ENegative::None);
