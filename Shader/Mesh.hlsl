@@ -5,6 +5,7 @@ struct InstanceData
     matrix WorldMatrix;
 };
 
+// InstanceData 구조체가 일정 간격(stride)으로 나열된 GPU 버퍼를 셰이더에서 배열처럼 접근
 StructuredBuffer<InstanceData> gInstanceBuffer : register(t0);
 
 struct VS_INPUT

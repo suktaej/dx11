@@ -5,7 +5,8 @@
 CMeshComponent::CMeshComponent(ComponentKey key) : CSceneComponent(key)
 {
     mObjectCB = std::make_unique<CObjectConstantBuffer>();
-    mObjectCB->init();
+    if (!mObjectCB->init())
+        return;
 }
 
 CMeshComponent::CMeshComponent(ComponentKey key, const CMeshComponent& other) : CSceneComponent(key, other)
@@ -16,6 +17,9 @@ CMeshComponent::CMeshComponent(ComponentKey key, const CMeshComponent& other) : 
     // 변환하고자 하는 타입임이 보장
     mObjectCB = std::unique_ptr<CObjectConstantBuffer>(
         static_cast<CObjectConstantBuffer*>(cloned.release()));
+
+    if (!mObjectCB->init())
+        return;
     
     // 안정성
     // dynamic_cast의 경우 런타임 오버해드 존재

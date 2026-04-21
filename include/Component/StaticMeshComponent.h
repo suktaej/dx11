@@ -21,6 +21,9 @@ public:
 	CStaticMesh* getMesh() const { return mMesh; }
 	CShader* getShader() const { return mShader; }
 
+private:
+	void registMap();
+
 public:
 	bool init() override;
 	bool init(const char* name) override;

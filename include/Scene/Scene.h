@@ -22,11 +22,14 @@ protected:
 	ComPtr<ID3D11Buffer> mInstanceBuffer = nullptr;
 	ComPtr<ID3D11ShaderResourceView> mInstanceSRV = nullptr;
 	UINT mInstanceBufferCapacity = 0;
+
+	std::unordered_map<CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>> mInstanceMap;
+	std::unordered_map<CStaticMesh*, CGraphicShader*> mShaderMap;
 	
 private:
 	void objectCleanUp();
 	void updateFrameBuffer();
-	void meshGrouping();
+	//void meshGrouping();
 
 public:
 	virtual bool init();
@@ -47,6 +50,8 @@ public:
 public:
 	class CInputContext* getInput() const { return mInput.get(); }
 	class CCameraManager* getCameraManager() const { return mCameraMgr.get(); }
+	void setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world);
+	void setShaderMap(CStaticMesh* mesh, CGraphicShader* shader);
 
 public:
 	template<typename T>

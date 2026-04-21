@@ -1,9 +1,10 @@
 #include "StaticMeshComponent.h"
 #include "../Asset/Mesh/StaticMesh.h"
-#include "../Shader/Shader.h"
+#include "../Shader/GraphicShader.h"
 #include "../Shader/ShaderManager.h"
 #include "../Asset/AssetManager.h"
 #include "../Asset/Mesh/MeshManager.h"
+#include "../Scene/Scene.h"
 #include "../ServiceLocator.h"
 
 CStaticMeshComponent::CStaticMeshComponent(ComponentKey key) : CMeshComponent(key)
@@ -46,6 +47,23 @@ void CStaticMeshComponent::setMesh(CMesh& mesh)
     mMesh = dynamic_cast<CStaticMesh*>(&mesh);
 }
 
+void CStaticMeshComponent::registMap()
+{
+    using namespace DirectX;
+   
+    XMMATRIX world = XMLoadFloat4x4(&mWorldMatrix);
+    XMFLOAT4X4 transposed;
+    XMStoreFloat4x4(&transposed, XMMatrixTranspose(world));
+
+    mScene->setInstanceMap(getMesh(), transposed);
+
+    CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(getShader());
+    if (!meshShader)
+        return;
+
+    mScene->setShaderMap(getMesh(), meshShader);
+}
+
 bool CStaticMeshComponent::init()
 {
     CMeshComponent::init();
@@ -83,6 +101,8 @@ void CStaticMeshComponent::collision(float dt)
 void CStaticMeshComponent::preRender()
 {
     CMeshComponent::preRender();
+
+    registMap();
 }
 
 void CStaticMeshComponent::render()

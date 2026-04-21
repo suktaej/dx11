@@ -186,11 +186,11 @@ void CObject::makeStaticMeshBatchList(
 	for (auto& it : mSceneCompList)
 	{
 		CStaticMeshComponent* meshComp = dynamic_cast<CStaticMeshComponent*>(it.get());
-
 		if (!meshComp)
 			continue;
 
 		CStaticMesh* mesh = meshComp->getMesh();
+
 		//instanceMap[mesh].push_back(meshComp->getWorldMatrix());
 		XMMATRIX world = XMLoadFloat4x4(&meshComp->getWorldMatrix());
 		XMFLOAT4X4 transposed;
@@ -201,6 +201,7 @@ void CObject::makeStaticMeshBatchList(
 		CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(meshComp->getShader());
 		if (!meshShader)
 			continue;
+
 		shaderMap[mesh] = meshShader;
 	}
 }

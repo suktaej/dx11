@@ -95,6 +95,9 @@ void CScene::postCollision(float dt)
 
 void CScene::prevRender()
 {
+	mInstanceMap.clear();
+	mShaderMap.clear();
+
 	processObject([](CObject* obj)
 		{ obj->prevRender(); });
 }
@@ -106,7 +109,13 @@ void CScene::render()
 	processObject([](CObject* obj)
 		{ obj->render(); });
 
-	meshGrouping();
+	//meshGrouping();
+	for (auto& [mesh, matrices] : mInstanceMap)
+	{
+		mShaderMap[mesh]->setShader();
+		updateInstanceBuffer(matrices);
+		mesh->renderInstanced((UINT)matrices.size());
+	}
 }
 
 void CScene::postRender()
@@ -171,6 +180,16 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 	device.getContext()->VSSetShaderResources(0, 1, mInstanceSRV.GetAddressOf());
 }
 
+void CScene::setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world)
+{
+	mInstanceMap[mesh].push_back(world);
+}
+
+void CScene::setShaderMap(CStaticMesh* mesh, CGraphicShader* shader)
+{
+	mShaderMap[mesh] = shader;
+}
+
 void CScene::objectCleanUp()
 {
 	auto it = mObjectList.begin();
@@ -210,6 +229,9 @@ void CScene::updateFrameBuffer()
 	mFrameCB->updateBuffer();   // GPU에 한 번만 갱신 
 }
 
+/*
+// preRender에서 정보취합으로 변경
+
 void CScene::meshGrouping()
 {
 	std::unordered_map<CStaticMesh*, std::vector<XMFLOAT4X4>> instanceMap;
@@ -227,3 +249,4 @@ void CScene::meshGrouping()
 		mesh->renderInstanced((UINT)matrices.size()); // DrawIndexedInstanced
 	}
 }
+*/
