@@ -52,9 +52,9 @@ public:
 	void componentCleanUp();
 	void lifeTimer(float dt);
 	CComponent* findComponentByName(const std::string& name);
-	void makeStaticMeshBatchList(
-		std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
-		std::unordered_map<class CStaticMesh*, class CGraphicShader*>& shaderMap);
+	// void makeStaticMeshBatchList(
+	//	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
+	//	std::unordered_map<class CStaticMesh*, class CGraphicShader*>& shaderMap);
 
 private:
 	void sceneCompCleanUp();

@@ -4,8 +4,6 @@
 CMesh::CMesh()
 {
 	mAssetType = EAssetType::Mesh;
-	//mDevice = deviceMgr.getDevice();
-	//mContext = deviceMgr.getContext();
 	mPrimitive = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
 

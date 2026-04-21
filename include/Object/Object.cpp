@@ -177,6 +177,7 @@ CComponent* CObject::findComponentByName(const std::string& name)
 	return nullptr;
 }
 
+/*
 void CObject::makeStaticMeshBatchList(
 	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
 	std::unordered_map<CStaticMesh*, CGraphicShader*>& shaderMap)
@@ -205,3 +206,4 @@ void CObject::makeStaticMeshBatchList(
 		shaderMap[mesh] = meshShader;
 	}
 }
+*/

@@ -23,8 +23,7 @@ protected:
 	ComPtr<ID3D11ShaderResourceView> mInstanceSRV = nullptr;
 	UINT mInstanceBufferCapacity = 0;
 
-	std::unordered_map<CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>> mInstanceMap;
-	std::unordered_map<CStaticMesh*, CGraphicShader*> mShaderMap;
+	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>> mInstanceMap;
 	
 private:
 	void objectCleanUp();
@@ -50,8 +49,8 @@ public:
 public:
 	class CInputContext* getInput() const { return mInput.get(); }
 	class CCameraManager* getCameraManager() const { return mCameraMgr.get(); }
-	void setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world);
-	void setShaderMap(CStaticMesh* mesh, CGraphicShader* shader);
+	void setInstanceMap(class CStaticMesh* mesh, DirectX::XMFLOAT4X4 world);
+	//void setShaderMap(class CStaticMesh* mesh, class CGraphicShader* shader);
 
 public:
 	template<typename T>

@@ -96,8 +96,7 @@ void CScene::postCollision(float dt)
 void CScene::prevRender()
 {
 	mInstanceMap.clear();
-	mShaderMap.clear();
-
+	
 	processObject([](CObject* obj)
 		{ obj->prevRender(); });
 }
@@ -112,7 +111,6 @@ void CScene::render()
 	//meshGrouping();
 	for (auto& [mesh, matrices] : mInstanceMap)
 	{
-		mShaderMap[mesh]->setShader();
 		updateInstanceBuffer(matrices);
 		mesh->renderInstanced((UINT)matrices.size());
 	}
@@ -183,11 +181,6 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 void CScene::setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world)
 {
 	mInstanceMap[mesh].push_back(world);
-}
-
-void CScene::setShaderMap(CStaticMesh* mesh, CGraphicShader* shader)
-{
-	mShaderMap[mesh] = shader;
 }
 
 void CScene::objectCleanUp()
