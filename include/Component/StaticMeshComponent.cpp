@@ -90,7 +90,8 @@ void CStaticMeshComponent::render()
     CMeshComponent::render();
 
     mShader->setShader();
-    mMesh->render();
+    // TODO : 인스턴싱 대상 구분변수(bool)할당
+    //mMesh->render();
 }
 
 void CStaticMeshComponent::postRender()

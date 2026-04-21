@@ -18,6 +18,8 @@ public:
 	void setShader(class CShader& shader);
 	void setMesh(const std::string& name);
 	void setMesh(class CMesh& mesh);
+	CStaticMesh* getMesh() const { return mMesh; }
+	CShader* getShader() const { return mShader; }
 
 public:
 	bool init() override;

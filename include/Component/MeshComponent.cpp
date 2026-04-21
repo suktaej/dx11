@@ -36,6 +36,31 @@ CMeshComponent::~CMeshComponent()
 {
 }
 
+void CMeshComponent::updateObjectBuffer()
+{
+    using namespace DirectX;
+    
+    mObjectCB->setWorld(mWorldMatrix);
+
+    /*
+    // hlsl에서 instancing을 사용하므로 VP정보만 활용
+    // CPU 단계에서 WVP 갱신 불필요
+
+    ICamera& camera = CServiceLocator::getCamera();
+
+    XMMATRIX wvp =
+        XMLoadFloat4x4(&mWorldMatrix) *
+        XMLoadFloat4x4(&camera.getViewMat()) *
+        XMLoadFloat4x4(&camera.getProjMat());
+
+    XMFLOAT4X4 mwvp;
+    XMStoreFloat4x4(&mwvp, wvp);
+
+    mObjectCB->setWVP(mwvp);
+    */
+    mObjectCB->updateBuffer();
+}
+
 bool CMeshComponent::init()
 {
     CSceneComponent::init();
@@ -77,28 +102,9 @@ void CMeshComponent::preRender()
 
 void CMeshComponent::render()
 {
-    using namespace DirectX;
-
     CSceneComponent::render();
-
-    mObjectCB->setWorld(mWorldMatrix);
-
-    ICamera& camera = CServiceLocator::getCamera();
-
-    XMMATRIX wvp = 
-        XMLoadFloat4x4(&mWorldMatrix) * 
-        XMLoadFloat4x4(&camera.getViewMat()) * 
-        XMLoadFloat4x4(&camera.getProjMat());
-
-    XMFLOAT4X4 mwvp;
-    XMStoreFloat4x4(&mwvp, wvp);
-
-    mObjectCB->setWVP(mwvp);
-    mObjectCB->updateBuffer();
-
-    //mTransformConstantBuffer->setView(view);
-    //mTransformConstantBuffer->setProjection(projection);
-    //mTransformConstantBuffer->updateBuffer();
+    
+    updateObjectBuffer();
 }
 
 void CMeshComponent::postRender()

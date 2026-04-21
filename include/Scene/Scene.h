@@ -17,10 +17,16 @@ public:
 protected:
 	std::vector<std::unique_ptr<CObject>> mObjectList;
 	std::unique_ptr<class CInputContext> mInput;
-	std::unique_ptr<class CCameraManager> mCamera;
+	std::unique_ptr<class CCameraManager> mCameraMgr;
+	std::unique_ptr<class CFrameConstantBuffer> mFrameCB;
+	ComPtr<ID3D11Buffer> mInstanceBuffer = nullptr;
+	ComPtr<ID3D11ShaderResourceView> mInstanceSRV = nullptr;
+	UINT mInstanceBufferCapacity = 0;
 	
 private:
 	void objectCleanUp();
+	void updateFrameBuffer();
+	void meshGrouping();
 
 public:
 	virtual bool init();
@@ -36,9 +42,11 @@ public:
 	virtual void render();
 	virtual void postRender();
 
+	void updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matrices);
+
 public:
 	class CInputContext* getInput() const { return mInput.get(); }
-	class CCameraManager* getCameraManager() const { return mCamera.get(); }
+	class CCameraManager* getCameraManager() const { return mCameraMgr.get(); }
 
 public:
 	template<typename T>

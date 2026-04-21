@@ -14,6 +14,9 @@ protected:
 	//std::unique_ptr<class CTransformConstantBuffer> mTransformConstantBuffer = nullptr;
 	std::unique_ptr<class CObjectConstantBuffer> mObjectCB = nullptr;
 
+private:
+	void updateObjectBuffer();
+
 public:
 	bool init() override;
 	bool init(const char* name) override;

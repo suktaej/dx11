@@ -63,5 +63,6 @@ public:
 		D3D11_USAGE indexUsage = D3D11_USAGE_DEFAULT);
 
 	void render();
+	void renderInstanced(UINT instanceCount);
 };
 

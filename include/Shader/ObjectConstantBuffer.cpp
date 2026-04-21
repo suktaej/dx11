@@ -18,7 +18,7 @@ CObjectConstantBuffer::~CObjectConstantBuffer()
 bool CObjectConstantBuffer::init()
 {
 	setConstantBuffer("ObjectCB");
-    return false;
+    return true;
 }
 
 void CObjectConstantBuffer::updateBuffer()

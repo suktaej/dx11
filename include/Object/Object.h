@@ -51,6 +51,10 @@ public:
 	
 	void componentCleanUp();
 	void lifeTimer(float dt);
+	CComponent* findComponentByName(const std::string& name);
+	void makeStaticMeshBatchList(
+		std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
+		std::unordered_map<class CStaticMesh*, class CGraphicShader*>& shaderMap);
 
 private:
 	void sceneCompCleanUp();
@@ -97,6 +101,42 @@ public:
 			mNonSceneCompList.emplace_back(std::move(newComp));
 
 		return newCompPtr;
+	}
+
+	template<typename T>
+	T* findSceneComponent()
+	{
+		auto it = mSceneCompList.begin();
+
+		while (it != mSceneCompList.end())
+		{
+			T* comp = dynamic_cast<T*>((*it).get());
+
+			if (comp)
+				return comp;
+
+			++it;
+		}
+
+		return nullptr;
+	}
+
+	template<typename T>
+	T* findNonSceneComponent()
+	{
+		auto it = mNonSceneCompList.begin();
+
+		while (it != mNonSceneCompList.end())
+		{
+			T* comp = dynamic_cast<T*>((*it).get());
+
+			if (comp)
+				return comp;
+
+			++it;
+		}
+
+		return nullptr;
 	}
 
 private:

@@ -16,7 +16,7 @@ CFrameConstantBuffer::~CFrameConstantBuffer()
 bool CFrameConstantBuffer::init()
 {
 	setConstantBuffer("FrameCB");
-	return false;
+	return true;
 }
 
 void CFrameConstantBuffer::updateBuffer()

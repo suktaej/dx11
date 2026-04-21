@@ -148,3 +148,38 @@ void CMesh::render()
 		device.getContext()->Draw(mVertexBuffer.count, 0);
 	}
 }
+
+void CMesh::renderInstanced(UINT instanceCount)
+{
+	IDevice& device = CServiceLocator::getDevice();
+	device.getContext()->IASetPrimitiveTopology(mPrimitive);
+
+	UINT stride = mVertexBuffer.size;
+	UINT offset = 0;
+	device.getContext()->IASetVertexBuffers(
+		0, 1, mVertexBuffer.buffer.GetAddressOf(), &stride, &offset);
+
+	size_t slotCount = mMeshSlots.size();
+	if (slotCount > 0)
+	{
+		for (size_t i = 0; i < slotCount; ++i)
+		{
+			device.getContext()->IASetIndexBuffer(
+				mMeshSlots[i]->indexBuffer.buffer.Get(),
+				mMeshSlots[i]->indexBuffer.format, 0);
+
+			device.getContext()->DrawIndexedInstanced(
+				mMeshSlots[i]->indexBuffer.count,  // 인덱스 수
+				instanceCount,                     // 인스턴스 수
+				0, 0, 0);
+		}
+	}
+	else
+	{
+		device.getContext()->IASetIndexBuffer(nullptr, DXGI_FORMAT_UNKNOWN, 0);
+		device.getContext()->DrawInstanced(
+			mVertexBuffer.count,
+			instanceCount,
+			0, 0);
+	}
+}

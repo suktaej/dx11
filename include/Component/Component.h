@@ -48,7 +48,7 @@ public:
 public:
 	class CObject* getOwner() const { return mOwner; }
 	class CScene* getScene() const { return mScene; }
-	const char* getName() const { return mName.c_str(); }
+	const std::string& getName() const { return mName; }
 	void setName(const std::string& name) { mName = name; }
 	bool isActive() { return mIsActive; }
 	bool isEnable() { return mIsEnabled; }

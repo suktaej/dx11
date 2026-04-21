@@ -1,5 +1,8 @@
 #include "Object.h"
 #include "../ServiceLocator.h"
+#include "../Asset/Mesh/Mesh.h"
+#include "../Component/StaticMeshComponent.h"
+#include "../Shader/GraphicShader.h"
 
 CObject::CObject(ObjectKey key)
 {
@@ -146,5 +149,58 @@ void CObject::lifeTimer(float dt)
 
 		if (mLifeTime <= 0)
 			destroy();
+	}
+}
+
+CComponent* CObject::findComponentByName(const std::string& name)
+{
+	auto nit = mNonSceneCompList.begin();
+
+	while (nit != mNonSceneCompList.end())
+	{
+		if (name == (*nit).get()->getName())
+			return (*nit).get();
+
+		++nit;
+	}
+
+	auto sit = mSceneCompList.begin();
+
+	while (sit != mSceneCompList.end())
+	{
+		if (name == (*sit).get()->getName())
+			return (*sit).get();
+
+		++sit;
+	}
+
+	return nullptr;
+}
+
+void CObject::makeStaticMeshBatchList(
+	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
+	std::unordered_map<CStaticMesh*, CGraphicShader*>& shaderMap)
+{
+	using namespace DirectX;
+
+	for (auto& it : mSceneCompList)
+	{
+		CStaticMeshComponent* meshComp = dynamic_cast<CStaticMeshComponent*>(it.get());
+
+		if (!meshComp)
+			continue;
+
+		CStaticMesh* mesh = meshComp->getMesh();
+		//instanceMap[mesh].push_back(meshComp->getWorldMatrix());
+		XMMATRIX world = XMLoadFloat4x4(&meshComp->getWorldMatrix());
+		XMFLOAT4X4 transposed;
+		XMStoreFloat4x4(&transposed, XMMatrixTranspose(world));
+		instanceMap[mesh].push_back(transposed);
+
+		// TODO : Shader Type Á¤¸®
+		CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(meshComp->getShader());
+		if (!meshShader)
+			continue;
+		shaderMap[mesh] = meshShader;
 	}
 }

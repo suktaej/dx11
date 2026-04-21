@@ -20,6 +20,7 @@ public:
 
 	void setView(const DirectX::XMFLOAT4X4& view) { mData.View = view; }
 	void setProjection(const DirectX::XMFLOAT4X4& projection) { mData.Projection = projection; }
+	void setVP(const DirectX::XMFLOAT4X4& vp) { mData.VP = vp; }
 	//const FFrameConstantBufferInfo& getInfo() { return mData; }
 };
 
