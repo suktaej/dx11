@@ -90,7 +90,7 @@ public:
 
 	void addWorldPosition(const EAxis& axis, const float& pos);
 	void addWorldPosition(const DirectX::XMFLOAT3& pos);
-	
+
 	void addWorldRotation(const EAxis& axis, const float& angle);
 
 	const DirectX::XMFLOAT3& getLocalScale() { return mLocalScale; }

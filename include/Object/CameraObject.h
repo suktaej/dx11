@@ -12,6 +12,8 @@ private:
     class CInputContext* mInput;
     class CCameraComponent* mCam;
     class CMovementComponent* mMove;
+    float mYaw;
+    float mPitch;
 
 public:
     bool init(class CScene* scene) override;

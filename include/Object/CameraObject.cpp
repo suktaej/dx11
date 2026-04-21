@@ -110,6 +110,9 @@ void CCameraObject::Rotation(float dt)
 	IInput& input = CServiceLocator::getInput();
 	XMFLOAT2 amount = input.getMouseMoveAmount();
 
-	mCam->addWorldRotation(EAxis::y, amount.x * sensitivity);
-	mCam->addWorldRotation(EAxis::x, -amount.y * sensitivity);
+	mYaw += amount.x * sensitivity;
+	mPitch += -amount.y * sensitivity;
+	mPitch = max(-89.f, min(89.f, mPitch));
+
+	mCam->setWorldRotation(mPitch, mYaw, 0.f);
 }

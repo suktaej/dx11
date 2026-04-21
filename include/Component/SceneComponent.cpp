@@ -550,7 +550,7 @@ void CSceneComponent::addWorldRotation(const EAxis& axis, const float& angle)
     XMFLOAT4 worldRot = getWorldRotation();
     XMVECTOR worldQuat = XMLoadFloat4(&worldRot);
     XMVECTOR delta = XMQuaternionRotationAxis(FAxis::Get(axis), XMConvertToRadians(angle));
-    worldQuat = XMQuaternionMultiply(worldQuat, delta);
+	worldQuat = XMQuaternionMultiply(delta, worldQuat);
 
     if (mParent)
     {
