@@ -10,7 +10,6 @@
 
 class CGameManager : public IGame
 {
-	//DECLARE_SINGLE(CGameManager);
 public:
 	CGameManager();
 	~CGameManager();

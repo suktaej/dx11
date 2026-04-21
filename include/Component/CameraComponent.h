@@ -17,15 +17,11 @@ public:
 	~CCameraComponent() override;
 
 private:
-
 	XMFLOAT4X4 mView;
-	//XMFLOAT3 mForward;
-	//XMFLOAT3 mRight;
-	//XMFLOAT3 mUp;
-
 	XMFLOAT4X4 mProjection;
 	EProjectionType mProjectionType = EProjectionType::Perspective;
-	float mViewAngle = 90.f;
+	const float mHorizontalFOV = 90.f;
+	float mFieldOfView = 0.f;
 	float mNear = 0.5f;
 	float mFar = 1000.f;
 	float mWidth = 0.f;
@@ -33,10 +29,11 @@ private:
 
 private:
 	void updateViewMatrix();
+	void calcVerticalFOV();
 
 public:
 	void setProjectionType(EProjectionType type);
-	void setAngle(float angle) { mViewAngle = angle; }
+	void setAngle(float angle) { mFieldOfView = angle; }
 	void setNear(float value) { mNear = value; }
 	void setFar(float value) { mFar = value; }
 	void setViewResolution(float width, float height) { mWidth = width, height = height; }

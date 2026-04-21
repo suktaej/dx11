@@ -28,10 +28,17 @@ void CCameraComponent::updateViewMatrix()
 
 	XMVECTOR at = XMVectorAdd(pos, forward);
 	XMStoreFloat4x4(&mView, XMMatrixLookAtLH(pos, at, up));
+}
 
-	//XMStoreFloat3(&mForward, forward);
-	//XMStoreFloat3(&mUp, up);
-	//XMStoreFloat3(&mRight, worldMat.r[0]);
+void CCameraComponent::calcVerticalFOV()
+{
+	float aspectRatio = mWidth / mHeight;
+	float hFovRad = XMConvertToRadians(mHorizontalFOV);
+
+	// 수평 FOV → 수직 FOV
+	float vFovRad = 2.f * std::atan(std::tan(hFovRad / 2.f) / aspectRatio);
+
+	mFieldOfView = XMConvertToDegrees(vFovRad);
 }
 
 void CCameraComponent::setProjectionType(EProjectionType type)
@@ -42,7 +49,7 @@ void CCameraComponent::setProjectionType(EProjectionType type)
 	{
 	case EProjectionType::Perspective:
 	{
-		float angle = XMConvertToRadians(mViewAngle);
+		float angle = XMConvertToRadians(mFieldOfView);
 		float ratio = mWidth / mHeight;
 		XMMATRIX perspect = XMMatrixPerspectiveFovLH(angle, ratio, mNear, mFar);
 
@@ -71,6 +78,7 @@ bool CCameraComponent::init()
 	mWidth = (float)value.width;
 	mHeight = (float)value.height;
 	
+	calcVerticalFOV();
 	updateViewMatrix();
 	setProjectionType(EProjectionType::Perspective);
 

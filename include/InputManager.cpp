@@ -178,8 +178,6 @@ void CInputManager::updateMousePos()
 		mMouseCompute = true;
 
 	mMousePos = MousePos;
-
-	//TODO : 카메라 위치값 입력
 }
 
 void CInputManager::printMousePos()
