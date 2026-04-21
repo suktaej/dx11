@@ -66,8 +66,8 @@ void CPlayerObject::createMesh()
 	
 	mCamera = createComponent<CCameraComponent>("Camera");
 	mObjRoot->addChild(*mCamera);
-	mCamera->setCameraPosition(0.f, 0.f, -20.f);
-	mCamera->setCameraRotation(0.f, 0.f, 0.f);
+	mCamera->setCameraRotation(20.f, 0.f, 0.f);
+	mCamera->setCameraPosition(0.f, 10.f, -20.f);
 
 	mMove = createComponent<CMovementComponent>("Move");
 	mMove->setUpdateComponent(mObjRoot);
@@ -201,9 +201,13 @@ void CPlayerObject::Fire(float dt)
 {
 	CCollisionObject* obj = mScene->createObject<CCollisionObject>();
 	obj->setLifeTime(1.f);
-
+	
 	CComponent* root = obj->getRootComponent();
 	CSceneComponent* sceneRoot = dynamic_cast<CSceneComponent*>(root);
+	CMovementComponent* move = obj->getMove();
+	move->setSpeed(50.f);
+	move->setVelocity(false);
+	move->setDirZ(1.f);
 	
 	CSceneComponent* thisRoot = dynamic_cast<CSceneComponent*>(mRootComponent);
 

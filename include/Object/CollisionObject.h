@@ -11,8 +11,10 @@ public:
 
 private:
     class CStaticMeshComponent* mMeshComp;
+    class CMovementComponent* mMove;
 
 public:
     bool init(class CScene* scene) override;
     void update(float dt) override;
+    class CMovementComponent* getMove() { return mMove; }
 };

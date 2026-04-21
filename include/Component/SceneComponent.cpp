@@ -668,7 +668,7 @@ bool CSceneComponent::init()
 }
 
 bool CSceneComponent::init(const char* name) 
-{ 
+{
     return true; 
 }
 

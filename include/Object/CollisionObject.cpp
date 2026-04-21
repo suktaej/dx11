@@ -1,5 +1,6 @@
 #include "CollisionObject.h"
 #include "../Component/StaticMeshComponent.h"
+#include "../Component/MovementComponent.h"
 
 CCollisionObject::CCollisionObject(ObjectKey key) : CObject(key)
 {
@@ -19,6 +20,9 @@ bool CCollisionObject::init(CScene* scene)
 	mMeshComp->setMesh("ColoredBox");
 	mMeshComp->setShader("ColorMeshShader");
 	setRootComponent(mMeshComp);
+
+	mMove = createComponent<CMovementComponent>();
+	mMove->setUpdateComponent(mMeshComp);
 	
 	return true;
 }

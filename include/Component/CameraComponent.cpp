@@ -18,10 +18,10 @@ CCameraComponent::~CCameraComponent()
 void CCameraComponent::updateViewMatrix()
 {
 	XMMATRIX worldMat = XMLoadFloat4x4(&getWorldMatrix());
-	
+
+	XMVECTOR pos = worldMat.r[3];
 	XMVECTOR up = worldMat.r[1];
 	XMVECTOR forward = worldMat.r[2];
-	XMVECTOR pos = worldMat.r[3];
 
 	forward = XMVector3Normalize(forward);
 	up = XMVector3Normalize(up);
