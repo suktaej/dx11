@@ -20,7 +20,12 @@ protected:
 	DirectX::XMFLOAT3 mDirection = { 0.f, 0.f, 0.f };
 	DirectX::XMFLOAT3 mMoveAmount = { 0.f, 0.f, 0.f };
 	bool mVelocity = true;
-	float mSpeed = 1.f;
+	float mSpeed = 0.f;
+	
+	DirectX::XMFLOAT3 mRotation= { 0.f, 0.f, 0.f };
+	DirectX::XMFLOAT3 mRotAmount = { 0.f, 0.f, 0.f };
+	bool mRotVelocity = true;
+	float mRotSpeed = 0.f;
 
 public:
 	bool init() override;
@@ -34,7 +39,12 @@ public:
 	void postRender() override;
 	std::unique_ptr<CComponent> clone() const override;
 
+private:
+	void updateDirection(float dt);
+	void updateRotation(float dt);
+
 public:
+#pragma region Direction
 	void setDirection(float x, float y, float z) { mDirection = { x,y,z }; }
 	void setDirection(const DirectX::XMFLOAT3& dir) { mDirection = dir; }
 	void setDirection(const DirectX::XMVECTOR& dir) { DirectX::XMStoreFloat3(&mDirection, dir); }
@@ -61,6 +71,33 @@ public:
 	float getDirX() { return mDirection.x; }
 	float getDirY() { return mDirection.y; }
 	float getDirZ() { return mDirection.z; }
+#pragma endregion Direction
 
+#pragma region Rotation
+	void setRotation(float x, float y, float z) { mRotation = { x,y,z }; }
+	void setRotation(const DirectX::XMFLOAT3& dir) { mRotation = dir; }
+	void setRotation(const DirectX::XMVECTOR& dir) { DirectX::XMStoreFloat3(&mRotation, dir); }
+	void setRotation(const EAxis& axis) { DirectX::XMStoreFloat3(&mRotation, FAxis::Get(EAxis::x)); }
+	void setRotSpeed(float speed) { mRotSpeed = speed; }
+
+	void addRotation(float x, float y, float z, ENegative flag = ENegative::None);
+	void addRotation(const DirectX::XMFLOAT3& dir, ENegative flag = ENegative::None);
+	void addRotation(const DirectX::XMVECTOR& dir, ENegative flag = ENegative::None);
+
+	const DirectX::XMFLOAT3 getRotAmount() const { return mRotAmount; }
+	void setRotVelocity(bool init) { mRotVelocity = init; }
+
+	void addRotX(const float& x) { mRotation.x += x; }
+	void addRotY(const float& y) { mRotation.y += y; }
+	void addRotZ(const float& z) { mRotation.z += z; }
+
+	void setRotX(const float& x) { mRotation.x = x; }
+	void setRotY(const float& y) { mRotation.y = y; }
+	void setRotZ(const float& z) { mRotation.z = z; }
+
+	float getRotX() { return mRotation.x; }
+	float getRotY() { return mRotation.y; }
+	float getRotZ() { return mRotation.z; }
+#pragma endregion Rotation
 };
 

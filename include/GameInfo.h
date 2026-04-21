@@ -135,7 +135,7 @@ enum class EAssetType
 	Sound
 };
 
-enum class EAxis { x, y, z, end };
+enum class EAxis { None = -1, x, y, z, end };
 
 struct FAxis {
 	static DirectX::XMVECTOR Get(EAxis axis)

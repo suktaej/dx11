@@ -51,6 +51,7 @@ public:
 	void eraseOwner() override;
 
 public:
+#pragma region Local
 	void setLocalScale(const DirectX::XMFLOAT3& scale);
 	void setLocalScale(const EAxis& axis, const float& scale);
 	void setLocalScale(float x, float y, float z);
@@ -64,6 +65,14 @@ public:
 	void setLocalRotation(const EAxis& axis, const float& angle);
 	void setLocalRotation(float x, float y, float z);
 
+	void addLocalScale(const EAxis& axis, const float& scale);
+	void addLocalPosition(const EAxis& axis, const float& pos);
+	void addLocalRotation(const EAxis& axis, const float& angle);
+
+	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
+#pragma endregion Local
+
+#pragma region World
 	void setWorldScale(const DirectX::XMFLOAT3& scale);
 	void setWorldScale(const EAxis& axis, const float& scale);
 	void setWorldScale(float x, float y, float z);
@@ -76,12 +85,7 @@ public:
 	void setWorldRotation(const DirectX::XMFLOAT4& rotation);
 	void setWorldRotation(const EAxis& axis, const float& angle);
 	void setWorldRotation(float x, float y, float z);
-	
-	void addLocalScale(const EAxis& axis, const float& scale);
-	void addLocalPosition(const EAxis& axis, const float& pos);
-	void addLocalRotation(const EAxis& axis, const float& angle);
 
-	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
 	void addForwardVector(const float& pos);
 	void addRightVector(const float& pos);
 	void addUpVector(const float& pos);
@@ -92,7 +96,12 @@ public:
 	void addWorldPosition(const DirectX::XMFLOAT3& pos);
 
 	void addWorldRotation(const EAxis& axis, const float& angle);
+	void addWorldRotation(const DirectX::XMFLOAT3& rotation);
+	void addWorldRotation(float x, float y, float z);
+#pragma endregion World
 
+
+#pragma region Getter
 	const DirectX::XMFLOAT3& getLocalScale() { return mLocalScale; }
 	const DirectX::XMFLOAT4& getLocalRotation() { return mLocalRotation; }
 	const DirectX::XMFLOAT3& getLocalPosition() { return mLocalPosition; }
@@ -106,7 +115,7 @@ public:
 	const DirectX::XMFLOAT3 getForwardVector();
 	const DirectX::XMFLOAT3 getRightVector();
 	const DirectX::XMFLOAT3 getUpVector();
-	
+#pragma endregion Getter
 	//void setLocalRotation(EAxis axis, const float& angle);
 	//void setWorldRotation(EAxis axis, const float& rotation);
 

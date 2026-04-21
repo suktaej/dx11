@@ -81,6 +81,72 @@ void CMovementComponent::addDirection(const DirectX::XMVECTOR& dir, ENegative fl
     }
 }
 
+void CMovementComponent::addRotation(float x, float y, float z, ENegative flag)
+{
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mRotation.x += x;
+        mRotation.y += y;
+        mRotation.z += z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mRotation.x -= x;
+        mRotation.y -= y;
+        mRotation.z -= z;
+        break;
+    }
+    }
+}
+
+void CMovementComponent::addRotation(const DirectX::XMFLOAT3& dir, ENegative flag)
+{
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mRotation.x += dir.x;
+        mRotation.y += dir.y;
+        mRotation.z += dir.z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mRotation.x -= dir.x;
+        mRotation.y -= dir.y;
+        mRotation.z -= dir.z;
+        break;
+    }
+    }
+}
+
+void CMovementComponent::addRotation(const DirectX::XMVECTOR& dir, ENegative flag)
+{
+    DirectX::XMFLOAT3 temp;
+    DirectX::XMStoreFloat3(&temp, dir);
+
+    switch (flag)
+    {
+    case ENegative::None:
+    {
+        mRotation.x += temp.x;
+        mRotation.y += temp.y;
+        mRotation.z += temp.z;
+        break;
+    }
+    case ENegative::Negative:
+    {
+        mRotation.x -= temp.x;
+        mRotation.y -= temp.y;
+        mRotation.z -= temp.z;
+        break;
+    }
+    }
+}
+
 const float CMovementComponent::getDistance() const
 {
     DirectX::XMVECTOR vec = DirectX::XMLoadFloat3(&mMoveAmount);
@@ -125,20 +191,8 @@ void CMovementComponent::update(float dt)
             mUpdateComponent = nullptr;
         else
         {
-            using namespace DirectX;
-
-            XMVECTOR vel = XMLoadFloat3(&mDirection);
-            XMVECTOR unit = XMVector3Normalize(vel);
-            XMVECTOR len = XMVector3Length(vel);
-
-            if (XMVectorGetX(len) > 0.f)
-            {
-                float dist = mSpeed * dt;
-                XMVECTOR amount = XMVectorScale(unit,dist);
-                XMStoreFloat3(&mMoveAmount, amount);
-
-                mUpdateComponent->addWorldPosition(mMoveAmount);
-            }
+            updateDirection(dt);
+            updateRotation(dt);
         }
     }
 }
@@ -169,9 +223,46 @@ void CMovementComponent::postRender()
 
     if(mVelocity)
 		mDirection = { 0.f,0.f,0.f };
+
+    if (mRotVelocity)
+        mRotAmount = { 0.f, 0.f, 0.f };
 }
 
 std::unique_ptr<CComponent> CMovementComponent::clone() const
 {
     return std::make_unique<CMovementComponent>(createKey(), *this);
+}
+
+void CMovementComponent::updateDirection(float dt)
+{
+    using namespace DirectX;
+
+    XMVECTOR velo = XMLoadFloat3(&mDirection);
+    XMVECTOR unit = XMVector3Normalize(velo);
+    XMVECTOR lenSq = XMVector3LengthSq(velo);
+
+    if (XMVectorGetX(lenSq) > 0.f)
+    {
+        float dist = mSpeed * dt;
+        XMVECTOR amount = XMVectorScale(unit, dist);
+        XMStoreFloat3(&mMoveAmount, amount);
+
+        mUpdateComponent->addWorldPosition(mMoveAmount);
+    }
+}
+
+void CMovementComponent::updateRotation(float dt)
+{
+    using namespace DirectX;
+
+    XMVECTOR velo = XMLoadFloat3(&mRotation);
+
+    if (!XMVector3Equal(velo, XMVectorZero()))
+    {
+        float dist = mRotSpeed * dt;
+        XMVECTOR amount = XMVectorScale(velo, dist);
+        XMStoreFloat3(&mRotAmount, amount);
+
+        mUpdateComponent->addWorldRotation(mRotAmount);
+    }
 }
