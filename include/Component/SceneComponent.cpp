@@ -1,4 +1,5 @@
 #include "SceneComponent.h"
+#include "../Object/Object.h"
 
 CSceneComponent::CSceneComponent(ComponentKey key) 
     : CComponent(key),
@@ -662,13 +663,17 @@ void CSceneComponent::setWorldPosition(const EAxis& axis, const float& pos)
     setWorldPosition(worldPos);
 }
 
-bool CSceneComponent::init()
+bool CSceneComponent::init(class CObject* obj)
 {
+    CComponent::init(obj);
+
     return true;
 }
 
-bool CSceneComponent::init(const char* name) 
+bool CSceneComponent::init(class CObject* obj,const char* name)
 {
+    CComponent::init(obj, name);
+
     return true; 
 }
 

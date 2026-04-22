@@ -107,6 +107,7 @@ void CObject::sceneCompCleanUp()
 	{
 		if (!(*it)->isActive())
 		{
+			// TODO : Erase-Remove Idiom
 			it = mSceneCompList.erase(it);
 			continue;
 		}
@@ -128,6 +129,7 @@ void CObject::nonSceneCompCleanUp()
 	{
 		if (!(*it)->isActive())
 		{
+			// TODO : Erase-Remove Idiom
 			it = mNonSceneCompList.erase(it);
 			continue;
 		}

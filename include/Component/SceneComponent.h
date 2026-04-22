@@ -35,8 +35,8 @@ private:
 	//DirectX::XMFLOAT3 quaternionToEuler(DirectX::XMVECTOR quat);
 
 public:
-	bool init() override;
-	bool init(const char* name) override;
+	bool init(class CObject* obj) override;
+	bool init(class CObject* obj,const char* name) override;
 	void preUpdate(float dt) override;
 	void update(float dt) override;
 	void postUpdate(float dt) override;
@@ -130,6 +130,7 @@ private:
 
 			if (!child->isActive())
 			{
+				// TODO : Erase-Remove Idiom
 				it = mChildList.erase(it);
 				continue;
 			}

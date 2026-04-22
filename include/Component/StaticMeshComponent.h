@@ -21,12 +21,12 @@ public:
 	CStaticMesh* getMesh() const { return mMesh; }
 	CShader* getShader() const { return mShader; }
 
-private:
+//private:
 	void registMap();
 
 public:
-	bool init() override;
-	bool init(const char* name) override;
+	bool init(class CObject* obj) override;
+	bool init(class CObject* obj,const char* name) override;
 	void preUpdate(float dt) override;
 	void update(float dt) override;
 	void postUpdate(float dt) override;

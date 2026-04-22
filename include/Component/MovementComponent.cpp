@@ -154,17 +154,17 @@ const float CMovementComponent::getDistance() const
     return DirectX::XMVectorGetX(len);
 }
 
-bool CMovementComponent::init()
+bool CMovementComponent::init(class CObject* obj)
 {
-    if(!CComponent::init())
+    if(!CComponent::init(obj))
 		return false;
 
     return true;
 }
 
-bool CMovementComponent::init(const char* name)
+bool CMovementComponent::init(class CObject* obj,const char* name)
 {
-    if (!CComponent::init(name))
+    if (!CComponent::init(obj,name))
         return false;
 
     return true;

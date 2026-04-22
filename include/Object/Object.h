@@ -84,12 +84,12 @@ public:
 
 		std::unique_ptr<T> newComp = std::make_unique<T>(typename T::ComponentKey{});
 
-		if (!newComp->init())
+		if (!newComp->init(this))
 			return nullptr;
 
 		newComp->setName(name);
-		newComp->setScene(mScene);
-		newComp->setOwner(this);
+		//newComp->setScene(mScene);
+		//newComp->setOwner(this);
 		
 		T* newCompPtr = newComp.get();
 
@@ -151,6 +151,7 @@ private:
 			
 			if (!comp->isActive())
 			{
+				// TODO : Erase-Remove Idiom
 				it = mNonSceneCompList.erase(it);
 				continue;
 			}

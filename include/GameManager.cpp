@@ -6,6 +6,9 @@
 #include "Shader/ColorMeshShader.h"
 #include "ServiceLocator.h"
 
+#include <chrono>
+//#define GAMEDEBUG
+
 //DEFINITION_SINGLE(CGameManager)
 bool CGameManager::mLoop = true;
 
@@ -80,13 +83,47 @@ BOOL CGameManager::InitInstance()
 
 void CGameManager::logic()
 {
-    //float deltaTime = CTimeManager::update();
     float deltaTime = mTime.update();
 
+#ifdef GAMEDEBUG
+    using clock = std::chrono::high_resolution_clock;
+    auto t0 = clock::now();
+#endif
+
     input(deltaTime);
+
+#ifdef GAMEDEBUG
+    auto t1 = clock::now();
+#endif
+
     update(deltaTime);
+
+#ifdef GAMEDEBUG
+    auto t2 = clock::now();
+#endif
+
     collision(deltaTime);
+
+#ifdef GAMEDEBUG
+    auto t3 = clock::now();
+#endif
+
     render(deltaTime);
+
+#ifdef GAMEDEBUG
+    auto t4 = clock::now();
+
+    auto inputTime = std::chrono::duration<float, std::milli>(t1 - t0).count();
+    auto updateTime = std::chrono::duration<float, std::milli>(t2 - t1).count();
+    auto collisionTime = std::chrono::duration<float, std::milli>(t3 - t2).count();
+    auto renderTime = std::chrono::duration<float, std::milli>(t4 - t3).count();
+
+    wchar_t title[256];
+    swprintf_s(title, L"Input: %.2fms / Update: %.2fms / Collision: %.2fms / Render: %.2fms",
+        inputTime, updateTime, collisionTime, renderTime);
+
+    SetWindowTextW(mhWnd, title);
+#endif
 }
 
 void CGameManager::input(float dt)
@@ -115,7 +152,7 @@ void CGameManager::render(float dt)
 
     mScene.render();
 
-    mDevice.testRender();
+    mDevice.forwardRender();
 
     /*
     // 3. 라이팅 단계 (Lighting Buffer)

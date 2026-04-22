@@ -618,7 +618,7 @@ void CDeviceManager::unbindShaderResources()
 	mContext->CSSetShaderResources(0, 16, nullSRVs);
 }
 
-void CDeviceManager::testRender()
+void CDeviceManager::forwardRender()
 {
 	ComPtr<ID3D11Texture2D> backBuffer;
 	HRESULT hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);

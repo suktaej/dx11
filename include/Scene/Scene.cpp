@@ -7,9 +7,10 @@
 #include "InputContext.h"
 #include "CameraManager.h"
 
+#include "../Component/StaticMeshComponent.h"
 #include <chrono>
 #include <ctime>
-#define SCENEDEBUG
+//#define SCENEDEBUG
 
 CScene::CScene(SceneKey key)
 {
@@ -70,7 +71,7 @@ void CScene::prevUpdate(float dt)
 
 void CScene::update(float dt)
 {
-	//debugFPS(dt);
+	debugFPS(dt);
 
 	processObject([dt](CObject* obj)
 		{ obj->update(dt); });
@@ -118,7 +119,10 @@ void CScene::render()
 #ifdef SCENEDEBUG
 	auto t1 = high_resolution_clock::now();
 #endif
-	processObject([](CObject* obj) { obj->render(); });
+	//processObject([](CObject* obj) { obj->render(); });
+	for (auto& it : mRenderList)
+		it->registMap();
+
 #ifdef SCENEDEBUG
 	auto t2 = high_resolution_clock::now();
 #endif
@@ -133,7 +137,6 @@ void CScene::render()
 #ifdef SCENEDEBUG
 	auto t3 = high_resolution_clock::now();
 
-	// ms 단위 출력
 	float frameBuffer = duration<float, std::milli>(t1 - t0).count();
 	float processObj = duration<float, std::milli>(t2 - t1).count();
 	float drawCall = duration<float, std::milli>(t3 - t2).count();
@@ -145,7 +148,6 @@ void CScene::render()
 	IGame& game = CServiceLocator::getGame();
 	SetWindowTextW(game.getHandle(), title);
 #endif
-
 }
 
 void CScene::postRender()
@@ -307,3 +309,8 @@ void CScene::meshGrouping()
 	}
 }
 */
+
+void CScene::setRenderList(CStaticMeshComponent* comp)
+{
+	mRenderList.emplace_back(comp);
+}

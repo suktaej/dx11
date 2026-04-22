@@ -63,16 +63,16 @@ void CMeshComponent::updateObjectBuffer()
     mObjectCB->updateBuffer();
 }
 
-bool CMeshComponent::init()
+bool CMeshComponent::init(class CObject* obj)
 {
-    CSceneComponent::init();
+    CSceneComponent::init(obj);
 
     return true;
 }
 
-bool CMeshComponent::init(const char* name)
+bool CMeshComponent::init(class CObject* obj,const char* name)
 {
-    CSceneComponent::init(name);
+    CSceneComponent::init(obj,name);
 
     return true;
 }

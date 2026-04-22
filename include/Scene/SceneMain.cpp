@@ -26,16 +26,18 @@ bool CSceneMain::init()
 
 bool CSceneMain::create()
 {
+	int n = 75;
+
 	CPlayerObject* obj = createObject<CPlayerObject>("Player");
 	CCollisionObject* col[10000];
 	CSceneComponent* colComp = nullptr;
 	
-	for (int i = 0; i<100;++i)
+	for (int i = 0; i<n;++i)
 	{
-		for (int j = 0; j < 100; ++j)
+		for (int j = 0; j < n; ++j)
 		{
-			col[i*100+j] = createObject<CCollisionObject>();
-			colComp = static_cast<CSceneComponent*>(col[i*100+j]->getRootComponent());
+			col[i*n+j] = createObject<CCollisionObject>();
+			colComp = static_cast<CSceneComponent*>(col[i*n+j]->getRootComponent());
 			colComp->setLocalPosition(j*10, i*10, 0.f);
 		}
 	}

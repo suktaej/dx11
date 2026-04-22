@@ -43,8 +43,8 @@ public:
 	const XMFLOAT4X4& getProjMat() const { return mProjection; }
 
 public:
-	bool init() override;
-	bool init(const char* name) override;
+	bool init(class CObject* obj) override;
+	bool init(class CObject* obj,const char* name) override;
 	void preUpdate(float dt) override;
 	void update(float dt) override;
 	void postUpdate(float dt) override;

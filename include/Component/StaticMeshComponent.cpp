@@ -65,16 +65,18 @@ void CStaticMeshComponent::registMap()
     mScene->setShaderMap(getMesh(), meshShader);
 }
 
-bool CStaticMeshComponent::init()
+bool CStaticMeshComponent::init(class CObject* obj)
 {
-    CMeshComponent::init();
+    CMeshComponent::init(obj);
+
+    mScene->setRenderList(this);
 
     return true;
 }
 
-bool CStaticMeshComponent::init(const char* name)
+bool CStaticMeshComponent::init(class CObject* obj,const char* name)
 {
-    CMeshComponent::init(name);
+    CMeshComponent::init(obj,name);
 
     return true;
 }
@@ -103,7 +105,7 @@ void CStaticMeshComponent::preRender()
 {
     CMeshComponent::preRender();
 
-    registMap();
+    //registMap();
 }
 
 void CStaticMeshComponent::render()

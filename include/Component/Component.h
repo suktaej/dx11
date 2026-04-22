@@ -31,8 +31,8 @@ protected:
 	ComponentKey createKey() const { return ComponentKey(); }
 
 public:
-	virtual bool init();
-	virtual bool init(const char* name);
+	virtual bool init(class CObject* obj);
+	virtual bool init(class CObject* obj,const char* name);
 	virtual void preUpdate(float dt);
 	virtual void update(float dt);
 	virtual void postUpdate(float dt);

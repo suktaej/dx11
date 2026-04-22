@@ -81,9 +81,9 @@ void CCameraComponent::setCameraRotation(float x, float y, float z)
 	updateViewMatrix();
 }
 
-bool CCameraComponent::init()
+bool CCameraComponent::init(class CObject* obj)
 {
-	CSceneComponent::init();
+	CSceneComponent::init(obj);
 
 	IDevice& device = CServiceLocator::getDevice();
 	FResolution value = device.getResolution();
@@ -102,9 +102,9 @@ bool CCameraComponent::init()
 	return true;
 }
 
-bool CCameraComponent::init(const char* name)
+bool CCameraComponent::init(class CObject* obj,const char* name)
 {
-	CSceneComponent::init(name);
+	CSceneComponent::init(obj,name);
 
 	IDevice& device = CServiceLocator::getDevice();
 	FResolution value = device.getResolution();
