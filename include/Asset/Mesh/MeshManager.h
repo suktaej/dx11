@@ -23,6 +23,8 @@ private:
 public:
 	class CMesh* findMesh(const std::string& name);
     void coloredBox();
+    void coloredSphere();
+    void coloredTetrahedron();
 
 private:
     template <typename T>

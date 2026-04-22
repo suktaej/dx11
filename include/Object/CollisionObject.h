@@ -12,9 +12,12 @@ public:
 private:
     class CStaticMeshComponent* mMeshComp;
     class CMovementComponent* mMove;
+    class CObject* mTarget;
 
 public:
     bool init(class CScene* scene) override;
     void update(float dt) override;
     class CMovementComponent* getMove() { return mMove; }
+    void setTarget(class CObject* target) { mTarget = target; }
+    void viewTarget();
 };

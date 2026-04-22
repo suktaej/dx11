@@ -43,8 +43,6 @@ void CPlayerObject::createMesh()
 	mObjRoot = createComponent<CStaticMeshComponent>("PlayerComponent");
 	mObjRoot->setMesh("ColoredBox");
 	mObjRoot->setShader("ColorMeshShader");
-	//mObjRoot->setWorldPosition(0.f, 0.f, 0.f);
-	//mObjRoot->setLocalRotation(0.f, 45.f, 45.f);
 	mObjRoot->setWorldScale(2.f, 2.f, 2.f);
 
 	setRootComponent(mObjRoot);
@@ -59,7 +57,7 @@ void CPlayerObject::createMesh()
 	
 	mSub = createComponent<CStaticMeshComponent>("Obit");
 	mPivot->addChild(*mSub);
-	mSub->setMesh("ColoredBox");
+	mSub->setMesh("ColoredSphere");
 	mSub->setShader("ColorMeshShader");
 	mSub->setLocalPosition(10.f, 0.f, 0.f);
 	mSub->setLocalScale(0.5f, 0.5f, 0.5f);
@@ -78,10 +76,12 @@ void CPlayerObject::keyBind()
 {
 	CInputContext* input = mScene->getInput();
 
-	input->addBindKey("MoveUp", 'W');
-	input->addBindKey("MoveDown", 'S');
+	input->addBindKey("MoveForward", 'W');
+	input->addBindKey("MoveBackward", 'S');
 	input->addBindKey("MoveRight", 'D');
 	input->addBindKey("MoveLeft", 'A');
+	input->addBindKey("MoveUp", 'Q');
+	input->addBindKey("MoveDown", 'E');
 
 	input->addBindKey("RotX", 'Z');
 	input->addBindKey("RotXInv", 'Z');
@@ -98,10 +98,12 @@ void CPlayerObject::keyBind()
 
 	input->addBindKey("Fire", VK_SPACE);
 
-	input->BindAction(this, &CPlayerObject::MoveUp, "MoveUp", EInputType::Hold);
-	input->BindAction(this, &CPlayerObject::MoveDown, "MoveDown", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveForward, "MoveForward", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveBackward, "MoveBackward", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveRight, "MoveRight", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveLeft, "MoveLeft", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveDown, "MoveDown", EInputType::Hold);
+	input->BindAction(this, &CPlayerObject::MoveUp, "MoveUp", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotY, "RotY", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotZ, "RotZ", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotX, "RotX", EInputType::Hold);
@@ -111,7 +113,7 @@ void CPlayerObject::keyBind()
 	input->BindAction(this, &CPlayerObject::Fire, "Fire", EInputType::Down);
 }
 
-void CPlayerObject::MoveUp(float dt)
+void CPlayerObject::MoveForward(float dt)
 {
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
 
@@ -119,12 +121,28 @@ void CPlayerObject::MoveUp(float dt)
 		mMove->addDirection(sceneComp->getForwardVector());
 }
 
-void CPlayerObject::MoveDown(float dt)
+void CPlayerObject::MoveBackward(float dt)
 {
 	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
 
 	if (sceneComp)
 		mMove->addDirection(sceneComp->getForwardVector(),ENegative::Negative);
+}
+
+void CPlayerObject::MoveUp(float dt)
+{
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+
+	if (sceneComp)
+		mMove->addDirection(sceneComp->getUpVector());
+}
+
+void CPlayerObject::MoveDown(float dt)
+{
+	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
+
+	if (sceneComp)
+		mMove->addDirection(sceneComp->getUpVector(), ENegative::Negative);
 }
 
 void CPlayerObject::MoveRight(float dt)
@@ -201,15 +219,14 @@ void CPlayerObject::Fire(float dt)
 {
 	CCollisionObject* obj = mScene->createObject<CCollisionObject>();
 	obj->setLifeTime(1.f);
-	
 	CComponent* root = obj->getRootComponent();
 	CSceneComponent* sceneRoot = dynamic_cast<CSceneComponent*>(root);
 	CMovementComponent* move = obj->getMove();
-	move->setSpeed(50.f);
-	move->setVelocity(false);
-	move->setDirZ(1.f);
 	
 	CSceneComponent* thisRoot = dynamic_cast<CSceneComponent*>(mRootComponent);
+	move->setSpeed(50.f);
+	move->setVelocity(false);
+	move->setDirection(thisRoot->getForwardVector());
 
 	sceneRoot->setWorldRotation(thisRoot->getWorldRotation());
 	sceneRoot->setWorldPosition(thisRoot->getWorldPosition());

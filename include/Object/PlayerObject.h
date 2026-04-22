@@ -25,6 +25,8 @@ private:
     void createMesh();
     void keyBind();
 
+    void MoveForward(float dt);
+    void MoveBackward(float dt);
     void MoveUp(float dt);
     void MoveDown(float dt);
     void MoveRight(float dt);
