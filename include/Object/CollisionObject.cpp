@@ -17,7 +17,7 @@ CCollisionObject::~CCollisionObject()
 bool CCollisionObject::init(CScene* scene)
 {
 	mMeshComp = createComponent<CStaticMeshComponent>();
-	mMeshComp->setMesh("ColoredTetrahedron");
+	mMeshComp->setMesh("ColoredBox");
 	mMeshComp->setShader("ColorMeshShader");
 	setRootComponent(mMeshComp);
 

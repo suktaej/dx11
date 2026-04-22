@@ -57,11 +57,12 @@ void CStaticMeshComponent::registMap()
 
     mScene->setInstanceMap(getMesh(), transposed);
 
-    //CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(getShader());
-    //if (!meshShader)
-    //    return;
+    CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(getShader());
 
-    //mScene->setShaderMap(getMesh(), meshShader);
+    if (!meshShader)
+        return;
+
+    mScene->setShaderMap(getMesh(), meshShader);
 }
 
 bool CStaticMeshComponent::init()
@@ -109,8 +110,8 @@ void CStaticMeshComponent::render()
 {
     CMeshComponent::render();
 
-    mShader->setShader();
     // TODO : 인스턴싱 대상 구분변수(bool)할당
+    //mShader->setShader();
     //mMesh->render();
 }
 

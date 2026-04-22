@@ -7,6 +7,9 @@
 #include "InputContext.h"
 #include "CameraManager.h"
 
+#include <chrono>
+#include <ctime>
+#define SCENEDEBUG
 
 CScene::CScene(SceneKey key)
 {
@@ -67,6 +70,8 @@ void CScene::prevUpdate(float dt)
 
 void CScene::update(float dt)
 {
+	//debugFPS(dt);
+
 	processObject([dt](CObject* obj)
 		{ obj->update(dt); });
 
@@ -96,6 +101,7 @@ void CScene::postCollision(float dt)
 void CScene::prevRender()
 {
 	mInstanceMap.clear();
+	mShaderMap.clear();
 	
 	processObject([](CObject* obj)
 		{ obj->prevRender(); });
@@ -103,17 +109,43 @@ void CScene::prevRender()
 
 void CScene::render()
 {
+#ifdef SCENEDEBUG
+	using namespace std::chrono;
+
+	auto t0 = high_resolution_clock::now();
+#endif
 	updateFrameBuffer();
-
-	processObject([](CObject* obj)
-		{ obj->render(); });
-
+#ifdef SCENEDEBUG
+	auto t1 = high_resolution_clock::now();
+#endif
+	processObject([](CObject* obj) { obj->render(); });
+#ifdef SCENEDEBUG
+	auto t2 = high_resolution_clock::now();
+#endif
 	//meshGrouping();
 	for (auto& [mesh, matrices] : mInstanceMap)
 	{
+		mShaderMap[mesh]->setShader();
 		updateInstanceBuffer(matrices);
 		mesh->renderInstanced((UINT)matrices.size());
 	}
+
+#ifdef SCENEDEBUG
+	auto t3 = high_resolution_clock::now();
+
+	// ms 단위 출력
+	float frameBuffer = duration<float, std::milli>(t1 - t0).count();
+	float processObj = duration<float, std::milli>(t2 - t1).count();
+	float drawCall = duration<float, std::milli>(t3 - t2).count();
+
+	wchar_t title[256];
+	swprintf_s(title, L"FrameBuffer: %.2fms / ProcessObj: %.2fms / DrawCall: %.2fms",
+		frameBuffer, processObj, drawCall);
+
+	IGame& game = CServiceLocator::getGame();
+	SetWindowTextW(game.getHandle(), title);
+#endif
+
 }
 
 void CScene::postRender()
@@ -127,7 +159,9 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 	IDevice& device = CServiceLocator::getDevice();
 	UINT needed = (UINT)matrices.size();
 
-	// 버퍼가 없거나 크기가 부족하면 재생성
+	if (needed == 0) 
+		return;
+
 	if (!mInstanceBuffer || mInstanceBufferCapacity < needed)
 	{
 		mInstanceBuffer.Reset();
@@ -135,52 +169,57 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 
 		D3D11_BUFFER_DESC desc = {};
 		desc.ByteWidth = sizeof(XMFLOAT4X4) * needed;
-		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 		desc.StructureByteStride = sizeof(XMFLOAT4X4);
-		desc.CPUAccessFlags = 0;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-		HRESULT bufferHR = device.getDevice()->CreateBuffer(&desc, nullptr, mInstanceBuffer.GetAddressOf());
-		if (FAILED(bufferHR))
+		HRESULT hr = device.getDevice()->CreateBuffer(
+			&desc, nullptr, mInstanceBuffer.GetAddressOf());
+
+		if (FAILED(hr)) 
 			return;
 
+		mInstanceBufferCapacity = needed;
+
+		// SRV는 버퍼 재생성 시에만 재생성
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 		srvDesc.Buffer.FirstElement = 0;
 		srvDesc.Buffer.NumElements = needed;
 
-		HRESULT srvHR = device.getDevice()->CreateShaderResourceView(
+		hr = device.getDevice()->CreateShaderResourceView(
 			mInstanceBuffer.Get(), &srvDesc, mInstanceSRV.GetAddressOf());
-		if (FAILED(srvHR))
-			return;
 
-		mInstanceBufferCapacity = needed;
+		if (FAILED(hr)) 
+			return;
 	}
 
-	/*
-	// 데이터 업로드
+	// 매 프레임 데이터 업로드
 	D3D11_MAPPED_SUBRESOURCE mapped = {};
-	device.getContext()->Map(mInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-	memcpy(mapped.pData, matrices.data(), sizeof(XMFLOAT4X4) * needed);
+	HRESULT hr = device.getContext()->Map(
+		mInstanceBuffer.Get(), 0,
+		D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+
+	if (FAILED(hr)) 
+		return;
+
+	std::memcpy(mapped.pData, matrices.data(), sizeof(XMFLOAT4X4) * needed);
 	device.getContext()->Unmap(mInstanceBuffer.Get(), 0);
-	*/
-	
-	device.getContext()->UpdateSubresource(
-		mInstanceBuffer.Get(),
-		0, nullptr,
-		matrices.data(),
-		0, 0
-	);
-	
-	// VS의 t0 슬롯에 바인딩
+
 	device.getContext()->VSSetShaderResources(0, 1, mInstanceSRV.GetAddressOf());
 }
 
 void CScene::setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world)
 {
 	mInstanceMap[mesh].push_back(world);
+}
+
+void CScene::setShaderMap(CStaticMesh* mesh, CGraphicShader* shader)
+{
+	mShaderMap.emplace(mesh, shader);
 }
 
 void CScene::objectCleanUp()
@@ -220,6 +259,31 @@ void CScene::updateFrameBuffer()
 	mFrameCB->setVP(mvp);
 
 	mFrameCB->updateBuffer();   // GPU에 한 번만 갱신 
+}
+
+void CScene::debugFPS(float dt)
+{
+	static float elapsed = 0.f;
+	static int   frameCount = 0;
+
+	elapsed += dt;
+	++frameCount;
+
+	if (elapsed >= 1.f)
+	{
+		float fps = frameCount / elapsed;
+		float ms = (elapsed / frameCount) * 1000.f;
+
+		wchar_t title[128];
+		swprintf_s(title, L"FPS: %.1f  /  %.2f ms  /  Objects: %zu",
+			fps, ms, mObjectList.size());
+
+		IGame& game = CServiceLocator::getGame();
+		SetWindowTextW(game.getHandle(), title);
+
+		elapsed = 0.f;
+		frameCount = 0;
+	}
 }
 
 /*

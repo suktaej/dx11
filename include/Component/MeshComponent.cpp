@@ -46,7 +46,6 @@ void CMeshComponent::updateObjectBuffer()
     
     mObjectCB->setWorld(mWorldMatrix);
 
-    /*
     // hlsl에서 instancing을 사용하므로 VP정보만 활용
     // CPU 단계에서 WVP 갱신 불필요
 
@@ -61,7 +60,6 @@ void CMeshComponent::updateObjectBuffer()
     XMStoreFloat4x4(&mwvp, wvp);
 
     mObjectCB->setWVP(mwvp);
-    */
     mObjectCB->updateBuffer();
 }
 
@@ -108,7 +106,7 @@ void CMeshComponent::render()
 {
     CSceneComponent::render();
     
-    updateObjectBuffer();
+    //updateObjectBuffer();
 }
 
 void CMeshComponent::postRender()
