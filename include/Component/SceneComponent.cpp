@@ -142,6 +142,27 @@ void CSceneComponent::addLocalRotation(const EAxis& axis, const float& angle)
     invalidateTransform();
 }
 
+void CSceneComponent::addLocalRotation(float x, float y, float z)
+{
+    addLocalRotation((DirectX::XMFLOAT3(x, y, z)));
+}
+
+void CSceneComponent::addLocalRotation(const DirectX::XMFLOAT3& rotation)
+{
+    using namespace DirectX;
+
+    XMVECTOR curQuat = XMLoadFloat4(&mLocalRotation);
+    XMVECTOR quat = XMQuaternionRotationRollPitchYaw(
+        XMConvertToRadians(rotation.x),
+        XMConvertToRadians(rotation.y),
+        XMConvertToRadians(rotation.z));
+    curQuat = XMQuaternionMultiply(curQuat, quat);
+    XMStoreFloat4(&mLocalRotation, curQuat);
+
+    mIsLocalDirty = true;
+    invalidateTransform();
+}
+
 void CSceneComponent::addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist)
 {
     using namespace DirectX;
@@ -443,7 +464,7 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT3& rotation)
         XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
         // 행렬곱 순서 주의
-        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(invParentQuat, worldQuat);
         localQuat = XMQuaternionNormalize(localQuat);
 
         XMStoreFloat4(&mLocalRotation, localQuat);
@@ -470,7 +491,7 @@ void CSceneComponent::setWorldRotation(const DirectX::XMFLOAT4& rotation)
         XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
         XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
-        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(invParentQuat, worldQuat);
 
         localQuat = XMQuaternionNormalize(localQuat);
 
@@ -497,7 +518,7 @@ void CSceneComponent::setWorldRotation(const EAxis& axis, const float& angle)
         XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
         XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
-        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(invParentQuat, worldQuat);
 
         localQuat = XMQuaternionNormalize(localQuat);
 
@@ -560,7 +581,7 @@ void CSceneComponent::addWorldRotation(const EAxis& axis, const float& angle)
         XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
         // 행렬곱 순서 주의
-        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(invParentQuat, worldQuat);
         localQuat = XMQuaternionNormalize(localQuat);
 
         XMStoreFloat4(&mLocalRotation, localQuat);
@@ -597,12 +618,12 @@ void CSceneComponent::addWorldRotation(float x, float y, float z)
 
     if (mParent)
     {
-        // 로컬 회전 계산: LocalQuat = WorldQuat * Inverse(ParentWorldQuat)
+        // 로컬 회전 계산: LocalQuat = Inverse(ParentWorldQuat) * WorldQuat 
         XMFLOAT4 parentWorldRot = mParent->getWorldRotation();
         XMVECTOR parentQuat = XMLoadFloat4(&parentWorldRot);
         XMVECTOR invParentQuat = XMQuaternionInverse(parentQuat);
         // 행렬곱 순서 주의
-        XMVECTOR localQuat = XMQuaternionMultiply(worldQuat, invParentQuat);
+        XMVECTOR localQuat = XMQuaternionMultiply(invParentQuat, worldQuat);
         localQuat = XMQuaternionNormalize(localQuat);
 
         XMStoreFloat4(&mLocalRotation, localQuat);

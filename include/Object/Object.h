@@ -88,8 +88,8 @@ public:
 			return nullptr;
 
 		newComp->setName(name);
-		//newComp->setScene(mScene);
-		//newComp->setOwner(this);
+		newComp->setScene(mScene);
+		newComp->setOwner(this);
 		
 		T* newCompPtr = newComp.get();
 

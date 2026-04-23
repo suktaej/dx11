@@ -262,6 +262,6 @@ void CMovementComponent::updateRotation(float dt)
         XMVECTOR amount = XMVectorScale(velo, dt);
         XMStoreFloat3(&mRotAmount, amount);
 
-        mUpdateComponent->addWorldRotation(mRotAmount);
+        mUpdateComponent->addLocalRotation(mRotAmount);
     }
 }

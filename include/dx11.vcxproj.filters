@@ -174,11 +174,11 @@
     <ClCompile Include="Scene\CameraManager.cpp">
       <Filter>04_Scene\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\SceneTester.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Object\CameraObject.cpp">
       <Filter>05_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneTester.cpp">
+      <Filter>04_Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,11 +299,11 @@
     <ClInclude Include="Scene\CameraManager.h">
       <Filter>04_Scene\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\SceneTester.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Object\CameraObject.h">
       <Filter>05_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneTester.h">
+      <Filter>04_Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

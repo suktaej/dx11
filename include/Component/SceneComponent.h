@@ -66,8 +66,12 @@ public:
 	void setLocalRotation(float x, float y, float z);
 
 	void addLocalScale(const EAxis& axis, const float& scale);
+
 	void addLocalPosition(const EAxis& axis, const float& pos);
+
 	void addLocalRotation(const EAxis& axis, const float& angle);
+	void addLocalRotation(float x, float y, float z);
+	void addLocalRotation(const DirectX::XMFLOAT3& rotation);
 
 	void addLocalPositionByDirection(const DirectX::XMFLOAT3& dir, const float& dist);
 #pragma endregion Local

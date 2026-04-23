@@ -20,29 +20,23 @@ private:
 	~CDeviceManager();
 
 private:
-	// IUnkonwn 인터페이스를 상속받는 ID3D11Device와 ID3D11DeviceContext 포인터를 멤버 변수로 선언.
-	//ID3D11Device* mDevice = nullptr;
+	// IUnkonwn 인터페이스를 상속받는 ID3D11Device, ID3D11DeviceContext
 	ComPtr<ID3D11Device> mDevice;
-	//ID3D11DeviceContext* mContext = nullptr;
 	ComPtr<ID3D11DeviceContext> mContext;
-	// page flip을 위한 IDXGISwapChain 포인터를 멤버 변수로 선언.
-	//IDXGISwapChain* mSwapChain = nullptr;
+	// page flip을 위한 IDXGISwapChain
 	ComPtr<IDXGISwapChain1> mSwapChain;
-	// 렌더 타겟 뷰 포인터를 멤버 변수로 선언.
-	//ID3D11RenderTargetView* mRenderTargetView = nullptr;
-	ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+	// 렌더 타겟 뷰
+	ComPtr<ID3D11RenderTargetView> mRenderTargetView;	
+	// DepthStencil View
+	ComPtr<ID3D11DepthStencilView> mDepthStencilView;
+	ComPtr<ID3D11ShaderResourceView> mDepthSRV; 
 
 	// MSAA용 내부 텍스처
 	ComPtr<ID3D11Texture2D> mMSAATexture[3];
-	// MSAA 텍스처를 위한 RTV 배열 (Color, Normal, Specular)
-	// 기하구조(Geometry) 정보를 저장
+	// MSAA 텍스처 RTV (Color, Normal, Specular)
 	ComPtr<ID3D11RenderTargetView> mMSAARenderTargetView[3]; 
-	// MSAA 텍스처를 위한 SRV 배열 (Color, Normal, Specular)
+	// MSAA 텍스처 SRV
 	ComPtr<ID3D11ShaderResourceView> mMSAAShaderResourceView[3];
-
-	// 깊이-스텐실 뷰 포인터를 멤버 변수로 선언.
-	ComPtr<ID3D11DepthStencilView> mDepthStencilView;
-	ComPtr<ID3D11ShaderResourceView> mDepthSRV; 
 	
 	// 라이팅 결과가 담길 HDR 버퍼 (MSAA 대응)
 	ComPtr<ID3D11Texture2D> mLightAccumTextureMSAA;
