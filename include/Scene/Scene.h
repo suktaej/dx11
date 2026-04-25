@@ -32,8 +32,11 @@ public:
 
 protected:
 	std::vector<std::unique_ptr<CObject>> mObjectList;
+	std::vector<std::unique_ptr<CObject>> mPendingAdd;
+	std::vector<CObject*> mPendingRemove;
+
 	std::unique_ptr<class CInputContext> mInput;
-	std::unique_ptr<class CMainCamera> mCameraMgr;
+	std::unique_ptr<class CMainCamera> mMainCam;
 	std::unique_ptr<class CFrameConstantBuffer> mFrameCB;
 
 #if MESHCALL_TYPE == 1
@@ -63,14 +66,14 @@ public:
 	virtual void render();
 	virtual void postRender();
 
-	void updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matrices);
-
 public:
 	class CInputContext* getInput() const { return mInput.get(); }
-	class CMainCamera* getCameraManager() const { return mCameraMgr.get(); }
+	class CMainCamera* getSceneCamera() const { return mMainCam.get(); }
+	void addPendingRemove(class CObject* obj) { mPendingRemove.push_back(obj); }
 
 #if MESHCALL_TYPE == 1
 	void setInstanceBatch(class CMesh* mesh, class CGraphicShader* shader, const DirectX::XMFLOAT4X4& world);
+	void updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matrices);
 #endif
 
 public:
@@ -89,7 +92,9 @@ public:
 
 		T* newObjPtr = newObj.get();
 
-		mObjectList.push_back(std::move(newObj));
+		//mObjectList.push_back(std::move(newObj));
+		// 생성요청 프레임에서 처리하지 않고 다음 프레임에서 처리
+		mPendingAdd.push_back(std::move(newObj));
 
 		return newObjPtr;
 	}
@@ -98,28 +103,15 @@ private:
 	template<typename F>
 	void processObject(F&& func)
 	{
-		auto it = mObjectList.begin();
-
-		while (it != mObjectList.end())
+		for (auto& obj : mObjectList)
 		{
-			CObject* obj = (*it).get();
-
-			if (!obj->isActive())
-			{
-				it = mObjectList.erase(it);
+			if (!obj->isActive() || !obj->isEnabled())
 				continue;
-			}
 
-			if (!obj->isEnabled())
-			{
-				++it;
-				continue;
-			}
-
-			func(obj);
-			++it;
+			func(obj.get());
 		}
 	}
+
 };
 
 /*
@@ -129,4 +121,31 @@ std::unordered_map<std::pair<class CMesh*, class CGraphicShader*>, class CGraphi
 void meshGrouping();
 void setInstanceMap(class CMesh* mesh, DirectX::XMFLOAT4X4 world);
 void setShaderMap(class CMesh* mesh, class CGraphicShader* shader);
+void eraseRemovedObjects();
+
+template<typename F>
+void processObject(F&& func)
+{
+	auto it = mObjectList.begin();
+
+	while (it != mObjectList.end())
+	{
+		CObject* obj = (*it).get();
+
+		if (!obj->isActive())
+		{
+			it = mObjectList.erase(it);
+			continue;
+		}
+
+		if (!obj->isEnabled())
+		{
+			++it;
+			continue;
+		}
+
+		func(obj);
+		++it;
+	}
+}
 */

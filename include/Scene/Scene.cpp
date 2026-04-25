@@ -25,15 +25,15 @@ bool CScene::init()
 	if (!mInput->init()) 
 		return false;
 
-	mCameraMgr = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
-	if (!mCameraMgr->init())
+	mMainCam = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
+	if (!mMainCam->init())
 		return false;
 
 	mFrameCB = std::make_unique<CFrameConstantBuffer>();
 	if (!mFrameCB->init())
 		return false;
 
-	CServiceLocator::provideCamera(*mCameraMgr.get());
+	CServiceLocator::provideCamera(*mMainCam.get());
 
 	return true;
 }
@@ -44,15 +44,15 @@ bool CScene::init(const char* filePath)
 	if (!mInput->init()) 
 		return false;
 	
-	mCameraMgr = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
-	if (!mCameraMgr->init())
+	mMainCam = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
+	if (!mMainCam->init())
 		return false;
 
 	mFrameCB = std::make_unique<CFrameConstantBuffer>();
 	if (!mFrameCB->init())
 		return false;
 
-	CServiceLocator::provideCamera(*mCameraMgr.get());
+	CServiceLocator::provideCamera(*mMainCam.get());
 	
 	return true;
 }
@@ -136,31 +136,31 @@ void CScene::postRender()
 
 void CScene::objectCleanUp()
 {
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
+	// 삭제
+	std::erase_if(mObjectList, [&](const auto& obj)
 		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-		else if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
+			return std::find(mPendingRemove.begin(), mPendingRemove.end(), obj.get())
+				!= mPendingRemove.end();
+		});
+	mPendingRemove.clear();
 
-		(*it)->componentCleanUp();
-		++it;
-	}
+	// 추가
+	// 삭제 후 추가를 진행하여 중복 방지
+	for (auto& obj : mPendingAdd)
+		mObjectList.push_back(std::move(obj));
+	mPendingAdd.clear();
+
+	// 컴포넌트 정리
+	for (auto& obj : mObjectList)
+		if (obj->isEnabled())
+			obj->componentCleanUp();
 }
 
 void CScene::updateFrameBuffer()
 {
 	// 카메라에서 View,Proj 가져와서 FrameBuffer 한 번만 갱신
-	mFrameCB->setView(mCameraMgr->getViewMat());
-	mFrameCB->setProjection(mCameraMgr->getProjMat());
+	mFrameCB->setView(mMainCam->getViewMat());
+	mFrameCB->setProjection(mMainCam->getProjMat());
 	mFrameCB->updateBuffer();
 }
 
@@ -235,10 +235,7 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 
 	// 매 프레임 데이터 업로드
 	D3D11_MAPPED_SUBRESOURCE mapped = {};
-	HRESULT hr = device.getContext()->Map(
-		mInstanceBuffer.Get(), 0,
-		D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-
+	HRESULT hr = device.getContext()->Map( mInstanceBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped); 
 	if (FAILED(hr)) 
 		return;
 
@@ -247,6 +244,7 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 
 	device.getContext()->VSSetShaderResources(0, 1, mInstanceSRV.GetAddressOf());
 }
+
 
 void CScene::setInstanceBatch(CMesh* mesh, CGraphicShader* shader, const DirectX::XMFLOAT4X4& world)
 {
@@ -258,6 +256,18 @@ void CScene::setInstanceBatch(CMesh* mesh, CGraphicShader* shader, const DirectX
 #endif
 
 /*
+void CScene::eraseRemovedObjects()
+{
+	auto it = std::remove_if(mObjectList.begin(), mObjectList.end(),
+		[&](const auto& obj)
+		{
+			return std::find(mPendingRemove.begin(), mPendingRemove.end(), obj.get())
+				!= mPendingRemove.end();
+		});
+	mObjectList.erase(it, mObjectList.end());
+	mPendingRemove.clear();
+}
+
 // preRender에서 정보취합으로 변경
 
 void CScene::meshGrouping()

@@ -29,7 +29,6 @@ bool CSceneMain::create()
 	int n = 50;
 
 	CPlayerObject* obj = createObject<CPlayerObject>("Player");
-	//CCollisionObject* col[10000];
 	std::vector<CCollisionObject*> col(n*n);
 
 	CSceneComponent* colComp = nullptr;
@@ -39,7 +38,7 @@ bool CSceneMain::create()
 		for (int j = 0; j < n; ++j)
 		{
 			col[i*n+j] = createObject<CCollisionObject>();
-			colComp = static_cast<CSceneComponent*>(col[i*n+j]->getRootComponent());
+			colComp = col[i*n+j]->getRootComponent();
 			colComp->setLocalPosition(j*10.f, i*10.f, 0.f);
 		}
 	}

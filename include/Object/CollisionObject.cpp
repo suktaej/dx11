@@ -38,8 +38,8 @@ void CCollisionObject::viewTarget()
 
 	if (mTarget)
 	{
-		CSceneComponent* mine = dynamic_cast<CSceneComponent*>(mRootComponent);
-		CSceneComponent* target = dynamic_cast<CSceneComponent*>(mTarget->getRootComponent());
+		CSceneComponent* mine = mRootComponent;
+		CSceneComponent* target = mTarget->getRootComponent();
 		XMFLOAT3 minePos = mine->getWorldPosition();
 		XMFLOAT3 targetPos = target->getWorldPosition();
 		XMFLOAT3 viewVec = { targetPos.x - minePos.x, targetPos.y - minePos.y,targetPos.z - minePos.z };

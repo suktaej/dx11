@@ -3,6 +3,7 @@
 #include "../Asset/Mesh/Mesh.h"
 #include "../Component/StaticMeshComponent.h"
 #include "../Shader/GraphicShader.h"
+#include "../Scene/Scene.h"
 
 CObject::CObject(ObjectKey key)
 {
@@ -79,18 +80,22 @@ void CObject::postRender()
 void CObject::destroy()
 {
 	mIsActive = false;
+	mScene->addPendingRemove(this);
 
-	//auto sit = mSceneCompList.begin();
-	//while (sit != mSceneCompList.end())
-	//	(*sit++)->setActive(false);
+	/*
+	// smart pointer로 관리하므로 비활성화 시 자동 삭제
+	auto sit = mSceneCompList.begin();
+	while (sit != mSceneCompList.end())
+		(*sit++)->setActive(false);
 
+	auto nit = mNonSceneCompList.begin();
+	while (nit != mNonSceneCompList.end())
+		(*nit++)->setActive(false);
+	
+	// pedding으로 다음 프레임에서 삭제
 	mSceneCompList.clear();
-
-	//auto nit = mNonSceneCompList.begin();
-	//while (nit != mNonSceneCompList.end())
-	//	(*nit++)->setActive(false);
-
 	mNonSceneCompList.clear();
+	*/
 }
 
 void CObject::componentCleanUp()

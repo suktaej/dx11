@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameInfo.h"
 #include "../Component/Component.h"
+#include <typeinfo>
 
 class CObject abstract
 {
@@ -25,7 +26,7 @@ public:
 
 protected:
 	class CScene* mScene = nullptr;
-	class CComponent* mRootComponent = nullptr;
+	class CSceneComponent* mRootComponent = nullptr;
 	std::vector<std::unique_ptr<class CComponent>> mNonSceneCompList;
 	std::vector<std::unique_ptr<class CComponent>> mSceneCompList;
 	std::string mName;
@@ -52,9 +53,6 @@ public:
 	void componentCleanUp();
 	void lifeTimer(float dt);
 	CComponent* findComponentByName(const std::string& name);
-	// void makeStaticMeshBatchList(
-	//	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
-	//	std::unordered_map<class CStaticMesh*, class CGraphicShader*>& shaderMap);
 
 private:
 	void sceneCompCleanUp();
@@ -73,8 +71,8 @@ public:
 	float getLifeTime() { return mLifeTime; }
 	void setSpeed(float speed) { mSpeed = speed; }
 	float getSpeed() { return mSpeed; }
-	void setRootComponent(class CComponent* root) { mRootComponent = root; }
-	class CComponent* getRootComponent() { return mRootComponent; }
+	void setRootComponent(class CSceneComponent* root) { mRootComponent = root; }
+	class CSceneComponent* getRootComponent() { return mRootComponent; }
 
 public:
 	template<typename T>
@@ -88,14 +86,10 @@ public:
 			return nullptr;
 
 		newComp->setName(name);
-		newComp->setScene(mScene);
-		newComp->setOwner(this);
 		
 		T* newCompPtr = newComp.get();
 
-		class CSceneComponent* sceneComp = dynamic_cast<class CSceneComponent*>(newCompPtr);
-
-		if (sceneComp)
+		if (typeid(*newCompPtr) == typeid(CSceneComponent))
 			mSceneCompList.emplace_back(std::move(newComp));
 		else
 			mNonSceneCompList.emplace_back(std::move(newComp));

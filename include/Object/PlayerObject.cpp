@@ -111,115 +111,72 @@ void CPlayerObject::keyBind()
 
 void CPlayerObject::MoveForward(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getForwardVector());
+		mMove->addDirection(mRootComponent->getForwardVector());
 }
 
 void CPlayerObject::MoveBackward(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent); 
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getForwardVector(),ENegative::Negative);
+		mMove->addDirection(mRootComponent->getForwardVector(),ENegative::Negative);
 }
 
 void CPlayerObject::MoveUp(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getUpVector());
+		mMove->addDirection(mRootComponent->getUpVector());
 }
 
 void CPlayerObject::MoveDown(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getUpVector(), ENegative::Negative);
+		mMove->addDirection(mRootComponent->getUpVector(), ENegative::Negative);
 }
 
 void CPlayerObject::MoveRight(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getRightVector());
+		mMove->addDirection(mRootComponent->getRightVector());
 }
 
 void CPlayerObject::MoveLeft(float dt)
 {
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->addDirection(sceneComp->getRightVector(), ENegative::Negative);
+	mMove->addDirection(mRootComponent->getRightVector(), ENegative::Negative);
 }
 
 void CPlayerObject::RotX(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-	
-	if (sceneComp)
-		mMove->setRotX(90.f);
+	mMove->setRotX(90.f);
 }
 
 void CPlayerObject::RotY(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->setRotY(90.f);
+	mMove->setRotY(90.f);
 }
 
 void CPlayerObject::RotZ(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->setRotZ(90.f);
+	mMove->setRotZ(90.f);
 }
 
 void CPlayerObject::RotXInv(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->setRotX(-90.f);
+	mMove->setRotX(-90.f);
 }
 
 void CPlayerObject::RotYInv(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->setRotY(-90.f);
+	mMove->setRotY(-90.f);
 }
 
 void CPlayerObject::RotZInv(float dt)
 {
-	using namespace DirectX;
-	CSceneComponent* sceneComp = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (sceneComp)
-		mMove->setRotZ(-90.f);
+	mMove->setRotZ(-90.f);
 }
 
 void CPlayerObject::Fire(float dt)
 {
 	CCollisionObject* obj = mScene->createObject<CCollisionObject>();
 	obj->setLifeTime(1.f);
-	CComponent* root = obj->getRootComponent();
-	CSceneComponent* sceneRoot = dynamic_cast<CSceneComponent*>(root);
+	CSceneComponent* sceneRoot = obj->getRootComponent();
 	CMovementComponent* move = obj->getMove();
 	
-	CSceneComponent* thisRoot = dynamic_cast<CSceneComponent*>(mRootComponent);
+	CSceneComponent* thisRoot = mRootComponent;
 	move->setSpeed(50.f);
 	move->setVelocity(false);
 	move->setDirection(thisRoot->getForwardVector());

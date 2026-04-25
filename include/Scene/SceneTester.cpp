@@ -27,29 +27,24 @@ bool CSceneTester::create()
 	CCameraObject* cam = createObject<CCameraObject>("CameraObject");
 
 	CCollisionObject* obj1 = createObject<CCollisionObject>("Obj");
-	CComponent* obj1Comp = obj1->getRootComponent();
-	CSceneComponent* obj1SceneComp = dynamic_cast<CSceneComponent*>(obj1Comp);
-	obj1SceneComp->setLocalPosition(0.f, 0.f, 10.f);
+	CSceneComponent* obj1Comp = obj1->getRootComponent();
+	obj1Comp->setLocalPosition(0.f, 0.f, 10.f);
 
 	CCollisionObject* obj2 = createObject<CCollisionObject>("Obj");
-	CComponent* obj2Comp = obj2->getRootComponent();
-	CSceneComponent* obj2SceneComp = dynamic_cast<CSceneComponent*>(obj2Comp);
-	obj2SceneComp->setLocalPosition(50.f, 0.f, 10.f);
+	CSceneComponent* obj2Comp = obj2->getRootComponent();
+	obj2Comp->setLocalPosition(50.f, 0.f, 10.f);
 
 	CCollisionObject* obj3 = createObject<CCollisionObject>("Obj");
-	CComponent* obj3Comp = obj3->getRootComponent();
-	CSceneComponent* obj3SceneComp = dynamic_cast<CSceneComponent*>(obj3Comp);
-	obj3SceneComp->setLocalPosition(-50.f, 0.f, 10.f);
+	CSceneComponent* obj3Comp = obj3->getRootComponent();
+	obj3Comp->setLocalPosition(-50.f, 0.f, 10.f);
 
 	CCollisionObject* obj4 = createObject<CCollisionObject>("Obj");
-	CComponent* obj4Comp = obj4->getRootComponent();
-	CSceneComponent* obj4SceneComp = dynamic_cast<CSceneComponent*>(obj4Comp);
-	obj4SceneComp->setLocalPosition(0.f, 50.f, 10.f);
+	CSceneComponent* obj4Comp = obj4->getRootComponent();
+	obj4Comp->setLocalPosition(0.f, 50.f, 10.f);
 	
 	CCollisionObject* obj5 = createObject<CCollisionObject>("Obj");
-	CComponent* obj5Comp = obj5->getRootComponent();
-	CSceneComponent* obj5SceneComp = dynamic_cast<CSceneComponent*>(obj5Comp);
-	obj5SceneComp->setLocalPosition(0.f, -50.f, 10.f);
+	CSceneComponent* obj5Comp = obj5->getRootComponent();
+	obj5Comp->setLocalPosition(0.f, -50.f, 10.f);
 
 	return true;
 }

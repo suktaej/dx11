@@ -33,12 +33,14 @@ void CSceneManager::update(float dt)
 	mCurrentScene->postUpdate(dt);
 }
 
+void CSceneManager::collision(float dt)
+{
+}
+
 void CSceneManager::render()
 {
 	mCurrentScene->prevRender();
 	mCurrentScene->render();
 	mCurrentScene->postRender();
 }
-void CSceneManager::collision(float dt)
-{
-}
+
