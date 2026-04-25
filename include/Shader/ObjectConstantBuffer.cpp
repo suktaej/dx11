@@ -29,11 +29,9 @@ void CObjectConstantBuffer::updateBuffer()
 	FObjectConstantBufferInfo objectData;
 
 	XMMATRIX world = XMLoadFloat4x4(&mData.World);
-	XMMATRIX wvp = XMLoadFloat4x4(&mData.WVP);
 
 	// GPU에 저장하기 위해 Transpose (GPU 방식-HLSL-인 Column-Major로 변환)
 	XMStoreFloat4x4(&objectData.World, XMMatrixTranspose(world));
-	XMStoreFloat4x4(&objectData.WVP, XMMatrixTranspose(wvp));
 
 	mBuffer->updateBuffer(&objectData);
 }

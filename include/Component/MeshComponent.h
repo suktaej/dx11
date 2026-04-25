@@ -11,10 +11,9 @@ public:
 	~CMeshComponent() override;
 
 protected:
-	//std::unique_ptr<class CTransformConstantBuffer> mTransformConstantBuffer = nullptr;
 	std::unique_ptr<class CObjectConstantBuffer> mObjectCB = nullptr;
 
-private:
+protected:
 	void updateObjectBuffer();
 
 public:

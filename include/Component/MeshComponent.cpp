@@ -42,24 +42,7 @@ CMeshComponent::~CMeshComponent()
 
 void CMeshComponent::updateObjectBuffer()
 {
-    using namespace DirectX;
-    
     mObjectCB->setWorld(mWorldMatrix);
-
-    // hlsl에서 instancing을 사용하므로 VP정보만 활용
-    // CPU 단계에서 WVP 갱신 불필요
-
-    ICamera& camera = CServiceLocator::getCamera();
-
-    XMMATRIX wvp =
-        XMLoadFloat4x4(&mWorldMatrix) *
-        XMLoadFloat4x4(&camera.getViewMat()) *
-        XMLoadFloat4x4(&camera.getProjMat());
-
-    XMFLOAT4X4 mwvp;
-    XMStoreFloat4x4(&mwvp, wvp);
-
-    mObjectCB->setWVP(mwvp);
     mObjectCB->updateBuffer();
 }
 
@@ -106,7 +89,9 @@ void CMeshComponent::render()
 {
     CSceneComponent::render();
     
-    //updateObjectBuffer();
+#if MESHCALL_TYPE == 0 
+    updateObjectBuffer();
+#endif
 }
 
 void CMeshComponent::postRender()

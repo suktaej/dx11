@@ -17,7 +17,7 @@ C:\MyCode\dx11\include\Object\CameraObject.cpp;C:\MyCode\dx11\Intermediate\Camer
 C:\MyCode\dx11\include\Object\CollisionObject.cpp;C:\MyCode\dx11\Intermediate\CollisionObject.obj
 C:\MyCode\dx11\include\Object\Object.cpp;C:\MyCode\dx11\Intermediate\Object.obj
 C:\MyCode\dx11\include\Object\PlayerObject.cpp;C:\MyCode\dx11\Intermediate\PlayerObject.obj
-C:\MyCode\dx11\include\Scene\CameraManager.cpp;C:\MyCode\dx11\Intermediate\CameraManager.obj
+C:\MyCode\dx11\include\Scene\MainCamera.cpp;C:\MyCode\dx11\Intermediate\MainCamera.obj
 C:\MyCode\dx11\include\Scene\InputContext.cpp;C:\MyCode\dx11\Intermediate\InputContext.obj
 C:\MyCode\dx11\include\Scene\Scene.cpp;C:\MyCode\dx11\Intermediate\Scene.obj
 C:\MyCode\dx11\include\Scene\SceneMain.cpp;C:\MyCode\dx11\Intermediate\SceneMain.obj

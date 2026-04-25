@@ -21,9 +21,6 @@ bool CFrameConstantBuffer::init()
 
 void CFrameConstantBuffer::updateBuffer()
 {
-	// TODO : Scene, Camera update이후 constant Buffer 호출 수정
-	// 현재 임시로 object constant buffer에서 받아와 사용 중
-	
 	// 전송용 임시 구조체 생성
 	FFrameConstantBufferInfo frameData;
 

@@ -164,7 +164,7 @@
     <ClCompile Include="Object\CollisionObject.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\PlayerObject.cpp" />
-    <ClCompile Include="Scene\CameraManager.cpp" />
+    <ClCompile Include="Scene\MainCamera.cpp" />
     <ClCompile Include="Scene\DInputManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -215,7 +215,7 @@
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\PlayerObject.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene\CameraManager.h" />
+    <ClInclude Include="Scene\MainCamera.h" />
     <ClInclude Include="Scene\DInputManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -260,6 +260,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shader\Shared.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\InstanceMesh.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

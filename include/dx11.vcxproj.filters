@@ -171,7 +171,7 @@
     <ClCompile Include="Component\CameraComponent.cpp">
       <Filter>06_Component\SceneComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\CameraManager.cpp">
+    <ClCompile Include="Scene\MainCamera.cpp">
       <Filter>04_Scene\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Object\CameraObject.cpp">
@@ -296,7 +296,7 @@
     <ClInclude Include="Component\CameraComponent.h">
       <Filter>06_Component\SceneComponent</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\CameraManager.h">
+    <ClInclude Include="Scene\MainCamera.h">
       <Filter>04_Scene\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Object\CameraObject.h">
@@ -321,6 +321,9 @@
       <Filter>03_Shader\HLSL</Filter>
     </None>
     <None Include="..\Shader\Mesh.hlsl">
+      <Filter>03_Shader\HLSL</Filter>
+    </None>
+    <None Include="..\Shader\InstanceMesh.hlsl">
       <Filter>03_Shader\HLSL</Filter>
     </None>
   </ItemGroup>

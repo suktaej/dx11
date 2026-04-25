@@ -26,7 +26,7 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "d2d1.lib")
 
-#define MESHCALL_TYPE = 0 // 0: object 순회, 1: instanceMap 사용
+#define MESHCALL_TYPE 1 // 0: object 순회, 1: instanceMap 사용
 
 #define SAFE_DELETE(p) { if(p) { delete p; p = nullptr; }}
 #define	SAFE_DELETE_ARRAY(p) {if(p)	{ delete[] p; p = nullptr; }}

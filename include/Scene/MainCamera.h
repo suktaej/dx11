@@ -3,7 +3,7 @@
 #include "../ServiceInterface.h"
 using namespace DirectX;
 
-class CCameraManager : public ICamera
+class CMainCamera : public ICamera
 {
 public:
 	class CameraKey
@@ -11,8 +11,8 @@ public:
 		friend class CScene;
 		CameraKey() {}
 	};
-	CCameraManager(CameraKey key);
-	~CCameraManager();
+	CMainCamera(CameraKey key);
+	~CMainCamera();
 
 private:
 	class CCameraComponent* mViewTarget;

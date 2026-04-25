@@ -10,7 +10,7 @@ public:
 	~CStaticMeshComponent() override;
 
 protected:
-	class CStaticMesh* mMesh = nullptr;
+	class CMesh* mMesh = nullptr;
 	class CShader* mShader = nullptr;
 
 public:
@@ -18,11 +18,13 @@ public:
 	void setShader(class CShader& shader);
 	void setMesh(const std::string& name);
 	void setMesh(class CMesh& mesh);
-	CStaticMesh* getMesh() const { return mMesh; }
+	CMesh* getMesh() const { return mMesh; }
 	CShader* getShader() const { return mShader; }
 
+#if MESHCALL_TYPE == 1
 private:
 	void registMap();
+#endif
 
 public:
 	bool init(class CObject* obj) override;

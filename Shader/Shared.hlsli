@@ -6,16 +6,6 @@ struct PS_OUT_SINGLE
     float4 Color : SV_TARGET;
 };
 
-/*
-cbuffer TransformBuffer : register(b0)
-{
-    float4x4 gWorld;
-    float4x4 gView;
-    float4x4 gProjection;
-    float4x4 gWVP;
-};
-*/
-
 cbuffer FrameBuffer : register(b0)
 {
     float4x4 gView;
@@ -26,5 +16,4 @@ cbuffer FrameBuffer : register(b0)
 cbuffer ObjectBuffer : register(b3)
 {
     float4x4 gWorld;
-    float4x4 gWVP;
 }

@@ -5,12 +5,11 @@
 #include "../Shader/GraphicShader.h"
 #include "../Asset/Mesh/StaticMesh.h"
 #include "InputContext.h"
-#include "CameraManager.h"
+#include "MainCamera.h"
 
 #include "../Component/StaticMeshComponent.h"
 #include <chrono>
 #include <ctime>
-//#define SCENEDEBUG
 
 CScene::CScene(SceneKey key)
 {
@@ -26,7 +25,7 @@ bool CScene::init()
 	if (!mInput->init()) 
 		return false;
 
-	mCameraMgr = std::make_unique<CCameraManager>(CCameraManager::CameraKey{});
+	mCameraMgr = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
 	if (!mCameraMgr->init())
 		return false;
 
@@ -45,7 +44,7 @@ bool CScene::init(const char* filePath)
 	if (!mInput->init()) 
 		return false;
 	
-	mCameraMgr = std::make_unique<CCameraManager>(CCameraManager::CameraKey{});
+	mCameraMgr = std::make_unique<CMainCamera>(CMainCamera::CameraKey{});
 	if (!mCameraMgr->init())
 		return false;
 
@@ -76,7 +75,7 @@ void CScene::update(float dt)
 	processObject([dt](CObject* obj)
 		{ obj->update(dt); });
 
-	mCameraMgr->update(dt);
+	//mCameraMgr->update(dt);
 }
 
 void CScene::postUpdate(float dt)
@@ -101,8 +100,9 @@ void CScene::postCollision(float dt)
 
 void CScene::prevRender()
 {
-	mInstanceMap.clear();
-	mShaderMap.clear();
+#if MESHCALL_TYPE == 1
+	mBatchMap.clear();
+#endif
 	
 	processObject([](CObject* obj)
 		{ obj->prevRender(); });
@@ -112,17 +112,18 @@ void CScene::render()
 {
 	updateFrameBuffer();
 
-#ifdef MESHCALL_TYPE == 0
+#if MESHCALL_TYPE == 0
 	processObject([](CObject* obj) 
 	 { obj->render(); });
-#endif
 
-#ifdef MESHCALL_TYPE == 1
-	for (auto& [mesh, matrices] : mInstanceMap)
+#elif MESHCALL_TYPE == 1
+	for (auto& [key, batch] : mBatchMap)
 	{
-		mShaderMap[mesh]->setShader();
-		updateInstanceBuffer(matrices);
-		mesh->renderInstanced((UINT)matrices.size());
+		CMesh* mesh = key.first;
+		
+		batch.shader->setShader();
+		updateInstanceBuffer(batch.matrices);
+		mesh->renderInstanced((UINT)batch.matrices.size());
 	}
 #endif
 }
@@ -133,6 +134,62 @@ void CScene::postRender()
 		{ obj->postRender(); });
 }
 
+void CScene::objectCleanUp()
+{
+	auto it = mObjectList.begin();
+
+	while (it != mObjectList.end())
+	{
+		if (!(*it)->isActive())
+		{
+			it = mObjectList.erase(it);
+			continue;
+		}
+		else if (!(*it)->isEnabled())
+		{
+			++it;
+			continue;
+		}
+
+		(*it)->componentCleanUp();
+		++it;
+	}
+}
+
+void CScene::updateFrameBuffer()
+{
+	// 카메라에서 View,Proj 가져와서 FrameBuffer 한 번만 갱신
+	mFrameCB->setView(mCameraMgr->getViewMat());
+	mFrameCB->setProjection(mCameraMgr->getProjMat());
+	mFrameCB->updateBuffer();
+}
+
+void CScene::debugFPS(float dt)
+{
+	static float elapsed = 0.f;
+	static int   frameCount = 0;
+
+	elapsed += dt;
+	++frameCount;
+
+	if (elapsed >= 1.f)
+	{
+		float fps = frameCount / elapsed;
+		float ms = (elapsed / frameCount) * 1000.f;
+
+		wchar_t title[128];
+		swprintf_s(title, L"FPS: %.1f  /  %.2f ms  /  Objects: %zu",
+			fps, ms, mObjectList.size());
+
+		IGame& game = CServiceLocator::getGame();
+		SetWindowTextW(game.getHandle(), title);
+
+		elapsed = 0.f;
+		frameCount = 0;
+	}
+}
+
+#if MESHCALL_TYPE == 1
 void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matrices)
 {
 	IDevice& device = CServiceLocator::getDevice();
@@ -191,79 +248,14 @@ void CScene::updateInstanceBuffer(const std::vector<DirectX::XMFLOAT4X4>& matric
 	device.getContext()->VSSetShaderResources(0, 1, mInstanceSRV.GetAddressOf());
 }
 
-void CScene::setInstanceMap(CStaticMesh* mesh, DirectX::XMFLOAT4X4 world)
+void CScene::setInstanceBatch(CMesh* mesh, CGraphicShader* shader, const DirectX::XMFLOAT4X4& world)
 {
-	mInstanceMap[mesh].push_back(world);
+	auto key = std::make_pair(mesh, shader);
+	
+	mBatchMap[key].shader = shader;
+	mBatchMap[key].matrices.push_back(world);
 }
-
-void CScene::setShaderMap(CStaticMesh* mesh, CGraphicShader* shader)
-{
-	mShaderMap.emplace(mesh, shader);
-}
-
-void CScene::objectCleanUp()
-{
-	auto it = mObjectList.begin();
-
-	while (it != mObjectList.end())
-	{
-		if (!(*it)->isActive())
-		{
-			it = mObjectList.erase(it);
-			continue;
-		}
-		else if (!(*it)->isEnabled())
-		{
-			++it;
-			continue;
-		}
-
-		(*it)->componentCleanUp();
-		++it;
-	}
-}
-
-void CScene::updateFrameBuffer()
-{
-	// 카메라에서 View,Proj 가져와서 FrameBuffer 한 번만 갱신
-	mFrameCB->setView(mCameraMgr->getViewMat());
-	mFrameCB->setProjection(mCameraMgr->getProjMat());
-
-	XMMATRIX vp =
-		XMLoadFloat4x4(&mCameraMgr->getViewMat()) *
-		XMLoadFloat4x4(&mCameraMgr->getProjMat());
-
-	XMFLOAT4X4 mvp;
-	XMStoreFloat4x4(&mvp, vp);
-	mFrameCB->setVP(mvp);
-
-	mFrameCB->updateBuffer();   // GPU에 한 번만 갱신 
-}
-
-void CScene::debugFPS(float dt)
-{
-	static float elapsed = 0.f;
-	static int   frameCount = 0;
-
-	elapsed += dt;
-	++frameCount;
-
-	if (elapsed >= 1.f)
-	{
-		float fps = frameCount / elapsed;
-		float ms = (elapsed / frameCount) * 1000.f;
-
-		wchar_t title[128];
-		swprintf_s(title, L"FPS: %.1f  /  %.2f ms  /  Objects: %zu",
-			fps, ms, mObjectList.size());
-
-		IGame& game = CServiceLocator::getGame();
-		SetWindowTextW(game.getHandle(), title);
-
-		elapsed = 0.f;
-		frameCount = 0;
-	}
-}
+#endif
 
 /*
 // preRender에서 정보취합으로 변경
@@ -284,11 +276,6 @@ void CScene::meshGrouping()
 		updateInstanceBuffer(matrices);         // StructuredBuffer 업데이트
 		mesh->renderInstanced((UINT)matrices.size()); // DrawIndexedInstanced
 	}
-}
-
-void CScene::setRenderList(CStaticMeshComponent* comp)
-{
-	mRenderList.emplace_back(comp);
 }
 
 void CScene::render()
@@ -331,5 +318,15 @@ void CScene::render()
 	IGame& game = CServiceLocator::getGame();
 	SetWindowTextW(game.getHandle(), title);
 #endif
+}
+
+void CScene::setInstanceMap(CMesh* mesh, DirectX::XMFLOAT4X4 world)
+{
+	mInstanceMap[mesh].push_back(world);
+}
+
+void CScene::setShaderMap(CMesh* mesh, CGraphicShader* shader)
+{
+	mShaderMap.emplace( std::make_pair(mesh,shader) , shader);
 }
 */

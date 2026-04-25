@@ -19,5 +19,5 @@ public:
 	std::unique_ptr<CObjectConstantBuffer> cloneObject() const;
 
 	void setWorld(const DirectX::XMFLOAT4X4& world) { mData.World = world; }
-	void setWVP(const DirectX::XMFLOAT4X4& wvp) { mData.WVP = wvp; }
+	//void setWVP(const DirectX::XMFLOAT4X4& wvp) { mData.WVP = wvp; }
 };

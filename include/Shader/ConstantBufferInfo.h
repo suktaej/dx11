@@ -22,6 +22,6 @@ struct FFrameConstantBufferInfo
 struct FObjectConstantBufferInfo 
 {
 	DirectX::XMFLOAT4X4 World;
-	DirectX::XMFLOAT4X4 WVP;	// vertex shader에서 즉시 사용
+	//DirectX::XMFLOAT4X4 WVP;	// vertex shader에서 즉시 사용
 	//DirectX::XMFLOAT4X4 WorldInvTranspose; // 노멀(Normal) 계산용
 };

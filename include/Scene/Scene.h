@@ -2,6 +2,22 @@
 #include "../GameInfo.h"
 #include "../Object/Object.h"
 
+struct FInstanceBatch
+{
+	class CGraphicShader* shader = nullptr;
+	std::vector<DirectX::XMFLOAT4X4> matrices;
+};
+
+struct FPairHash
+{
+	size_t operator()(const std::pair<class CMesh*, class CGraphicShader*>& p) const
+	{
+		size_t h1 = std::hash<class CMesh*>{}(p.first);
+		size_t h2 = std::hash<class CGraphicShader*>{}(p.second);
+		return h1 ^ (h2 << 1);
+	}
+};
+
 class CScene abstract
 {
 public:
@@ -17,20 +33,20 @@ public:
 protected:
 	std::vector<std::unique_ptr<CObject>> mObjectList;
 	std::unique_ptr<class CInputContext> mInput;
-	std::unique_ptr<class CCameraManager> mCameraMgr;
+	std::unique_ptr<class CMainCamera> mCameraMgr;
 	std::unique_ptr<class CFrameConstantBuffer> mFrameCB;
+
+#if MESHCALL_TYPE == 1
+	std::unordered_map<std::pair<class CMesh*, class CGraphicShader*>, FInstanceBatch, FPairHash> mBatchMap;
+
 	ComPtr<ID3D11Buffer> mInstanceBuffer = nullptr;
 	ComPtr<ID3D11ShaderResourceView> mInstanceSRV = nullptr;
 	UINT mInstanceBufferCapacity = 0;
+#endif
 
-	//std::vector<class CStaticMeshComponent*> mRenderList;
-	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>> mInstanceMap;
-	std::unordered_map<class CStaticMesh*, class CGraphicShader*> mShaderMap;
-	
 private:
 	void objectCleanUp();
 	void updateFrameBuffer();
-	//void meshGrouping();
 	void debugFPS(float dt);
 
 public:
@@ -51,10 +67,11 @@ public:
 
 public:
 	class CInputContext* getInput() const { return mInput.get(); }
-	class CCameraManager* getCameraManager() const { return mCameraMgr.get(); }
-	void setInstanceMap(class CStaticMesh* mesh, DirectX::XMFLOAT4X4 world);
-	void setShaderMap(class CStaticMesh* mesh, class CGraphicShader* shader);
-	//void setRenderList(class CStaticMeshComponent* comp);
+	class CMainCamera* getCameraManager() const { return mCameraMgr.get(); }
+
+#if MESHCALL_TYPE == 1
+	void setInstanceBatch(class CMesh* mesh, class CGraphicShader* shader, const DirectX::XMFLOAT4X4& world);
+#endif
 
 public:
 	template<typename T>
@@ -105,3 +122,11 @@ private:
 	}
 };
 
+/*
+std::unordered_map<class CMesh*, std::vector<DirectX::XMFLOAT4X4>> mInstanceMap;
+std::unordered_map<std::pair<class CMesh*, class CGraphicShader*>, class CGraphicShader*> mShaderMap;
+
+void meshGrouping();
+void setInstanceMap(class CMesh* mesh, DirectX::XMFLOAT4X4 world);
+void setShaderMap(class CMesh* mesh, class CGraphicShader* shader);
+*/

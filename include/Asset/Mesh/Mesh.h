@@ -13,8 +13,6 @@ public:
 	virtual ~CMesh();
 
 protected:
-	//ID3D11Device* mDevice;
-	//ID3D11DeviceContext* mContext;
 	FVertexBuffer mVertexBuffer;
 	std::vector<std::unique_ptr<FMeshSlot>> mMeshSlots;
 	D3D11_PRIMITIVE_TOPOLOGY mPrimitive;

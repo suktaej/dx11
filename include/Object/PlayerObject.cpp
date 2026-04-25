@@ -33,9 +33,6 @@ bool CPlayerObject::init(class CScene* scene)
 void CPlayerObject::update(float dt)
 {
 	CObject::update(dt);
-
-	//float speed = 200.f * dt;
-	//mPivot->addLocalRotation(EAxis::x, speed);
 }
 
 void CPlayerObject::createMesh()
@@ -95,8 +92,7 @@ void CPlayerObject::keyBind()
 	input->addBindKey("RotZInv", 'C');
 	input->setModifier("RotZInv", EModifier::Ctrl);
 
-
-	//input->addBindKey("Fire", VK_SPACE);
+	input->addBindKey("Fire", VK_SPACE);
 
 	input->BindAction(this, &CPlayerObject::MoveForward, "MoveForward", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::MoveBackward, "MoveBackward", EInputType::Hold);
@@ -110,7 +106,7 @@ void CPlayerObject::keyBind()
 	input->BindAction(this, &CPlayerObject::RotXInv, "RotXInv", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotYInv, "RotYInv", EInputType::Hold);
 	input->BindAction(this, &CPlayerObject::RotZInv, "RotZInv", EInputType::Hold);
-	//input->BindAction(this, &CPlayerObject::Fire, "Fire", EInputType::Down);
+	input->BindAction(this, &CPlayerObject::Fire, "Fire", EInputType::Down);
 }
 
 void CPlayerObject::MoveForward(float dt)
