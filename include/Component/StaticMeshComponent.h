@@ -21,7 +21,7 @@ public:
 	CStaticMesh* getMesh() const { return mMesh; }
 	CShader* getShader() const { return mShader; }
 
-//private:
+private:
 	void registMap();
 
 public:

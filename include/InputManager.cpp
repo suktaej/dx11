@@ -1,6 +1,9 @@
 #include "InputManager.h"
 #include "ServiceLocator.h"
-#include <format>
+
+#ifdef INPUTDEBUG
+	#include <format>
+#endif
 
 CInputManager::CInputManager()
 {
@@ -180,9 +183,11 @@ void CInputManager::updateMousePos()
 	mMousePos = MousePos;
 }
 
+#ifdef INPUTDEBUG
 void CInputManager::printMousePos()
 {
 	std::string debugStr = std::format("Pos: ({:.2f}, {:.2f}) Move: ({:.2f}, {:.2f})\n",
 		mMousePos.x, mMousePos.y, mMouseMove.x, mMouseMove.y);
 	OutputDebugStringA(debugStr.c_str());
 }
+#endif

@@ -41,6 +41,16 @@ bool CSceneTester::create()
 	CSceneComponent* obj3SceneComp = dynamic_cast<CSceneComponent*>(obj3Comp);
 	obj3SceneComp->setLocalPosition(-50.f, 0.f, 10.f);
 
+	CCollisionObject* obj4 = createObject<CCollisionObject>("Obj");
+	CComponent* obj4Comp = obj4->getRootComponent();
+	CSceneComponent* obj4SceneComp = dynamic_cast<CSceneComponent*>(obj4Comp);
+	obj4SceneComp->setLocalPosition(0.f, 50.f, 10.f);
+	
+	CCollisionObject* obj5 = createObject<CCollisionObject>("Obj");
+	CComponent* obj5Comp = obj5->getRootComponent();
+	CSceneComponent* obj5SceneComp = dynamic_cast<CSceneComponent*>(obj5Comp);
+	obj5SceneComp->setLocalPosition(0.f, -50.f, 10.f);
+
 	return true;
 }
 

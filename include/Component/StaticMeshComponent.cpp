@@ -47,29 +47,13 @@ void CStaticMeshComponent::setMesh(CMesh& mesh)
     mMesh = dynamic_cast<CStaticMesh*>(&mesh);
 }
 
-void CStaticMeshComponent::registMap()
-{
-    using namespace DirectX;
-   
-    XMMATRIX world = XMLoadFloat4x4(&mWorldMatrix);
-    XMFLOAT4X4 transposed;
-    XMStoreFloat4x4(&transposed, XMMatrixTranspose(world));
 
-    mScene->setInstanceMap(getMesh(), transposed);
-
-    CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(getShader());
-
-    if (!meshShader)
-        return;
-
-    mScene->setShaderMap(getMesh(), meshShader);
-}
 
 bool CStaticMeshComponent::init(class CObject* obj)
 {
     CMeshComponent::init(obj);
 
-    mScene->setRenderList(this);
+    //mScene->setRenderList(this);
 
     return true;
 }
@@ -105,7 +89,9 @@ void CStaticMeshComponent::preRender()
 {
     CMeshComponent::preRender();
 
-    //registMap();
+#ifdef MESHCALL_TYPE == 1
+    registMap();
+#endif
 }
 
 void CStaticMeshComponent::render()
@@ -113,8 +99,10 @@ void CStaticMeshComponent::render()
     CMeshComponent::render();
 
     // TODO : 인스턴싱 대상 구분변수(bool)할당
-    //mShader->setShader();
-    //mMesh->render();
+#ifdef MESHCALL_TYPE == 0
+    mShader->setShader();
+    mMesh->render();
+#endif
 }
 
 void CStaticMeshComponent::postRender()
@@ -127,3 +115,20 @@ std::unique_ptr<CComponent> CStaticMeshComponent::clone() const
     return std::make_unique<CStaticMeshComponent>(createKey(), *this);
 }
 
+void CStaticMeshComponent::registMap()
+{
+    using namespace DirectX;
+
+    XMMATRIX world = XMLoadFloat4x4(&mWorldMatrix);
+    XMFLOAT4X4 transposed;
+    XMStoreFloat4x4(&transposed, XMMatrixTranspose(world));
+
+    mScene->setInstanceMap(getMesh(), transposed);
+
+    CGraphicShader* meshShader = dynamic_cast<CGraphicShader*>(getShader());
+
+    if (!meshShader)
+        return;
+
+    mScene->setShaderMap(getMesh(), meshShader);
+}

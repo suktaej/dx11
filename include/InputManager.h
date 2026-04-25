@@ -4,6 +4,8 @@
 #define	VK_WHEEL_UP 0xfc
 #define	VK_WHEEL_DOWN 0xfd
 
+//#define INPUTDEBUG
+
 class CInputManager : public IInput
 {
 	friend class CGameManager;
@@ -23,7 +25,6 @@ private:
 
 private:
 	void updateMousePos();
-	void printMousePos();
 
 public:
 	bool init();
@@ -36,4 +37,8 @@ public:
 	FKeyState* addKeyState(unsigned char Key) override;
 	const DirectX::XMFLOAT2& getMouseMoveAmount() const override { return mMouseMove; }
 
+#ifdef INPUTDEBUG
+private:
+	void printMousePos();
+#endif
 };

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\MyCode\dx11\Bin\dx11_Debug.exe</FullPath>
+      <FullPath>C:\MyCode\dx11\Bin\dx11.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

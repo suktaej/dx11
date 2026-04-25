@@ -110,43 +110,20 @@ void CScene::prevRender()
 
 void CScene::render()
 {
-#ifdef SCENEDEBUG
-	using namespace std::chrono;
-
-	auto t0 = high_resolution_clock::now();
-#endif
 	updateFrameBuffer();
-#ifdef SCENEDEBUG
-	auto t1 = high_resolution_clock::now();
-#endif
-	//processObject([](CObject* obj) { obj->render(); });
-	for (auto& it : mRenderList)
-		it->registMap();
 
-#ifdef SCENEDEBUG
-	auto t2 = high_resolution_clock::now();
+#ifdef MESHCALL_TYPE == 0
+	processObject([](CObject* obj) 
+	 { obj->render(); });
 #endif
-	//meshGrouping();
+
+#ifdef MESHCALL_TYPE == 1
 	for (auto& [mesh, matrices] : mInstanceMap)
 	{
 		mShaderMap[mesh]->setShader();
 		updateInstanceBuffer(matrices);
 		mesh->renderInstanced((UINT)matrices.size());
 	}
-
-#ifdef SCENEDEBUG
-	auto t3 = high_resolution_clock::now();
-
-	float frameBuffer = duration<float, std::milli>(t1 - t0).count();
-	float processObj = duration<float, std::milli>(t2 - t1).count();
-	float drawCall = duration<float, std::milli>(t3 - t2).count();
-
-	wchar_t title[256];
-	swprintf_s(title, L"FrameBuffer: %.2fms / ProcessObj: %.2fms / DrawCall: %.2fms",
-		frameBuffer, processObj, drawCall);
-
-	IGame& game = CServiceLocator::getGame();
-	SetWindowTextW(game.getHandle(), title);
 #endif
 }
 
@@ -308,9 +285,51 @@ void CScene::meshGrouping()
 		mesh->renderInstanced((UINT)matrices.size()); // DrawIndexedInstanced
 	}
 }
-*/
 
 void CScene::setRenderList(CStaticMeshComponent* comp)
 {
 	mRenderList.emplace_back(comp);
 }
+
+void CScene::render()
+{
+#ifdef SCENEDEBUG
+	using namespace std::chrono;
+
+	auto t0 = high_resolution_clock::now();
+#endif
+	updateFrameBuffer();
+#ifdef SCENEDEBUG
+	auto t1 = high_resolution_clock::now();
+#endif
+	//processObject([](CObject* obj) { obj->render(); });
+	for (auto& it : mRenderList)
+		it->registMap();
+
+#ifdef SCENEDEBUG
+	auto t2 = high_resolution_clock::now();
+#endif
+	//meshGrouping();
+	for (auto& [mesh, matrices] : mInstanceMap)
+	{
+		mShaderMap[mesh]->setShader();
+		updateInstanceBuffer(matrices);
+		mesh->renderInstanced((UINT)matrices.size());
+	}
+
+#ifdef SCENEDEBUG
+	auto t3 = high_resolution_clock::now();
+
+	float frameBuffer = duration<float, std::milli>(t1 - t0).count();
+	float processObj = duration<float, std::milli>(t2 - t1).count();
+	float drawCall = duration<float, std::milli>(t3 - t2).count();
+
+	wchar_t title[256];
+	swprintf_s(title, L"FrameBuffer: %.2fms / ProcessObj: %.2fms / DrawCall: %.2fms",
+		frameBuffer, processObj, drawCall);
+
+	IGame& game = CServiceLocator::getGame();
+	SetWindowTextW(game.getHandle(), title);
+#endif
+}
+*/
