@@ -1,7 +1,6 @@
 #pragma once
 #include "../GameInfo.h"
 #include "../Component/Component.h"
-#include <typeinfo>
 
 class CObject abstract
 {
@@ -88,8 +87,9 @@ public:
 		newComp->setName(name);
 		
 		T* newCompPtr = newComp.get();
+		class CSceneComponent* sceneCompPtr = dynamic_cast<class CSceneComponent*>(newCompPtr);
 
-		if (typeid(*newCompPtr) == typeid(CSceneComponent))
+		if(sceneCompPtr)
 			mSceneCompList.emplace_back(std::move(newComp));
 		else
 			mNonSceneCompList.emplace_back(std::move(newComp));
@@ -137,26 +137,12 @@ private:
 	template <typename F, typename... Args>
 	void nonSceneCompUpdate(F func, Args&&... args)
 	{
-		auto it = mNonSceneCompList.begin();
-
-		while (it != mNonSceneCompList.end())
+		for (auto& comp : mNonSceneCompList)
 		{
-			CComponent* comp = (*it).get();
-			
-			if (!comp->isActive())
-			{
-				// TODO : Erase-Remove Idiom
-				it = mNonSceneCompList.erase(it);
+			if (!comp->isActive() || !comp->isEnable())
 				continue;
-			}
-			else if (!comp->isEnable())
-			{
-				++it;
-				continue;
-			}
 
-			(comp->*func)(std::forward<Args>(args)...);
-			++it;
+			(comp.get()->*func)(std::forward<Args>(args)...);
 		}
 	}
 };

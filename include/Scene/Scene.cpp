@@ -150,10 +150,12 @@ void CScene::objectCleanUp()
 		mObjectList.push_back(std::move(obj));
 	mPendingAdd.clear();
 
+	/*
 	// 컴포넌트 정리
 	for (auto& obj : mObjectList)
 		if (obj->isEnabled())
 			obj->componentCleanUp();
+	*/
 }
 
 void CScene::updateFrameBuffer()

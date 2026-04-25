@@ -57,50 +57,32 @@ void CCameraObject::inputBind()
 
 void CCameraObject::MoveForward(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getForwardVector());
+		mMove->addDirection(mRootComponent->getForwardVector());
 }
 
 void CCameraObject::MoveBackward(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getForwardVector(),ENegative::Negative);
+		mMove->addDirection(mRootComponent->getForwardVector(),ENegative::Negative);
 }
 
 void CCameraObject::MoveRight(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getRightVector());
+		mMove->addDirection(mRootComponent->getRightVector());
 }
 
 void CCameraObject::MoveLeft(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getRightVector(), ENegative::Negative);
+		mMove->addDirection(mRootComponent->getRightVector(), ENegative::Negative);
 }
 
 void CCameraObject::MoveUp(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getUpVector());
+		mMove->addDirection(mRootComponent->getUpVector());
 }
 
 void CCameraObject::MoveDown(float dt)
 {
-	CSceneComponent* root = dynamic_cast<CSceneComponent*>(mRootComponent);
-
-	if (root)
-		mMove->addDirection(root->getUpVector(), ENegative::Negative);
+		mMove->addDirection(mRootComponent->getUpVector(), ENegative::Negative);
 }
 
 void CCameraObject::Rotation(float dt)
