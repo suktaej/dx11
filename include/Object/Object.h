@@ -49,13 +49,8 @@ public:
 	virtual void postRender();
 	void destroy();
 	
-	void componentCleanUp();
 	void lifeTimer(float dt);
 	CComponent* findComponentByName(const std::string& name);
-
-private:
-	void sceneCompCleanUp();
-	void nonSceneCompCleanUp();
 
 public:
 	class CScene* getScene() const { return mScene; }
@@ -146,3 +141,9 @@ private:
 		}
 	}
 };
+
+//public:
+//	void componentCleanUp();
+//private:
+//	void sceneCompCleanUp();
+//	void nonSceneCompCleanUp();

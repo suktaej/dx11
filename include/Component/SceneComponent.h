@@ -127,6 +127,20 @@ private:
 	template<typename Func, typename... Args>
 	void processChildren(Func func, Args&&... args)
 	{
+		for(auto* child : mChildList)
+		{
+			if (!child->isActive() || !child->isEnable())
+				continue;
+
+			(child->*func)(std::forward<Args>(args)...);
+		}
+	}
+};
+
+/*
+	template<typename Func, typename... Args>
+	void processChildren(Func func, Args&&... args)
+	{
 		auto it = mChildList.begin();
 		while (it != mChildList.end())
 		{
@@ -150,4 +164,4 @@ private:
 			++it;
 		}
 	}
-};
+*/

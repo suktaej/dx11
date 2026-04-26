@@ -98,6 +98,43 @@ void CObject::destroy()
 	*/
 }
 
+void CObject::lifeTimer(float dt)
+{
+	if (mLifeTime > 0.f)
+	{
+		mLifeTime -= dt;
+
+		if (mLifeTime <= 0)
+			destroy();
+	}
+}
+
+CComponent* CObject::findComponentByName(const std::string& name)
+{
+	auto nit = mNonSceneCompList.begin();
+
+	while (nit != mNonSceneCompList.end())
+	{
+		if (name == (*nit).get()->getName())
+			return (*nit).get();
+
+		++nit;
+	}
+
+	auto sit = mSceneCompList.begin();
+
+	while (sit != mSceneCompList.end())
+	{
+		if (name == (*sit).get()->getName())
+			return (*sit).get();
+
+		++sit;
+	}
+
+	return nullptr;
+}
+
+/*
 void CObject::componentCleanUp()
 {
 	sceneCompCleanUp();
@@ -148,43 +185,6 @@ void CObject::nonSceneCompCleanUp()
 	}
 }
 
-void CObject::lifeTimer(float dt)
-{
-	if (mLifeTime > 0.f)
-	{
-		mLifeTime -= dt;
-
-		if (mLifeTime <= 0)
-			destroy();
-	}
-}
-
-CComponent* CObject::findComponentByName(const std::string& name)
-{
-	auto nit = mNonSceneCompList.begin();
-
-	while (nit != mNonSceneCompList.end())
-	{
-		if (name == (*nit).get()->getName())
-			return (*nit).get();
-
-		++nit;
-	}
-
-	auto sit = mSceneCompList.begin();
-
-	while (sit != mSceneCompList.end())
-	{
-		if (name == (*sit).get()->getName())
-			return (*sit).get();
-
-		++sit;
-	}
-
-	return nullptr;
-}
-
-/*
 void CObject::makeStaticMeshBatchList(
 	std::unordered_map<class CStaticMesh*, std::vector<DirectX::XMFLOAT4X4>>& instanceMap,
 	std::unordered_map<CStaticMesh*, CGraphicShader*>& shaderMap)

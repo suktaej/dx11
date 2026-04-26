@@ -305,6 +305,9 @@
     <ClInclude Include="Scene\SceneTester.h">
       <Filter>04_Scene</Filter>
     </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>00_Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dx11.rc">

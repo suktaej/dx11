@@ -26,7 +26,7 @@ bool CSceneMain::init()
 
 bool CSceneMain::create()
 {
-	int n = 50;
+	int n = 100;
 
 	CPlayerObject* obj = createObject<CPlayerObject>("Player");
 	std::vector<CCollisionObject*> col(n*n);
